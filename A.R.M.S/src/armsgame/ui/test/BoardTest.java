@@ -93,8 +93,8 @@ public class BoardTest extends Application {
 		scene.setFill(Color.color(.85, .85, .85,.4));
 
 		//image files needed.
-		Image imgWood = new Image(ClassLoader.getSystemResourceAsStream("monopolycards/ui/test/Woodtexture.jpg"));
-		Image imgRoughGreen = new Image(ClassLoader.getSystemResourceAsStream("monopolycards/ui/test/TableTop.png"));
+		Image imgWood = new Image(ClassLoader.getSystemResourceAsStream("armsgame/ui/test/Woodtexture.jpg"));
+		Image imgRoughGreen = new Image(ClassLoader.getSystemResourceAsStream("armsgame/ui/test/TableTop.png"));
 
 		//Materials
 		PhongMaterial woodTexture = new PhongMaterial();

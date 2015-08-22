@@ -1,0 +1,83 @@
+A.R.M.S - A Race for Munitions and Survival
+
+Game Concepts
+
+1. Main Mode- Survival
+
+- In this game mode, players play as robots and they must gain as many weapons as possible using them to attack and destroy all the opponents.
+Last survivor wins, death -> elimination
+>Specs:
+Player Energy: 100 Volts
+Player Shield: Starts at 0 Volts, charges by attacking with a weapon that uses energy or drawing shields.
+You can gain shield by selling cards (energy worth is shown on the card)
+
+>Weapon Upgrades: Weapons can be upgraded when they are completed
+Basic Upgrade (BU) or Extreme Upgrade (EU)
+EU can only be applied after BU
+When attached, will change the weapon visual to more awesome one.
+
+>10 Total Weapon Sets: (Still coming up with ideas)
+1. Brown - Wooden Club(Physical Dmg): 2 Parts
+Club(5 DMG)- Spikes(5 DMG) 
+Completed = 10 DMG
+BU - Electric Barbed Club(B4 Model) - The next time the players who are attacked move, will inflict extra 15 damage each turn (15 shields gained)
+EU - Explosive Barbed Club (R60T Model)- The next time the players who are attacked move, will inflict extra 20 damage each turn (20 shields gained)
+2. Light Blue - Dagger (Physical DMG): 3 parts
+Hilt(5 DMG)- Blade(
+sword, bow and arrow, bayonett, machinegun,flamethrower,grenade launcher, nuke
+3. Dark Blue - Sword
+4. Purple- Throwing Spear
+4. Gray- Bow and Arrow
+5. Orange - Bayonett
+6. Yellow- machinegun
+7. Red- flamethrower 
+8. Black- Grenade Launcher
+9. Green- Nuke (Nuke has no upgrades)
+
+>Gameplay: Turn by turn players go, 3 moves per turn
+In one turn, players draw two cards, then can play three cards
+At the end of each turn, players can have up to 7 cards in their hand. Or else, the turn cannot be ended.
+
+Each turn, player can 
+a) play a card 
+b) discard a card (takes a turn unless 3 moves have been taken and more than 7 cards are in hand)
+c) end turn
+
+Win Conditions: When all other players are dead, winner willi gain X amount of points to his ranking, and the 2nd place -4th place will get X points
+1 game will be added to the game counter
+
+>Card Types:
+One use weapon upgrade: "BOOST!"
+
+Stealing one weapon part: "PART PICKER"
+
+Stealing a whole weapon: "WEAPON WEASEL"
+
+Swapping a weapon part with another person: "SWAP!"
+
+Single target barrage: "FOCUSED SHOT"
+
+Multi target small fire: "RAIN OF FIRE"
+
+Prevent any attack or swap: "EMP BARRIER"
+
+Single Ammunition for fire on one person: "SINGLE TARGET AMMUNITION"
+
+Ammunition specific to one - three weapons: (Dagger/sword/club, BowArrow/ Spear, Bayonett/MachineGun, Flamethrower/GrenadeLauncher, Nuke)
+
+Weapon Upgrade: "Basic Upgrade" or "Extreme Upgrade" (explained above)
+
+Shield Filler by ____ amount: "BURST CHARGE"
+
+Draw two cards: "SCAVENGE"
+
+Another turn: "TIME WARP"
+
+>(optional) Event Cards: When drawn, cards are immediately played, using a turn 
+1. Lucky Battery: Increases shields by 10 if full health
+2. Weapon Malfunction: If ___ is owned, the weapon is destroyed and put into the discard pile, unless it is part of a full set
+3. Robot Malfunction: Glitches and turn ends
+-new ideas welcome-
+
+2. Second mode: Weapons race- First player to reach a combined health and shields of 200 and gains 3 weapons wins
+-description yet to be implemented-

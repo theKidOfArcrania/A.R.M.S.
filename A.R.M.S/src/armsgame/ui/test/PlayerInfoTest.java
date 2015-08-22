@@ -2,7 +2,7 @@ package armsgame.ui.test;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;
-
+import armsgame.ui.test.Tools;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -65,7 +65,7 @@ public class PlayerInfoTest extends Application {
 		
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		AnchorPane root = new AnchorPane();
-		Scene scene = new Scene(root, 290*wRatio, 150*hRatio);
+		Scene scene = new Scene(root, 290*wRatio, 190*hRatio);
 		scene.setFill(Color.color(.85, .85, .85,.4));
 		
 		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
@@ -74,25 +74,30 @@ public class PlayerInfoTest extends Application {
 		InnerShadow greenShade = new InnerShadow(2.0, Color.DARKGREEN.darker());
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
 	
-		ImageView profileView = createImageView(createImage("blank-profile.jpg"), 60, 60, 10, 15, smallShade);
-		Image screw = createImage("screw.png");
-		ImageView screw1 = createImageView(screw, 15, 15, 0.0, 0.0, out);
-		ImageView screw2 = createImageView(screw, 15, 15, scene.getWidth()-21, 0.0, out);
-		ImageView screw3 = createImageView(screw, 15, 15, 0.0, scene.getHeight()-20,out);
-		ImageView screw4 = createImageView(screw, 15, 15, scene.getWidth()-21, scene.getHeight()-20,out);
+		ImageView profileView = Tools.createImageView(Tools.createImage("blank-profile.jpg"), 60, 60, 10, 15,  sRatio, wRatio, hRatio, smallShade);
+		Image screw = Tools.createImage("screw.png");
+		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, scene.getWidth()-21, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, scene.getHeight()-20, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, scene.getWidth()-21, scene.getHeight()-20, sRatio, wRatio, hRatio, out);
 		
-		Text name = createText(80,15, "MyUsername", Color.GRAY, smallShade, createBoldFont(24));
+		Text name = Tools.createText(80,15,  wRatio, hRatio,"MyUsername", Color.GRAY, smallShade, Tools.createBoldFont(24,sRatio));
 		//name.textProperty().bind(playerName);
-		Text weapons = createText(15, 112, "Finished Weapons: ", Color.GREEN.brighter(), greenShade, createRegularFont(16));
-		Text energy = createText(15, 85, "Energy: ", Color.GREEN.brighter(), greenShade, createRegularFont(16));
-		Text energyDisplay = createText(85, 85, "100 Volts", Color.GRAY, smallShade, createRegularFont(16));	
-		Text weaponDisplay = createText(190, 112, "0", Color.GRAY, smallShade, createRegularFont(16));
-		Text playerRank = createText(85.0, 57.0, "Rank: ", Color.WHITE, out, createRegularFont(10));
-		Text playerGames = createText(150.0, 57.0, "Games: ", Color.WHITE, out, createRegularFont(10));
-
-		Rectangle panel = createRoundedRectangle(scene.getWidth()-100,25,5,5,80,50,Color.DARKGRAY.darker().darker(), largeShade);
+		Text weapons = Tools.createText(15, 150,  wRatio, hRatio,"Finished Weapons: ", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
+		Text weaponDisplay = Tools.createText(190, 150,  wRatio, hRatio,"0", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));
+		Text energy = Tools.createText(15, 85,  wRatio, hRatio,"Energy ", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
+		//Text energyDisplay = Tools.createText(85, 85,  wRatio, hRatio,"100 V", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));	
+		Text shield = Tools.createText(15, 117.5,  wRatio, hRatio,"Shields: ", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
+		//Text shieldDisplay = Tools.createText(87, 117.5,  wRatio, hRatio,"0 V", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));
+		Text playerRank = Tools.createText(85.0, 57.0,  wRatio, hRatio,"Rank: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
+		Text playerGames = Tools.createText(150.0, 57.0,  wRatio, hRatio,"Games: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
 		
-		root.getChildren().addAll(name, weapons, energy,energyDisplay, weaponDisplay,  profileView, screw1
+		Rectangle energyEmpty = Tools.createRoundedRectangle(scene.getWidth()-100,20,5,5,85,85,sRatio, wRatio, hRatio,Color.DARKGRAY.darker(), largeShade);
+		Rectangle energyBar = Tools.createRoundedRectangle(scene.getWidth()-100,20,5,5,85,85,sRatio, wRatio, hRatio,Color.WHITE, out);
+			energyBar.setId("energyBar");
+		Rectangle panel = Tools.createRoundedRectangle(scene.getWidth()-100,25,5,5,80,50,sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
+		
+		root.getChildren().addAll(name, weapons, energy,energyEmpty, energyBar,weaponDisplay, shield,  profileView, screw1
 				,screw2, screw3,screw4, panel, playerRank, playerGames);
 		root.opacityProperty().bind(alph);
 		
@@ -125,56 +130,7 @@ public class PlayerInfoTest extends Application {
 		.add(new KeyFrame(Duration.seconds(.15), new KeyValue(alph, 1.0),
 				new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85,1.0))));
 	}
-	public Rectangle createRoundedRectangle(double w, double h, double xR, double yR, double x, double y, Color c, Effect g)
-	{
-		Rectangle r = new Rectangle(w*wRatio,h*hRatio);
-		r.setArcHeight(yR);
-		r.setArcWidth(xR);
-		AnchorPane.setTopAnchor(r, y);
-		AnchorPane.setLeftAnchor(r,x);
-		r.setFill(c);
-		r.setEffect(g);
-		
-		return r;
-	}
-	public Font createRegularFont(double size)
-	{
-		return Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), size*sRatio);
-	}
-	public Font createBoldFont(double size)
-	{
-		return Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Bold.otf").toExternalForm(), size*sRatio);
-	}
-	public Text createText(double x, double y, String text, Color color, Effect g, Font f)
-	{
-		Text t = new Text(text);
-		t.setFill(color);
-		t.setFont(f);
-		AnchorPane.setTopAnchor(t, y*hRatio);
-		AnchorPane.setLeftAnchor(t,x*wRatio);
-		t.setEffect(g);
-		
-		return t;
-	}
-	public Image createImage(String location)
-	{
-		return new Image(PlayerInfoTest.class.getResource(location).toExternalForm());
-	}
-	public ImageView createImageView(Image img, double h, double w, double x, double y, Effect g)
-	{
-		ImageView sv = new ImageView();
-		sv.setImage(img);
-		sv.setFitHeight(h*sRatio);
-		sv.setFitWidth(w*sRatio);
-		sv.setPreserveRatio(true);
-		sv.setSmooth(true);
-		sv.setCache(true);
-		sv.setEffect(g);
-		AnchorPane.setTopAnchor(sv, y*hRatio);
-		AnchorPane.setLeftAnchor(sv, x*wRatio);
-		
-		return sv;
-	}
+
 	
 	public void trans(boolean status){
 		if (solid.getStatus() == Status.RUNNING) {

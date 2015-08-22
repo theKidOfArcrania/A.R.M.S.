@@ -3,7 +3,7 @@ package armsgame.ui.test;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.util.ArrayList;
-
+import armsgame.ui.test.Tools;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -12,11 +12,9 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,7 +25,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -77,24 +74,24 @@ public class MoveCounter extends Application {
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
 		
-		Rectangle panel = createRoundedRectangle(217,140, 60, 60, 22, 52, Color.DARKGRAY.darker().darker(), largeShade);
-		Text name = createText(0, 12, "Move Counter", Color.GRAY, smallShade, createBoldFont(28));
+		Rectangle panel = Tools.createRoundedRectangle(217,140, 60, 60, 22, 52, sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
+		Text name = Tools.createText(0, 12, wRatio, hRatio,"Move Counter", Color.GRAY, smallShade, Tools.createBoldFont(28,sRatio));
 		name.setWrappingWidth(dispWidth/6);
 		name.setTextAlignment(TextAlignment.CENTER);
 		
-        Image lightoff = createImage("lightoff.png");
-        Image light = createImage("Greenlight.png");
-        Image screw = createImage("screw.png");
-        ImageView light1= createImageView(light, 56, 56, 36, 91.5, mediumShade); lightList.add(light1);
-        ImageView light2= createImageView(light, 56, 56, 102.5, 91.5, mediumShade); lightList.add(light2);
-        ImageView light3= createImageView(light, 56, 56, 168, 91.5, mediumShade); lightList.add(light3);
-		ImageView light1off = createImageView(lightoff, 56, 56, 36, 91.5, largeShade);
-		ImageView light2off = createImageView(lightoff, 56, 56, 102.5, 91.5, largeShade);
-		ImageView light3off = createImageView(lightoff, 56, 56, 168, 91.5, largeShade);
-		ImageView screw1 = createImageView(screw, 15, 15, 0.0, 0.0, out);
-		ImageView screw2 = createImageView(screw, 15, 15, scene.getWidth()-21, 0.0, out);
-		ImageView screw3 = createImageView(screw, 15, 15, 0.0, scene.getHeight()-20, out);
-		ImageView screw4 = createImageView(screw, 15, 15, scene.getWidth()-21, scene.getHeight()-20, out);
+        Image lightoff = Tools.createImage("lightoff.png");
+        Image light = Tools.createImage("Greenlight.png");
+        Image screw = Tools.createImage("screw.png");
+        ImageView light1= Tools.createImageView(light, 56, 56, 36, 91.5, sRatio, wRatio, hRatio, mediumShade); lightList.add(light1);
+        ImageView light2= Tools.createImageView(light, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light2);
+        ImageView light3= Tools.createImageView(light, 56, 56, 168, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light3);
+		ImageView light1off = Tools.createImageView(lightoff, 56, 56, 36, 91.5, sRatio, wRatio, hRatio, largeShade);
+		ImageView light2off = Tools.createImageView(lightoff, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio, largeShade);
+		ImageView light3off = Tools.createImageView(lightoff, 56, 56, 168, 91.5, sRatio, wRatio, hRatio, largeShade);
+		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, scene.getWidth()-21, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, scene.getHeight()-20, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, scene.getWidth()-21, scene.getHeight()-20, sRatio, wRatio, hRatio, out);
         
         
 		root.getChildren().addAll(name, panel, light1off, light2off, light3off, light1, 
@@ -155,56 +152,7 @@ public class MoveCounter extends Application {
 			light.setOpacity(1.0);
 		}
 	}
-	public Rectangle createRoundedRectangle(double w, double h, double xR, double yR, double x, double y, Color c, Effect g)
-	{
-		Rectangle r = new Rectangle(w*wRatio,h*hRatio);
-		r.setArcHeight(yR);
-		r.setArcWidth(xR);
-		AnchorPane.setTopAnchor(r, y);
-		AnchorPane.setLeftAnchor(r,x);
-		r.setFill(c);
-		r.setEffect(g);
-		
-		return r;
-	}
-	public Font createRegularFont(double size)
-	{
-		return Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), size*sRatio);
-	}
-	public Font createBoldFont(double size)
-	{
-		return Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Bold.otf").toExternalForm(), size*sRatio);
-	}
-	public Text createText(double x, double y, String text, Color color, Effect g, Font f)
-	{
-		Text t = new Text(text);
-		t.setFill(color);
-		t.setFont(f);
-		AnchorPane.setTopAnchor(t, y*hRatio);
-		AnchorPane.setLeftAnchor(t,x*wRatio);
-		t.setEffect(g);
-		
-		return t;
-	}
-	public Image createImage(String location)
-	{
-		return new Image(PlayerInfoTest.class.getResource(location).toExternalForm());
-	}
-	public ImageView createImageView(Image img, double h, double w, double x, double y, Effect g)
-	{
-		ImageView sv = new ImageView();
-		sv.setImage(img);
-		sv.setFitHeight(h*sRatio);
-		sv.setFitWidth(w*sRatio);
-		sv.setPreserveRatio(true);
-		sv.setSmooth(true);
-		sv.setCache(true);
-		sv.setEffect(g);
-		AnchorPane.setTopAnchor(sv, y*hRatio);
-		AnchorPane.setLeftAnchor(sv, x*wRatio);
-		
-		return sv;
-	}
+	
 	public double checkSmallRatio()
 	{
 	   return (wRatio>hRatio)?hRatio:wRatio;
