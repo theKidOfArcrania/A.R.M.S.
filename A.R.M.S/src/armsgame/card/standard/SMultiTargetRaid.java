@@ -14,7 +14,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class DealBreakerCard extends SAction {
+public class SMultiTargetRaid extends SAction {
 	/**
 	 *
 	 */
