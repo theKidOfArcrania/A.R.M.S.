@@ -51,6 +51,8 @@ public class PlayerInfoTest extends Application {
 	private final DoubleProperty alph;
 	private final IntegerProperty energyLevel;
 	private final DoubleProperty energyScale;
+	private final IntegerProperty shieldLevel;
+	private final DoubleProperty shieldScale;
 	private IntegerProperty weaponSets;
 	private final Timeline solid = new Timeline();
 	
@@ -61,10 +63,12 @@ public class PlayerInfoTest extends Application {
 	public PlayerInfoTest() {
 		sRatio = checkSmallRatio();
 		alph = new SimpleDoubleProperty(.4);
-		energyLevel = new SimpleIntegerProperty(80);
+		shieldLevel = new SimpleIntegerProperty(80);
+		shieldScale = new SimpleDoubleProperty(1.0);
+		shieldScale.bind(shieldLevel.divide(100.0));
+		energyLevel = new SimpleIntegerProperty(100);
 		energyScale = new SimpleDoubleProperty(1.0);
 		energyScale.bind(energyLevel.divide(100.0));
-		
 	}
 	
 	@Override
@@ -105,20 +109,32 @@ public class PlayerInfoTest extends Application {
 		
 		Rectangle shieldEmpty = Tools.createRoundedRectangle(170,22.5,5,5,85,116.5,sRatio, wRatio, hRatio,Color.DARKGRAY.darker(), largeShade);
 		Stop[] list = {new Stop(0.0, Color.WHITE),
-					new Stop(0.2, Color.web("#edf8ff")),
-					new Stop(.49, Color.web("#d9f0fc")), 
-					new Stop(.5, Color.web("#bee6fd")), 
+					new Stop(0.2, Color.web("#c4e0f4")),
+					new Stop(.49, Color.web("#acd5f2")), 
+					new Stop(.5, Color.web("#74b2dd")), 
 					new Stop(1.0, Color.web("#a9e1f7"))
 					};
 		LinearGradient shieldGrad = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,list);
-		Rectangle shieldBar = Tools.createRoundedRectangle((170)*energyScale.getValue()
+		Rectangle shieldBar = Tools.createRoundedRectangle((168)*shieldScale.getValue()
 				,20,5,5,86,117.5,sRatio, wRatio, hRatio,Color.WHITE, null);
 		shieldBar.setFill(shieldGrad);
+		
+		Rectangle energyEmpty = Tools.createRoundedRectangle(170,22.5,5,5,85,84,sRatio, wRatio, hRatio,Color.DARKGRAY.darker(), largeShade);
+		Stop[] elist = {new Stop(0.0, Color.WHITE),
+					new Stop(0.3, Color.rgb(202,255,202)),
+					new Stop(.49, Color.web("#acf0b7")), 
+					new Stop(.5, Color.rgb(116,229,135)), 
+					new Stop(1.0, Color.web("#c7f3ce"))
+					};
+		LinearGradient energyGrad = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,elist);
+		Rectangle energyBar = Tools.createRoundedRectangle((168)*energyScale.getValue()
+				,20,5,5,86,85,sRatio, wRatio, hRatio,Color.WHITE, null);
+		energyBar.setFill(energyGrad);
 		
 		
 		Rectangle panel = Tools.createRoundedRectangle(190,25,5,5,80,50,sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
 		
-		root.getChildren().addAll(name, weapons, energy,shieldEmpty, shieldBar,weaponDisplay, shield,  profileView, screw1
+		root.getChildren().addAll(name, weapons, energy,shieldEmpty, shieldBar,energyEmpty, energyBar,weaponDisplay, shield,  profileView, screw1
 				,screw2, screw3,screw4, panel, playerRank, playerGames);
 		root.opacityProperty().bind(alph);
 		

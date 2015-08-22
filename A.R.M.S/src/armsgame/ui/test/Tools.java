@@ -7,9 +7,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Tools {
+	static
+	{
+		Font.loadFont(PlayerInfoTest.class.getResourceAsStream("Xolonium-Regular.otf"), 10);
+		Font.loadFont(PlayerInfoTest.class.getResourceAsStream("Xolonium-Bold.otf"), 10);
+	}
 	public static Rectangle createRoundedRectangle(double w, double h, double xR, double yR, double x, double y, 
 			double sRatio, double wRatio, double hRatio, Color c, Effect g)
 	{
@@ -25,11 +31,11 @@ public class Tools {
 	}
 	public static Font createRegularFont(double size, double sRatio)
 	{
-		return Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), size*sRatio);
+		return Font.font("Xolonium", size*sRatio);
 	}
 	public static Font createBoldFont(double size, double sRatio)
 	{
-		return Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Bold.otf").toExternalForm(), size*sRatio);
+		return Font.font("Xolonium", FontWeight.BOLD, size*sRatio);
 	}
 	public static Text createText(double x, double y, double wRatio, double hRatio,
 			String text, Color color, Effect g, Font f)
@@ -45,7 +51,7 @@ public class Tools {
 	}
 	public static Image createImage(String location)
 	{
-		return new Image(PlayerInfoTest.class.getResource(location).toExternalForm());
+		return new Image(PlayerInfoTest.class.getResourceAsStream(location));
 	}
 	public static ImageView createImageView(Image img, double h, double w, double x, double y, 
 			double sRatio, double wRatio, double hRatio, Effect g)
