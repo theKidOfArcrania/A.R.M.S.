@@ -14,7 +14,7 @@ import armsgame.impl.Player;
  *
  * @author Henry
  */
-public class SThief extends SAction {
+public class SRaid extends SAction {
 	/**
 	 *
 	 */

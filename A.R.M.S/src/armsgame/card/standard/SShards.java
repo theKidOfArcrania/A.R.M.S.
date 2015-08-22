@@ -1,6 +1,6 @@
 package armsgame.card.standard;
 
-public class SShards extends DebtCollectorCard {
+public class SShards extends SEnergyZapper {
 	/**
 	 * 
 	 */

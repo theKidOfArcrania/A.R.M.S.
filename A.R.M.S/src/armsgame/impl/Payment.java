@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 import armsgame.card.Card;
 import armsgame.card.Energy;
-import armsgame.card.WeaponPart;
-import armsgame.card.WeaponSpec;
-import armsgame.card.WeaponSet;
 import armsgame.card.Response;
 import armsgame.card.Valuable;
+import armsgame.card.WeaponPart;
+import armsgame.card.WeaponSet;
+import armsgame.card.WeaponSpec;
 
 import static java.util.Objects.requireNonNull;
 
@@ -78,18 +78,18 @@ public class Payment {
 	}
 
 	private final ArrayList<Card> bills = new ArrayList<>(10);
-	private final Player creditor;
+	private final Player damager;
 
 	private int debt;
-	private final Player debtor;
+	private final Player victim;
 	private int paidAmount = 0;
-	private final ArrayList<WeaponPart> propRequested = new ArrayList<>(3);
+	private final ArrayList<WeaponPart> partsRequested = new ArrayList<>(3);
 
-	private final ArrayList<WeaponSpec> propSetsRequested = new ArrayList<>(3);
+	private final ArrayList<WeaponSpec> weaponsRequested = new ArrayList<>(3);
 
-	private final ArrayList<WeaponPart> propGiven = new ArrayList<>(3);
+	private final ArrayList<WeaponPart> partsGiven = new ArrayList<>(3);
 
-	private final ArrayList<WeaponSpec> propSetsGiven = new ArrayList<>(3);
+	private final ArrayList<WeaponSpec> weaponsGiven = new ArrayList<>(3);
 
 	private boolean canceled = false;
 
@@ -97,16 +97,16 @@ public class Payment {
 	 * Constructs a payment object without any payment parameters.
 	 * <p>
 	 *
-	 * @param creditor
-	 *            the reciever of this payment.
-	 * @param debtor
-	 *            the debtor of this payment.
+	 * @param damager
+	 *            the player who dealed the damage.
+	 * @param victim
+	 *            the player who is recieving this damage.
 	 */
-	public Payment(Player creditor, Player debtor) {
-		requireNonNull(creditor);
-		requireNonNull(debtor);
-		this.creditor = creditor;
-		this.debtor = debtor;
+	public Payment(Player damager, Player victim) {
+		requireNonNull(damager);
+		requireNonNull(victim);
+		this.damager = damager;
+		this.victim = victim;
 		this.debt = 0;
 	}
 
@@ -114,10 +114,10 @@ public class Payment {
 	 * Constructs a payment object with a pre-initialized debt.
 	 * <p>
 	 *
-	 * @param creditor
-	 *            the reciever of this payment.
-	 * @param debtor
-	 *            the debtor of this payment.
+	 * @param damager
+	 *            the player who dealed the damage.
+	 * @param victim
+	 *            the player who is recieving this damage.
 	 * @param debt
 	 *            the amount of debt to pay
 	 */
@@ -127,8 +127,8 @@ public class Payment {
 		if (debt <= 0) {
 			throw new IllegalArgumentException("Debt must be positive");
 		}
-		this.creditor = creditor;
-		this.debtor = debtor;
+		this.damager = creditor;
+		this.victim = debtor;
 		this.debt = debt;
 	}
 
@@ -136,42 +136,42 @@ public class Payment {
 	 * Constructs a payment object with a pre-initialized property to request.
 	 * <p>
 	 *
-	 * @param creditor
+	 * @param damager
 	 *            the reciever of this payment.
-	 * @param debtor
-	 *            the debtor of this payment.
-	 * @param propRequested
+	 * @param victim
+	 *            the victim of this payment.
+	 * @param partsRequested
 	 *            the requested property
 	 */
 	public Payment(Player creditor, Player debtor, WeaponPart propRequested) {
 		requireNonNull(creditor);
 		requireNonNull(debtor);
 		requireNonNull(propRequested);
-		this.creditor = creditor;
-		this.debtor = debtor;
+		this.damager = creditor;
+		this.victim = debtor;
 		this.debt = 0;
-		this.propRequested.add(propRequested);
+		this.partsRequested.add(propRequested);
 	}
 
 	/**
 	 * Constructs a payment object with a pre-initialized property set to request.
 	 * <p>
 	 *
-	 * @param creditor
+	 * @param damager
 	 *            the reciever of this payment.
-	 * @param debtor
-	 *            the debtor of this payment.
+	 * @param victim
+	 *            the victim of this payment.
 	 * @param propSetRequested
 	 *            the requested property set
 	 */
 	public Payment(Player creditor, Player debtor, WeaponSpec propSetRequested) {
 		requireNonNull(creditor);
 		requireNonNull(debtor);
-		requireNonNull(propRequested);
-		this.creditor = creditor;
-		this.debtor = debtor;
+		requireNonNull(partsRequested);
+		this.damager = creditor;
+		this.victim = debtor;
 		this.debt = 0;
-		this.propSetsRequested.add(propSetRequested);
+		this.weaponsRequested.add(propSetRequested);
 	}
 
 	public void finishPay() {
@@ -179,37 +179,37 @@ public class Payment {
 		// throw new IllegalStateException("Debt has not been fully met");
 		// }
 
-		propRequested.forEach(this::takeProp0);
-		propSetsRequested.forEach(this::takeProp0);
-		propGiven.forEach(this::giveProp0);
-		propSetsGiven.forEach(this::giveProp0);
+		partsRequested.forEach(this::takePart0);
+		weaponsRequested.forEach(this::takePart0);
+		partsGiven.forEach(this::givePart0);
+		weaponsGiven.forEach(this::givePart0);
 
 		bills.forEach(card -> {
 			// TO DO: check ref. and also shift ref.
 			if (card instanceof Energy) {
-				Energy bill = (Energy) card;
-				debtor.removeBill(bill);
-				creditor.addBill(bill);
+				Energy nrg = (Energy) card;
+				victim.removeBill(nrg);
+				damager.addBill(nrg);
 			} else {
-				takeProp0((WeaponPart) card);
+				takePart0((WeaponPart) card);
 			}
 		});
 	}
 
 	/**
-	 * This method finishes the payment request and hands it over to the debtor/ ower.
+	 * This method finishes the payment request and hands it over to the victim/ ower.
 	 */
 	public void finishRequest() {
 
-		if (debtor == creditor) {
+		if (victim == damager) {
 			return;
 		}
 
 		// currently, we only support one type of response: Just say no.
-		handleResponse(this.toString(), creditor, debtor);
+		handleResponse(this.toString(), damager, victim);
 
 		if (!canceled) {
-			debtor.selectPayment(this);
+			victim.selectPayment(this);
 			this.finishPay();
 		}
 	}
@@ -224,10 +224,10 @@ public class Payment {
 	 */
 	public boolean giveProperty(WeaponPart weaponPart) {
 		// TO DO: check prop ref.
-		if (propGiven.contains(weaponPart)) {
+		if (partsGiven.contains(weaponPart)) {
 			return false;
 		}
-		propGiven.add(weaponPart);
+		partsGiven.add(weaponPart);
 		return true;
 	}
 
@@ -240,10 +240,10 @@ public class Payment {
 	 * @return whether if this property was added to request list.
 	 */
 	public boolean givePropertySet(WeaponSpec set) {
-		if (propSetsGiven.contains(set)) {
+		if (weaponsGiven.contains(set)) {
 			return false;
 		}
-		propSetsGiven.add(set);
+		weaponsGiven.add(set);
 		return true;
 	}
 
@@ -287,10 +287,10 @@ public class Payment {
 	 */
 	public boolean requestProperty(WeaponPart weaponPart) {
 		// TO DO: check prop ref.
-		if (propRequested.contains(weaponPart)) {
+		if (partsRequested.contains(weaponPart)) {
 			return false;
 		}
-		propRequested.add(weaponPart);
+		partsRequested.add(weaponPart);
 		return true;
 	}
 
@@ -303,10 +303,10 @@ public class Payment {
 	 * @return whether if this property was added to request list.
 	 */
 	public boolean requestPropertySet(WeaponSpec set) {
-		if (propSetsRequested.contains(set)) {
+		if (weaponsRequested.contains(set)) {
 			return false;
 		}
-		propSetsRequested.add(set);
+		weaponsRequested.add(set);
 		return true;
 	}
 
@@ -319,14 +319,14 @@ public class Payment {
 		ArrayList<String> requests = new ArrayList<>(10);
 		ArrayList<String> gives = new ArrayList<>(10);
 
-		if (!propRequested.isEmpty()) {
-			propRequested.stream()
+		if (!partsRequested.isEmpty()) {
+			partsRequested.stream()
 					.map(WeaponPart::getPropertyName)
 					.forEach(requests::add);
 		}
 
-		if (!propSetsRequested.isEmpty()) {
-			propSetsRequested.stream()
+		if (!weaponsRequested.isEmpty()) {
+			weaponsRequested.stream()
 					.map(WeaponSpec::toString)
 					.map(color -> color + " set")
 					.forEach(requests::add);
@@ -340,14 +340,14 @@ public class Payment {
 			requests.add("nothing");
 		}
 
-		if (!propGiven.isEmpty()) {
-			propGiven.stream()
+		if (!partsGiven.isEmpty()) {
+			partsGiven.stream()
 					.map(WeaponPart::getPropertyName)
 					.forEach(gives::add);
 		}
 
-		if (!propSetsGiven.isEmpty()) {
-			propSetsGiven.stream()
+		if (!weaponsGiven.isEmpty()) {
+			weaponsGiven.stream()
 					.map(WeaponSpec::toString)
 					.map(color -> color + " set")
 					.forEach(gives::add);
@@ -356,7 +356,7 @@ public class Payment {
 		String requestsString = joinList(requests);
 		String givesString = joinList(gives);
 		StringBuilder description = new StringBuilder(25 + requestsString.length() + givesString.length()).append("Player ")
-				.append(creditor.getName())
+				.append(damager.getName())
 				.append(" wants ");
 		description.append(requestsString);
 
@@ -368,12 +368,12 @@ public class Payment {
 				.toString();
 	}
 
-	private void giveProp0(WeaponPart prop) {
-		transferProp(creditor, debtor, prop);
+	private void givePart0(WeaponPart prop) {
+		transferProp(damager, victim, prop);
 	}
 
-	private void giveProp0(WeaponSpec propset) {
-		transferProp(creditor, debtor, propset);
+	private void givePart0(WeaponSpec propset) {
+		transferProp(damager, victim, propset);
 	}
 
 	private void handleResponse(String responseString, Player requester, Player responder) {
@@ -391,12 +391,12 @@ public class Payment {
 		}
 	}
 
-	private void takeProp0(WeaponPart prop) {
-		transferProp(debtor, creditor, prop);
+	private void takePart0(WeaponPart prop) {
+		transferProp(victim, damager, prop);
 	}
 
-	private void takeProp0(WeaponSpec propset) {
-		transferProp(debtor, creditor, propset);
+	private void takePart0(WeaponSpec propset) {
+		transferProp(victim, damager, propset);
 	}
 
 }

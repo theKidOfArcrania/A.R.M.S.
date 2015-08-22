@@ -5,7 +5,7 @@ import armsgame.card.Energy;
 import armsgame.impl.Player;
 import armsgame.impl.CardActionType.Likeness;
 
-public final class CashCard extends StandardCard implements Energy {
+public final class SEnergy extends StandardCard implements Energy {
 
 	/**
 	 *
@@ -14,11 +14,11 @@ public final class CashCard extends StandardCard implements Energy {
 	private final int value;
 	private Action convertee = null;
 
-	public CashCard(int value) {
+	public SEnergy(int value) {
 		this.value = value;
 	}
 
-	public CashCard(String internalType) {
+	public SEnergy(String internalType) {
 		if (internalType.startsWith("$")) {
 			this.value = Integer.parseInt(internalType.substring(1)) * StandardCardDefaults.getCardDefaults()
 					.getScale();
@@ -27,7 +27,7 @@ public final class CashCard extends StandardCard implements Energy {
 		}
 	}
 
-	CashCard(Action convertee) {
+	SEnergy(Action convertee) {
 		this.value = convertee.getEnergyValue();
 		if (this.value == 0) {
 			throw new IllegalArgumentException();

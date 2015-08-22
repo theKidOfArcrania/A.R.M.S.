@@ -31,8 +31,8 @@ public abstract class SAction extends StandardCard implements Action {
 	}
 
 	@Override
-	public CashCard convertToCash() {
-		return new CashCard(this);
+	public SEnergy convertToCash() {
+		return new SEnergy(this);
 	}
 
 	@Override
