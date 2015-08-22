@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Henry
  */
-public class RentCard extends ActionCard {
+public class SDamageCard extends SAction {
 
 	/**
 	 *
@@ -28,7 +28,7 @@ public class RentCard extends ActionCard {
 	/**
 	 * Constructs an all-color wild rent (except gold, if applicable).
 	 */
-	public RentCard() {
+	public SDamageCard() {
 		propertyColors = new DualColor();
 	}
 
@@ -38,7 +38,7 @@ public class RentCard extends ActionCard {
 	 * @param weaponSpec
 	 *            What color this rent card represents.
 	 */
-	public RentCard(WeaponSpec weaponSpec) {
+	public SDamageCard(WeaponSpec weaponSpec) {
 		// all parameters MUST be non-null.
 		requireNonNull(weaponSpec);
 		propertyColors = new DualColor(weaponSpec);
@@ -53,7 +53,7 @@ public class RentCard extends ActionCard {
 	 * @param propertyColor2
 	 *            The second color of this wild card.
 	 */
-	public RentCard(WeaponSpec propertyColor1, WeaponSpec propertyColor2) {
+	public SDamageCard(WeaponSpec propertyColor1, WeaponSpec propertyColor2) {
 		// all parameters MUST be non-null;
 		requireNonNull(propertyColor1);
 		requireNonNull(propertyColor2);
@@ -66,7 +66,7 @@ public class RentCard extends ActionCard {
 	 * @param internalType
 	 *            the internal type of the rent-card color
 	 */
-	public RentCard(String internalType) {
+	public SDamageCard(String internalType) {
 		propertyColors = new DualColor(internalType);
 	}
 

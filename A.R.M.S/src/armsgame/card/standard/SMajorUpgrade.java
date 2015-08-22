@@ -5,7 +5,7 @@
  */
 package armsgame.card.standard;
 
-public class HotelCard extends HouseCard {
+public class SMajorUpgrade extends SMinorUpgrade {
 	/**
 	 * 
 	 */

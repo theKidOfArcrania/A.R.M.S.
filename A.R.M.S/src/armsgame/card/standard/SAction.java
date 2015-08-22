@@ -14,13 +14,13 @@ import armsgame.impl.Player;
  *
  * @author HW
  */
-public abstract class ActionCard extends StandardCard implements Action {
+public abstract class SAction extends StandardCard implements Action {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -8876027487042225439L;
 
-	ActionCard() {
+	SAction() {
 	}
 
 	@SuppressWarnings("unused")

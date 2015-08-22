@@ -1,6 +1,6 @@
 package armsgame.card.standard;
 
-public class BirthdayCard extends DebtCollectorCard {
+public class SShards extends DebtCollectorCard {
 	/**
 	 * 
 	 */

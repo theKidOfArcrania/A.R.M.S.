@@ -14,7 +14,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class HouseCard extends ActionCard implements PropertyRaise {
+public class SMinorUpgrade extends SAction implements PropertyRaise {
 
 	/**
 	 *

@@ -17,7 +17,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class DoubleTheRentCard extends ActionCard {
+public class DoubleTheRentCard extends SAction {
 	/**
 	 *
 	 */
@@ -35,7 +35,7 @@ public class DoubleTheRentCard extends ActionCard {
 			played = self
 					.selectHand("Select a rent card to rent others with.",
 							card -> ((!self.isLastTurn() && card instanceof DoubleTheRentCard)
-									|| (card instanceof RentCard && card.isEnabled(self, Likeness.Action))),
+									|| (card instanceof SDamageCard && card.isEnabled(self, Likeness.Action))),
 							cardAction -> cardAction.getInternalType()
 									.equals("move.action"));
 
@@ -47,11 +47,11 @@ public class DoubleTheRentCard extends ActionCard {
 				multiplier *= 2;
 			}
 		} while (played.getPlayed() instanceof DoubleTheRentCard);
-		RentCard rentCard = (RentCard) played.getPlayed();
+		SDamageCard sDamageCard = (SDamageCard) played.getPlayed();
 
 		int rent = self.columnStream()
 				.parallel()
-				.filter(rentCard::isValidRent)
+				.filter(sDamageCard::isValidRent)
 				.mapToInt(WeaponSet::getRent)
 				.max()
 				.orElse(0);
@@ -59,12 +59,12 @@ public class DoubleTheRentCard extends ActionCard {
 			return false;
 		}
 
-		if (payRequest(self, rentCard.isGlobal(), rent * multiplier, "rent")) {
+		if (payRequest(self, sDamageCard.isGlobal(), rent * multiplier, "rent")) {
 			extraDoubles.forEach((doubling) -> {
 				self.pushTurn(new CardAction(doubling, getSupportedTypes().getActionType(Likeness.Action)));
 				centerPlay.discard(doubling);
 			});
-			centerPlay.discard(rentCard);
+			centerPlay.discard(sDamageCard);
 			return true;
 		} else {
 			return false;
@@ -85,7 +85,7 @@ public class DoubleTheRentCard extends ActionCard {
 
 			return self.handStream()
 					.parallel()
-					.filter(card -> card instanceof RentCard)
+					.filter(card -> card instanceof SDamageCard)
 					.anyMatch(rent -> rent.isEnabled(self, Likeness.Action));
 		}
 		return true;

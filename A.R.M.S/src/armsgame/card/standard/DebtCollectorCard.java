@@ -12,7 +12,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class DebtCollectorCard extends ActionCard {
+public class DebtCollectorCard extends SAction {
 	/**
 	 *
 	 */
