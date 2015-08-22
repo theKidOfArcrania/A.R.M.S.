@@ -6,7 +6,7 @@ import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
 import armsgame.impl.CardActionType.Likeness;
 
-public class JustSayNoCard extends ActionCard implements Response {
+public class SShield extends SAction implements Response {
 	private static final long serialVersionUID = -1356787074424595137L;
 
 	@Override
@@ -16,7 +16,7 @@ public class JustSayNoCard extends ActionCard implements Response {
 
 	@Override
 	public ResponseType getResponseType() {
-		return ResponseType.JustSayNo;
+		return ResponseType.SHIELD;
 	}
 
 	@Override

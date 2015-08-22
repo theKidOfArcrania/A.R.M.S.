@@ -380,7 +380,7 @@ public class Payment {
 		Response response = responder.selectResponse(responseString);
 		if (response != null && response.getResponseType() != null) {
 			switch (response.getResponseType()) {
-			case JustSayNo:
+			case SHIELD:
 				canceled = !canceled;
 				handleResponse("Player " + responder.getName() + " has Just-Say-No-ed your request.", responder, requester);
 				break;

@@ -6,15 +6,15 @@
 package armsgame.card.standard;
 
 import armsgame.card.WeaponSet;
+import armsgame.impl.CardActionType.Likeness;
 import armsgame.impl.Payment;
 import armsgame.impl.Player;
-import armsgame.impl.CardActionType.Likeness;
 
 /**
  *
  * @author Henry
  */
-public class SlyDealCard extends ActionCard {
+public class SThief extends SAction {
 	/**
 	 *
 	 */
@@ -29,7 +29,7 @@ public class SlyDealCard extends ActionCard {
 		}
 
 		SWeaponPart take = (SWeaponPart) self.selectProperty("Please select a property to take.", (card) -> {
-			// Has to not be part of the full set.
+			// Has to not be part of the full weapon
 			WeaponSet column = target.getPropertyColumn(card);
 			column.sort();
 			return !column.isFullSet() || column.indexOf(card) >= column.getFullSet();

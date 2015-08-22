@@ -14,7 +14,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class ForcedDealCard extends ActionCard {
+public class ForcedDealCard extends SAction {
 	/**
 	 *
 	 */
