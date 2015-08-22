@@ -89,9 +89,9 @@ public class MoveCounter extends Application {
 		ImageView light2off = Tools.createImageView(lightoff, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio, largeShade);
 		ImageView light3off = Tools.createImageView(lightoff, 56, 56, 168, 91.5, sRatio, wRatio, hRatio, largeShade);
 		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw2 = Tools.createImageView(screw, 15, 15, scene.getWidth()-21, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, scene.getHeight()-20, sRatio, wRatio, hRatio, out);
-		ImageView screw4 = Tools.createImageView(screw, 15, 15, scene.getWidth()-21, scene.getHeight()-20, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, 246, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 205, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, 246, 205, sRatio, wRatio, hRatio, out);
         
         
 		root.getChildren().addAll(name, panel, light1off, light2off, light3off, light1, 

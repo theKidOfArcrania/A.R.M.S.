@@ -14,10 +14,10 @@ public class Tools {
 			double sRatio, double wRatio, double hRatio, Color c, Effect g)
 	{
 		Rectangle r = new Rectangle(w*wRatio,h*hRatio);
-		r.setArcHeight(yR);
-		r.setArcWidth(xR);
-		AnchorPane.setTopAnchor(r, y);
-		AnchorPane.setLeftAnchor(r,x);
+		r.setArcHeight(yR*hRatio);
+		r.setArcWidth(xR*wRatio);
+		AnchorPane.setTopAnchor(r, y*hRatio);
+		AnchorPane.setLeftAnchor(r,x*wRatio);
 		r.setFill(c);
 		r.setEffect(g);
 		
@@ -58,8 +58,8 @@ public class Tools {
 		sv.setSmooth(true);
 		sv.setCache(true);
 		sv.setEffect(g);
-		AnchorPane.setTopAnchor(sv, y*hRatio);
 		AnchorPane.setLeftAnchor(sv, x*wRatio);
+		AnchorPane.setTopAnchor(sv, y*hRatio);
 		
 		return sv;
 	}

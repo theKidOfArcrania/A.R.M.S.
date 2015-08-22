@@ -20,19 +20,19 @@ When attached, will change the weapon visual to more awesome one.
 1. Brown - Wooden Club(Physical Dmg): 2 Parts
 Club(5 DMG)- Spikes(5 DMG) 
 Completed = 10 DMG
-BU - Electric Barbed Club(B4 Model) - The next time the players who are attacked move, will inflict extra 15 damage each turn (15 shields gained)
-EU - Explosive Barbed Club (R60T Model)- The next time the players who are attacked move, will inflict extra 20 damage each turn (20 shields gained)
-2. Light Blue - Dagger (Physical DMG): 3 parts
+BU - Electric Barbed Club(B4 Model) - The next time the players who are attacked move, will inflict extra 15 damage (15 shields gained)
+EU - Explosive Barbed Club (R60T Model)- The next time the players who are attacked move, will inflict extra 20 damage(20 shields gained)
+
+2. Dark Blue - Dagger (Physical DMG): 3 parts
 Hilt(5 DMG)- Blade(
-sword, bow and arrow, bayonett, machinegun,flamethrower,grenade launcher, nuke
-3. Dark Blue - Sword
-4. Purple- Throwing Spear
-4. Gray- Bow and Arrow
+3. Gray - Sword
+4. Purple- Bow and Arrow
 5. Orange - Bayonett
 6. Yellow- machinegun
 7. Red- flamethrower 
 8. Black- Grenade Launcher
 9. Green- Nuke (Nuke has no upgrades)
+10.Light Blue- Raygun 
 
 >Gameplay: Turn by turn players go, 3 moves per turn
 In one turn, players draw two cards, then can play three cards
@@ -43,8 +43,9 @@ a) play a card
 b) discard a card (takes a turn unless 3 moves have been taken and more than 7 cards are in hand)
 c) end turn
 
-Win Conditions: When all other players are dead, winner willi gain X amount of points to his ranking, and the 2nd place -4th place will get X points
-1 game will be added to the game counter
+Win Conditions: When all other players are dead, winner will gain X amount of points, others will gain points based on performance
+
+Games are matched based on ranking
 
 >Card Types:
 One use weapon upgrade: "BOOST!"
@@ -73,10 +74,11 @@ Draw two cards: "SCAVENGE"
 
 Another turn: "TIME WARP"
 
->(optional) Event Cards: When drawn, cards are immediately played, using a turn 
+>(optional) Event Cards: When drawn using a turn, card is unknown until played.
 1. Lucky Battery: Increases shields by 10 if full health
 2. Weapon Malfunction: If ___ is owned, the weapon is destroyed and put into the discard pile, unless it is part of a full set
 3. Robot Malfunction: Glitches and turn ends
+4. Weapon of Choice:
 -new ideas welcome-
 
 2. Second mode: Weapons race- First player to reach a combined health and shields of 200 and gains 3 weapons wins
