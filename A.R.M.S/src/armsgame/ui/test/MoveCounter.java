@@ -3,7 +3,7 @@ package armsgame.ui.test;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.util.ArrayList;
-
+import armsgame.ui.test.Tools;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -12,11 +12,9 @@ import javafx.application.Application;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,7 +25,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -41,21 +38,23 @@ public class MoveCounter extends Application {
 	}
 	
 	private final PerspectiveCamera cameraView = new PerspectiveCamera();
-	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice()
-			.getDisplayMode();
+	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
+	private final double dispWidth = displayRes.getWidth();
+	private final double dispHeight = displayRes.getHeight();
+	private final double wRatio = dispWidth/1600;
+	private final double hRatio = dispHeight/900;
+	public double sRatio;
 	
-	public final double dispWidth = displayRes.getWidth();
-	public final double dispHeight = displayRes.getHeight();
-	
-	private static final double ANCHOR = 10.0;
 	private static int count;
 	private SimpleDoubleProperty alph;
-
 	private final Timeline solid = new Timeline();
+	public ArrayList<ImageView> lightList;
 	
 	public MoveCounter() {
 		alph = new SimpleDoubleProperty(1.0);
+		sRatio = checkSmallRatio();
+		lightList = new ArrayList<ImageView>();
 		count = 3;
 		
 	}
@@ -69,93 +68,39 @@ public class MoveCounter extends Application {
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		
 		AnchorPane root = new AnchorPane();
+		Scene scene = new Scene(root, 267*wRatio, 225*hRatio);
+		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
+		InnerShadow mediumShade = new InnerShadow(3.0, Color.BLACK);
+		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
+		DropShadow out = new DropShadow(2.0, Color.BLACK);
 		
-		//shades
-		InnerShadow smallShade = new InnerShadow();
-		smallShade.setRadius(2.0);
-		
-		InnerShadow mediumShade = new InnerShadow();
-		mediumShade.setRadius(3.0);
-		
-		InnerShadow largeShade = new InnerShadow();
-		mediumShade.setRadius(5.0);
-		
-		DropShadow out = new DropShadow();
-		out.setRadius(2.0);
-
-		
-		//lightholder
-		Rectangle panel = new Rectangle(dispWidth/6-50, dispHeight/4-85);
-		panel.setArcHeight(60.0);
-		panel.setArcWidth(60.0);
-		AnchorPane.setBottomAnchor(panel, 25.0);
-		AnchorPane.setLeftAnchor(panel, 22.0);
-		panel.setFill(Color.DARKGRAY.darker().darker());
-		panel.setEffect(largeShade);
-		
-		//label
-		Text name = new Text("Moves Left");
-		name.setFill(Color.GRAY);
-		name.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Bold.otf").toExternalForm(), 30));
+		Rectangle panel = Tools.createRoundedRectangle(217,140, 60, 60, 22, 52, sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
+		Text name = Tools.createText(0, 12, wRatio, hRatio,"Move Counter", Color.GRAY, smallShade, Tools.createBoldFont(28,sRatio));
 		name.setWrappingWidth(dispWidth/6);
 		name.setTextAlignment(TextAlignment.CENTER);
-		AnchorPane.setTopAnchor(name, 15.0);
-		name.setEffect(smallShade);
 		
-		Scene scene = new Scene(root, dispWidth/6, dispHeight/4);
-		//first light
-		
-		ArrayList<ImageView> lightList = new ArrayList<ImageView>();
-		
-		ImageView light1 = createLight(mediumShade);
-        AnchorPane.setBottomAnchor(light1, panel.getHeight()/2);
-        AnchorPane.setLeftAnchor(light1, panel.getWidth()/6);
-        lightList.add(light1);
+        Image lightoff = Tools.createImage("lightoff.png");
+        Image light = Tools.createImage("Greenlight.png");
+        Image screw = Tools.createImage("screw.png");
+        ImageView light1= Tools.createImageView(light, 56, 56, 36, 91.5, sRatio, wRatio, hRatio, mediumShade); lightList.add(light1);
+        ImageView light2= Tools.createImageView(light, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light2);
+        ImageView light3= Tools.createImageView(light, 56, 56, 168, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light3);
+		ImageView light1off = Tools.createImageView(lightoff, 56, 56, 36, 91.5, sRatio, wRatio, hRatio, largeShade);
+		ImageView light2off = Tools.createImageView(lightoff, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio, largeShade);
+		ImageView light3off = Tools.createImageView(lightoff, 56, 56, 168, 91.5, sRatio, wRatio, hRatio, largeShade);
+		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, 246, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 205, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, 246, 205, sRatio, wRatio, hRatio, out);
         
-		ImageView light2 = createLight(mediumShade);
-        AnchorPane.setBottomAnchor(light2, panel.getHeight()/2);
-        AnchorPane.setLeftAnchor(light2, scene.getWidth()/2-light2.getFitHeight()/2-3);
-        lightList.add(light2);
         
-		ImageView light3 = createLight(mediumShade);
-        AnchorPane.setBottomAnchor(light3, panel.getHeight()/2);
-        AnchorPane.setRightAnchor(light3, panel.getWidth()/6);
-        lightList.add(light3);
-        
-		ImageView light1off = createLightOff(largeShade);
-        AnchorPane.setBottomAnchor(light1off, panel.getHeight()/2);
-        AnchorPane.setLeftAnchor(light1off, panel.getWidth()/6);
-        
-        ImageView light2off = createLightOff(largeShade);
-        AnchorPane.setBottomAnchor(light2off, panel.getHeight()/2);
-        AnchorPane.setLeftAnchor(light2off, scene.getWidth()/2-light2.getFitHeight()/2-3);
-        
-        ImageView light3off = createLightOff(largeShade);
-        AnchorPane.setBottomAnchor(light3off, panel.getHeight()/2);
-        AnchorPane.setRightAnchor(light3off, panel.getWidth()/6);
-        
-        ImageView nut1 = createScrew(out);
-        AnchorPane.setTopAnchor(nut1, 0.0);
-        AnchorPane.setLeftAnchor(nut1, 0.0);
-        
-        ImageView nut2 = createScrew(out);
-        AnchorPane.setTopAnchor(nut2, 0.0);
-        AnchorPane.setLeftAnchor(nut2, scene.getWidth()-21);
-        
-        ImageView nut3 = createScrew(out);
-        AnchorPane.setTopAnchor(nut3, scene.getHeight()-20);
-        AnchorPane.setLeftAnchor(nut3, 0.0);
-        
-        ImageView nut4 = createScrew(out);
-        AnchorPane.setTopAnchor(nut4, scene.getHeight()-20);
-        AnchorPane.setLeftAnchor(nut4, scene.getWidth()-21);
 		root.getChildren().addAll(name, panel, light1off, light2off, light3off, light1, 
-				light2, light3,nut1,nut2,nut3,nut4);
+				light2, light3,screw1,screw2,screw3,screw4);
 		root.setOnMouseClicked(e->lightOff(lightList));
    
 		
 		root.setId("ROOTNODE");
-		scene.getStylesheets().add("/monopolycards/ui/test/border.css");
+		scene.getStylesheets().add("/armsgame/ui/test/border.css");
 		primaryStage.setX(0);
 		primaryStage.setY(dispHeight - scene.getHeight());
 
@@ -163,20 +108,6 @@ public class MoveCounter extends Application {
 		scene.setCamera(cameraView);
 		primaryStage.show();
 
-	}
-	public ImageView createScrew(Effect g)
-	{
-		Image turnoff = new Image((PlayerInfoTest.class.getResource("screw.png").toExternalForm()));
-		ImageView lightoff = new ImageView();
-		lightoff.setImage(turnoff);
-		lightoff.setFitHeight(15);
-		lightoff.setFitWidth(15);
-		lightoff.setPreserveRatio(true);
-        lightoff.setSmooth(true);
-        lightoff.setCache(true);
-        lightoff.setEffect(g);
-        
-        return lightoff;
 	}
 	public void lightOff(ArrayList<ImageView> lightList)
 	{
@@ -215,41 +146,15 @@ public class MoveCounter extends Application {
 	
 	public void resetMoves(ArrayList<ImageView> lightList)
 	{
-		count = 3;
+		count = lightList.size();
 		for(ImageView light: lightList)
 		{
 			light.setOpacity(1.0);
 		}
 	}
 	
-	public ImageView createLight(Effect g)
+	public double checkSmallRatio()
 	{
-		Image turn1 = new Image((PlayerInfoTest.class.getResource("Greenlight.png").toExternalForm()));
-		ImageView light1 = new ImageView();
-		light1.setImage(turn1);
-		light1.setFitHeight(dispHeight/16);
-		light1.setFitWidth(dispWidth/16);
-		light1.setPreserveRatio(true);
-        light1.setSmooth(true);
-        light1.setCache(true);
-        light1.setEffect(g);
-
-        
-        return light1;
-
-	}
-	public ImageView createLightOff(Effect g)
-	{
-		Image turnoff = new Image((PlayerInfoTest.class.getResource("lightoff.png").toExternalForm()));
-		ImageView lightoff = new ImageView();
-		lightoff.setImage(turnoff);
-		lightoff.setFitHeight(dispHeight/16);
-		lightoff.setFitWidth(dispWidth/16);
-		lightoff.setPreserveRatio(true);
-        lightoff.setSmooth(true);
-        lightoff.setCache(true);
-        lightoff.setEffect(g);
-        
-        return lightoff;
+	   return (wRatio>hRatio)?hRatio:wRatio;
 	}
 }

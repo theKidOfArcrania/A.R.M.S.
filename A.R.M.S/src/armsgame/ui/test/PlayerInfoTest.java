@@ -2,15 +2,18 @@ package armsgame.ui.test;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;
-
+import armsgame.ui.test.Tools;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -20,6 +23,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -30,231 +36,115 @@ import javafx.util.Duration;
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 
 public class PlayerInfoTest extends Application {
-
-	private static final double ANCHOR = 10.0;
-	//test
-
+	private final PerspectiveCamera cameraView = new PerspectiveCamera();
+	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
+	private final double dispWidth = displayRes.getWidth();
+	private final double dispHeight = displayRes.getHeight();
+	private final double wRatio = dispWidth/1600.0;
+	private final double hRatio = dispHeight/900.0;
+	public double sRatio;
+	
+	//user variables
+	private IntegerProperty energy;
+	private StringProperty playerName;
+	private final DoubleProperty alph;
+	private final IntegerProperty energyLevel;
+	private final DoubleProperty energyScale;
+	private final IntegerProperty shieldLevel;
+	private final DoubleProperty shieldScale;
+	private IntegerProperty weaponSets;
+	private final Timeline solid = new Timeline();
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
 
-	private final PerspectiveCamera cameraView = new PerspectiveCamera();
-	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice()
-			.getDisplayMode();
-	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
-	public final double dispWidth = displayRes.getWidth();
-	public final double dispHeight = displayRes.getHeight();
-	public double wRatio = dispWidth/1600;
-	public double hRatio = dispHeight/900;
-	//user variables
-	private SimpleIntegerProperty moneyValue;
-	private SimpleStringProperty playerName;
-	private final SimpleDoubleProperty alph;
-	private SimpleIntegerProperty setNumber;
-
-
-	private final Timeline solid = new Timeline();
-
 	public PlayerInfoTest() {
+		sRatio = checkSmallRatio();
 		alph = new SimpleDoubleProperty(.4);
+		shieldLevel = new SimpleIntegerProperty(80);
+		shieldScale = new SimpleDoubleProperty(1.0);
+		shieldScale.bind(shieldLevel.divide(100.0));
+		energyLevel = new SimpleIntegerProperty(100);
+		energyScale = new SimpleDoubleProperty(1.0);
+		energyScale.bind(energyLevel.divide(100.0));
 	}
-
-	public ImageView createScrew(Effect g)
-	{
-		Image turnoff = new Image((PlayerInfoTest.class.getResource("screw.png").toExternalForm()));
-		ImageView lightoff = new ImageView();
-		lightoff.setImage(turnoff);
-		lightoff.setFitHeight(15);
-		lightoff.setFitWidth(15);
-		lightoff.setPreserveRatio(true);
-		lightoff.setSmooth(true);
-		lightoff.setCache(true);
-		lightoff.setEffect(g);
-
-		return lightoff;
-	}
-
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		init(primaryStage);
 	}
-	public void trans(boolean status){
-		if (solid.getStatus() == Status.RUNNING) {
-			return;
-		}
-		if (status) {
-
-			solid.playFromStart();
-		} else {
-			solid.setRate(-1);
-			solid.jumpTo("end");
-			solid.play();
-		}
-
-	}
+	
 	private void init(Stage primaryStage) {
-
+		
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
-
 		AnchorPane root = new AnchorPane();
-
-		InnerShadow smallShade = new InnerShadow();
-		smallShade.setRadius(2.0);
-
-		InnerShadow mediumShade = new InnerShadow();
-		mediumShade.setRadius(3.0);
-
-		InnerShadow largeShade = new InnerShadow();
-		mediumShade.setRadius(5.0);
-
-		InnerShadow greenShade = new InnerShadow();
-		greenShade.setRadius(2);
-		greenShade.setColor(Color.DARKGREEN.darker());
-
-		DropShadow out = new DropShadow();
-		out.setRadius(2.0);
-
-
-		Text name = new Text("MyUsername");
-		//name.textProperty().bind(playerName);
-		name.setFill(Color.GRAY);
-		name.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Bold.otf").toExternalForm(), 24));
-		AnchorPane.setTopAnchor(name, 15.0);
-		AnchorPane.setLeftAnchor(name,80.0);
-		name.setEffect(smallShade);
-
-		Text money = new Text("Money:");
-		money.setFill(Color.GREEN.brighter());
-		money.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), 16));
-		AnchorPane.setTopAnchor(money, 85.0);
-		AnchorPane.setLeftAnchor(money, 15.0);
-		money.setEffect(greenShade);
-
-		Text moneyDisplay = new Text("$1000M");
-		//moneyDisplay.textProperty().bind(new SimpleStringProperty(moneyValue.getValue()+""));
-		moneyDisplay.setFill(Color.GRAY);
-		moneyDisplay.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), 16));
-		AnchorPane.setTopAnchor(moneyDisplay, 85.0);
-		AnchorPane.setLeftAnchor(moneyDisplay, 85.0);
-		moneyDisplay.setEffect(smallShade);
-
-		Text properties = new Text("Full Set Count:");
-		properties.setFill(Color.GREEN.brighter());
-		properties.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), 16));
-		AnchorPane.setTopAnchor(properties, 112.0);
-		AnchorPane.setLeftAnchor(properties, 15.0);
-		properties.setEffect(greenShade);
-
-		Text setDisplay = new Text("0 Sets");
-		//setDisplay.textProperty().bind(new SimpleStringProperty(setNumber.getValue()+""));
-		setDisplay.setFill(Color.GRAY);
-		setDisplay.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), 16));
-		AnchorPane.setTopAnchor(setDisplay, 112.0);
-		AnchorPane.setLeftAnchor(setDisplay, 150.0);
-		setDisplay.setEffect(smallShade);
-
-		Image profileImage = new Image((PlayerInfoTest.class.getResource("blank-profile.jpg").toExternalForm()));
-		ImageView profileView = new ImageView();
-		profileView.setImage(profileImage);
-		profileView.setFitHeight(60);
-		profileView.setFitWidth(60);
-		profileView.setSmooth(true);
-		profileView.setCache(true);
-		profileView.setEffect(smallShade);
-		AnchorPane.setTopAnchor(profileView, 15.0);
-		AnchorPane.setLeftAnchor(profileView, 10.0);
-
-
-
-
-		//moneypic
-		/*Image moneyPic = new Image((PlayerInfoTest.class.getResource("Dollar Sign.png").toExternalForm()));
-		ImageView moneyView = new ImageView();
-		moneyView.setImage(moneyPic);
-		moneyView.setFitHeight(20);
-		moneyView.setFitWidth(20);
-		moneyView.setPreserveRatio(true);
-        moneyView.setSmooth(true);
-        moneyView.setCache(true);
-        AnchorPane.setTopAnchor(moneyView, 65.0);
-        AnchorPane.setLeftAnchor(moneyView, 90.0);
-        moneyView.setEffect(shader);
-
-        //fullsets pic
-        Image cardPic = new Image((PlayerInfoTest.class.getResource("fullset.png").toExternalForm()));
-        ImageView cardView = new ImageView();
-		cardView.setImage(cardPic);
-		cardView.setFitHeight(50);
-		cardView.setFitWidth(50);
-		cardView.setPreserveRatio(true);
-        cardView.setSmooth(true);
-        cardView.setCache(true);
-
-        cardView.setEffect(shader);
-        AnchorPane.setTopAnchor(cardView, 85.0);
-        AnchorPane.setLeftAnchor(cardView, 15.0);*/
-
-		Scene scene = new Scene(root, dispWidth/5.5, dispHeight/6);
-
+		Scene scene = new Scene(root, 290*wRatio, 190*hRatio);
 		scene.setFill(Color.color(.85, .85, .85,.4));
-
-		ImageView nut1 = createScrew(out);
-		AnchorPane.setTopAnchor(nut1, 0.0);
-		AnchorPane.setLeftAnchor(nut1, 0.0);
-
-		ImageView nut2 = createScrew(out);
-		AnchorPane.setTopAnchor(nut2, 0.0);
-		AnchorPane.setLeftAnchor(nut2, scene.getWidth()-21);
-
-		ImageView nut3 = createScrew(out);
-		AnchorPane.setTopAnchor(nut3, scene.getHeight()-20);
-		AnchorPane.setLeftAnchor(nut3, 0.0);
-
-		ImageView nut4 = createScrew(out);
-		AnchorPane.setTopAnchor(nut4, scene.getHeight()-20);
-		AnchorPane.setLeftAnchor(nut4, scene.getWidth()-21);
-
-		Rectangle panel = new Rectangle(scene.getWidth()-100, 25);
-		panel.setArcHeight(5.0);
-		panel.setArcWidth(5.0);
-		AnchorPane.setTopAnchor(panel, 50.0);
-		AnchorPane.setLeftAnchor(panel,80.0);
-		panel.setFill(Color.DARKGRAY.darker().darker());
-		panel.setEffect(largeShade);
-
-
-		Text playerRank = new Text("Rank:");
-		playerRank.setFill(Color.WHITE);
-		playerRank.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), 10));
-		AnchorPane.setTopAnchor(playerRank, 57.0);
-		AnchorPane.setLeftAnchor(playerRank,85.0);
-		playerRank.setEffect(out);
-
-		Text playerGames = new Text("Games:");
-		playerGames.setFill(Color.WHITE);
-		playerGames.setFont(Font.loadFont(PlayerInfoTest.class.getResource("Xolonium-Regular.otf").toExternalForm(), 10));
-		AnchorPane.setTopAnchor(playerGames, 57.0);
-		AnchorPane.setRightAnchor(playerGames,50.0);
-		playerGames.setEffect(out);
-
-		root.getChildren().addAll(name, properties, money, moneyDisplay, setDisplay,  profileView, nut1
-				,nut2, nut3,nut4, panel, playerRank, playerGames);
+		
+		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
+		InnerShadow mediumShade = new InnerShadow(3.0, Color.BLACK);
+		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
+		InnerShadow greenShade = new InnerShadow(2.0, Color.DARKGREEN.darker());
+		DropShadow out = new DropShadow(2.0, Color.BLACK);
+	
+		ImageView profileView = Tools.createImageView(Tools.createImage("blank-profile.jpg"), 60, 60, 10, 15,  sRatio, wRatio, hRatio, smallShade);
+		Image screw = Tools.createImage("screw.png");
+		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, 269, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 170, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, 269, 170, sRatio, wRatio, hRatio, out);
+		
+		Text name = Tools.createText(80,15,  wRatio, hRatio,"MyUsername", Color.GRAY, smallShade, Tools.createBoldFont(24,sRatio));
+		//name.textProperty().bind(playerName);
+		Text weapons = Tools.createText(15, 150,  wRatio, hRatio,"Finished Weapons: ", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
+		Text weaponDisplay = Tools.createText(190, 150,  wRatio, hRatio,"0", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));
+		Text energy = Tools.createText(15, 85,  wRatio, hRatio,"Energy ", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
+		//Text energyDisplay = Tools.createText(85, 85,  wRatio, hRatio,"100 V", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));	
+		Text shield = Tools.createText(15, 117.5,  wRatio, hRatio,"Shields", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
+		//Text shieldDisplay = Tools.createText(87, 117.5,  wRatio, hRatio,"0 V", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));
+		Text playerRank = Tools.createText(85.0, 57.0,  wRatio, hRatio,"Rank: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
+		Text playerGames = Tools.createText(150.0, 57.0,  wRatio, hRatio,"Games: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
+		
+		Rectangle shieldEmpty = Tools.createRoundedRectangle(170,22.5,5,5,85,116.5,sRatio, wRatio, hRatio,Color.DARKGRAY.darker(), largeShade);
+		Stop[] list = {new Stop(0.0, Color.WHITE),
+					new Stop(0.2, Color.web("#c4e0f4")),
+					new Stop(.49, Color.web("#acd5f2")), 
+					new Stop(.5, Color.web("#74b2dd")), 
+					new Stop(1.0, Color.web("#a9e1f7"))
+					};
+		LinearGradient shieldGrad = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,list);
+		Rectangle shieldBar = Tools.createRoundedRectangle((168)*shieldScale.getValue()
+				,20,5,5,86,117.5,sRatio, wRatio, hRatio,Color.WHITE, null);
+		shieldBar.setFill(shieldGrad);
+		
+		Rectangle energyEmpty = Tools.createRoundedRectangle(170,22.5,5,5,85,84,sRatio, wRatio, hRatio,Color.DARKGRAY.darker(), largeShade);
+		Stop[] elist = {new Stop(0.0, Color.WHITE),
+					new Stop(0.3, Color.rgb(202,255,202)),
+					new Stop(.49, Color.web("#acf0b7")), 
+					new Stop(.5, Color.rgb(116,229,135)), 
+					new Stop(1.0, Color.web("#c7f3ce"))
+					};
+		LinearGradient energyGrad = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,elist);
+		Rectangle energyBar = Tools.createRoundedRectangle((168)*energyScale.getValue()
+				,20,5,5,86,85,sRatio, wRatio, hRatio,Color.WHITE, null);
+		energyBar.setFill(energyGrad);
+		
+		
+		Rectangle panel = Tools.createRoundedRectangle(190,25,5,5,80,50,sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
+		
+		root.getChildren().addAll(name, weapons, energy,shieldEmpty, shieldBar,energyEmpty, energyBar,weaponDisplay, shield,  profileView, screw1
+				,screw2, screw3,screw4, panel, playerRank, playerGames);
 		root.opacityProperty().bind(alph);
-
+		
+		//scene settings
 		scene.setOnMouseEntered(e->trans(true));
 		scene.setOnMouseExited(e->trans(false));
-		//white background
-		AnchorPane secLayout = new AnchorPane();
-		Stage secondStage = new Stage();
-		secondStage.initStyle(StageStyle.TRANSPARENT);
-		secondStage.setScene(new Scene(secLayout, dispWidth,dispHeight));
-		//secondStage.show();
 		root.setId("ROOTNODE");
-
-		scene.getStylesheets().add("/monopolycards/ui/test/border.css");
-		primaryStage.setX(dispWidth/2-scene.getWidth()/2);
+		scene.getStylesheets().add("/armsgame/ui/test/border.css");
+		
 		primaryStage.setY(0);
-
 		primaryStage.setScene(scene);
 		scene.setCamera(cameraView);
 		primaryStage.show();
@@ -262,8 +152,6 @@ public class PlayerInfoTest extends Application {
 
 
 		// Timeline
-
-		//start
 		solid.getKeyFrames()
 		.add(new KeyFrame(Duration.ZERO, new KeyValue(alph, .4),
 				new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85,.4))));
@@ -278,5 +166,25 @@ public class PlayerInfoTest extends Application {
 		solid.getKeyFrames()
 		.add(new KeyFrame(Duration.seconds(.15), new KeyValue(alph, 1.0),
 				new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85,1.0))));
+	}
+
+	
+	public void trans(boolean status){
+		if (solid.getStatus() == Status.RUNNING) {
+			return;
+		}
+		if (status) {
+
+			solid.playFromStart();
+		} else {
+			solid.setRate(-1);
+			solid.jumpTo("end");
+			solid.play();
+		}
+
+	}
+	public double checkSmallRatio()
+	{
+	   return (wRatio>hRatio)?hRatio:wRatio;
 	}
 }
