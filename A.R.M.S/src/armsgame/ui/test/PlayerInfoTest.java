@@ -48,11 +48,11 @@ public class PlayerInfoTest extends Application {
 	//user variables
 	private IntegerProperty energy;
 	private StringProperty playerName;
-	private final DoubleProperty alph;
-	private final IntegerProperty energyLevel;
-	private final DoubleProperty energyScale;
-	private final IntegerProperty shieldLevel;
-	private final DoubleProperty shieldScale;
+	private DoubleProperty alph;
+	private IntegerProperty energyLevel;
+	private DoubleProperty energyScale;
+	private IntegerProperty shieldLevel;
+	private DoubleProperty shieldScale;
 	private IntegerProperty weaponSets;
 	private final Timeline solid = new Timeline();
 	
@@ -63,9 +63,10 @@ public class PlayerInfoTest extends Application {
 	public PlayerInfoTest() {
 		sRatio = checkSmallRatio();
 		alph = new SimpleDoubleProperty(.4);
-		shieldLevel = new SimpleIntegerProperty(80);
+		shieldLevel = new SimpleIntegerProperty(0);
 		shieldScale = new SimpleDoubleProperty(1.0);
 		shieldScale.bind(shieldLevel.divide(100.0));
+		
 		energyLevel = new SimpleIntegerProperty(100);
 		energyScale = new SimpleDoubleProperty(1.0);
 		energyScale.bind(energyLevel.divide(100.0));
@@ -98,12 +99,17 @@ public class PlayerInfoTest extends Application {
 		
 		Text name = Tools.createText(80,15,  wRatio, hRatio,"MyUsername", Color.GRAY, smallShade, Tools.createBoldFont(24,sRatio));
 		//name.textProperty().bind(playerName);
-		Text weapons = Tools.createText(15, 150,  wRatio, hRatio,"Finished Weapons: ", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
-		Text weaponDisplay = Tools.createText(190, 150,  wRatio, hRatio,"0", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));
-		Text energy = Tools.createText(15, 85,  wRatio, hRatio,"Energy ", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
-		//Text energyDisplay = Tools.createText(85, 85,  wRatio, hRatio,"100 V", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));	
-		Text shield = Tools.createText(15, 117.5,  wRatio, hRatio,"Shields", Color.GREEN.brighter(), greenShade, Tools.createRegularFont(16,sRatio));
-		//Text shieldDisplay = Tools.createText(87, 117.5,  wRatio, hRatio,"0 V", Color.GRAY, smallShade, Tools.createRegularFont(16,sRatio));
+		Text weapons = Tools.createText(10, 150,  wRatio, hRatio,"Complete Weapons: ", Color.GRAY, smallShade, Tools.createRegularFont(14,sRatio));
+		Text weaponDisplay = Tools.createText(170, 150,  wRatio, hRatio,"0", Color.GRAY, smallShade, Tools.createRegularFont(14,sRatio));
+		
+		Text energy = Tools.createText(10, 85,  wRatio, hRatio,"Energy:", Color.rgb(116,229,135), out, Tools.createRegularFont(16,sRatio));
+		Text energyDisplay = Tools.createText(135, 90,  wRatio, hRatio, "100 / 100V", Color.WHITE, out, Tools.createRegularFont(10,sRatio));	
+			energyDisplay.textProperty().bind(energyLevel.asString().concat(" / 100V"));
+	
+		Text shield = Tools.createText(10, 117.5,  wRatio, hRatio,"Shields:", Color.LIGHTBLUE, out, Tools.createRegularFont(16,sRatio));
+		Text shieldDisplay = Tools.createText(135, 122.5,  wRatio, hRatio,"0 / 100V", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
+			shieldDisplay.textProperty().bind(shieldLevel.asString().concat(" / 100V"));
+		
 		Text playerRank = Tools.createText(85.0, 57.0,  wRatio, hRatio,"Rank: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
 		Text playerGames = Tools.createText(150.0, 57.0,  wRatio, hRatio,"Games: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
 		
@@ -134,7 +140,7 @@ public class PlayerInfoTest extends Application {
 		
 		Rectangle panel = Tools.createRoundedRectangle(190,25,5,5,80,50,sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
 		
-		root.getChildren().addAll(name, weapons, energy,shieldEmpty, shieldBar,energyEmpty, energyBar,weaponDisplay, shield,  profileView, screw1
+		root.getChildren().addAll(name, weapons, energy,shieldEmpty, shieldBar,energyEmpty, energyBar,weaponDisplay, energyDisplay, shieldDisplay, shield,  profileView, screw1
 				,screw2, screw3,screw4, panel, playerRank, playerGames);
 		root.opacityProperty().bind(alph);
 		

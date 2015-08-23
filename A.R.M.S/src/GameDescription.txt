@@ -48,11 +48,11 @@ Win Conditions: When all other players are dead, winner will gain X amount of po
 Games are matched based on ranking
 
 >Card Types:
-One use weapon upgrade: "BOOST!"
+One use ammunition upgrade: "BOOST!"
 
 Stealing one weapon part: "PART PICKER"
 
-Stealing a whole weapon: "WEAPON WEASEL"
+Stealing a whole weapon: "ARMS ABDUCTION"
 
 Swapping a weapon part with another person: "SWAP!"
 
@@ -65,12 +65,13 @@ Prevent any attack or swap: "EMP BARRIER"
 Single Ammunition for fire on one person: "SINGLE TARGET AMMUNITION"
 
 Ammunition specific to one - three weapons: (Dagger/sword/club, BowArrow/ Spear, Bayonett/MachineGun, Flamethrower/GrenadeLauncher, Nuke)
+Hits Everyone, MULTI TARGET AMMUNITION
 
-Weapon Upgrade: "Basic Upgrade" or "Extreme Upgrade" (explained above)
+Weapon Upgrade: "Versatile Basic Upgrade" or "Extreme Upgrade" (explained above)
 
-Shield Filler by ____ amount: "BURST CHARGE"
+Shield Filler: "SHIELD CHARGE"
 
-Draw two cards: "SCAVENGE"
+Draw two cards: "SCAVENGE THE JUNKYARD"
 
 Another turn: "TIME WARP"
 
