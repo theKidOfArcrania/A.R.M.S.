@@ -16,7 +16,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class DoubleTheRentCard extends SAction {
+public class Boost extends Action {
 	/**
 	 *
 	 */
@@ -24,7 +24,7 @@ public class DoubleTheRentCard extends SAction {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		ArrayList<DoubleTheRentCard> extraDoubles = new ArrayList<>(10);
+		ArrayList<Boost> extraDoubles = new ArrayList<>(10);
 		CardAction played;
 		CenterPlay centerPlay = self.getGame()
 				.getCenterPlay();
@@ -33,24 +33,24 @@ public class DoubleTheRentCard extends SAction {
 		do {
 			played = self
 					.selectHand("Select a rent card to rent others with.",
-							card -> ((!self.isLastTurn() && card instanceof DoubleTheRentCard)
-									|| (card instanceof SDamageCard && card.isEnabled(self, Likeness.Action))),
+							card -> ((!self.isLastTurn() && card instanceof Boost)
+									|| (card instanceof Ammunition && card.isEnabled(self, Likeness.Action))),
 							cardAction -> cardAction.getInternalType()
 									.equals("move.action"));
 
 			if (played == null) {
 				return false;
 			}
-			if (played.getPlayed() instanceof DoubleTheRentCard) {
-				extraDoubles.add((DoubleTheRentCard) played.getPlayed());
+			if (played.getPlayed() instanceof Boost) {
+				extraDoubles.add((Boost) played.getPlayed());
 				multiplier *= 2;
 			}
-		} while (played.getPlayed() instanceof DoubleTheRentCard);
-		SDamageCard sDamageCard = (SDamageCard) played.getPlayed();
+		} while (played.getPlayed() instanceof Boost);
+		Ammunition ammunition = (Ammunition) played.getPlayed();
 
 		int rent = self.columnStream()
 				.parallel()
-				.filter(sDamageCard::isValidRent)
+				.filter(ammunition::isValidRent)
 				.mapToInt(WeaponSet::getRent)
 				.max()
 				.orElse(0);
@@ -58,12 +58,12 @@ public class DoubleTheRentCard extends SAction {
 			return false;
 		}
 
-		if (payRequest(self, sDamageCard.isGlobal(), rent * multiplier, "rent")) {
+		if (payRequest(self, ammunition.isGlobal(), rent * multiplier, "rent")) {
 			extraDoubles.forEach((doubling) -> {
 				self.pushTurn(new CardAction(doubling, getSupportedTypes().getActionType(Likeness.Action)));
 				centerPlay.discard(doubling);
 			});
-			centerPlay.discard(sDamageCard);
+			centerPlay.discard(ammunition);
 			return true;
 		} else {
 			return false;
@@ -84,7 +84,7 @@ public class DoubleTheRentCard extends SAction {
 
 			return self.handStream()
 					.parallel()
-					.filter(card -> card instanceof SDamageCard)
+					.filter(card -> card instanceof Ammunition)
 					.anyMatch(rent -> rent.isEnabled(self, Likeness.Action));
 		}
 		return true;

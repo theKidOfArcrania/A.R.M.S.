@@ -12,7 +12,7 @@ import armsgame.impl.Player;
  *
  * @author Henry
  */
-public class SMinorUpgrade extends Upgrade {
+public class MUpgrade extends Upgrade {
 
 	/**
 	 *

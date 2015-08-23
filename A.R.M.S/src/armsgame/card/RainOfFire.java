@@ -1,6 +1,6 @@
 package armsgame.card;
 
-public class SShards extends SEnergyZapper {
+public class RainOfFire extends FocusedShot {
 	/**
 	 * 
 	 */

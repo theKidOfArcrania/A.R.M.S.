@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 import armsgame.card.Card;
 import armsgame.card.Response;
-import armsgame.card.SEnergy;
-import armsgame.card.SWeaponPart;
+import armsgame.card.BurstCharge;
+import armsgame.card.WeaponPart;
 import armsgame.card.Valuable;
 import armsgame.card.WeaponSet;
 import armsgame.card.WeaponSpec;
@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 public class Payment {
 
 	private static int getValue(Card c) {
-		if (!(c instanceof SEnergy) && !(c instanceof SWeaponPart)) {
+		if (!(c instanceof BurstCharge) && !(c instanceof WeaponPart)) {
 			throw new IllegalArgumentException("Must be a money card or a property card.");
 		}
 
@@ -54,7 +54,7 @@ public class Payment {
 				.collect(Collectors.joining(", ")) + ", and " + last;
 	}
 
-	private static void transferProp(Player giver, Player reciever, SWeaponPart prop) {
+	private static void transferProp(Player giver, Player reciever, WeaponPart prop) {
 		WeaponSet columnGiver = giver.getPropertyColumn(prop);
 		WeaponSet columnReciever = reciever.getPropertyColumn(columnGiver.getPropertyColor());
 
@@ -83,11 +83,11 @@ public class Payment {
 	private int debt;
 	private final Player victim;
 	private int paidAmount = 0;
-	private final ArrayList<SWeaponPart> partsRequested = new ArrayList<>(3);
+	private final ArrayList<WeaponPart> partsRequested = new ArrayList<>(3);
 
 	private final ArrayList<WeaponSpec> weaponsRequested = new ArrayList<>(3);
 
-	private final ArrayList<SWeaponPart> partsGiven = new ArrayList<>(3);
+	private final ArrayList<WeaponPart> partsGiven = new ArrayList<>(3);
 
 	private final ArrayList<WeaponSpec> weaponsGiven = new ArrayList<>(3);
 
@@ -143,7 +143,7 @@ public class Payment {
 	 * @param partsRequested
 	 *            the requested property
 	 */
-	public Payment(Player creditor, Player debtor, SWeaponPart propRequested) {
+	public Payment(Player creditor, Player debtor, WeaponPart propRequested) {
 		requireNonNull(creditor);
 		requireNonNull(debtor);
 		requireNonNull(propRequested);
@@ -186,12 +186,12 @@ public class Payment {
 
 		bills.forEach(card -> {
 			// TO DO: check ref. and also shift ref.
-			if (card instanceof SEnergy) {
-				SEnergy nrg = (SEnergy) card;
+			if (card instanceof BurstCharge) {
+				BurstCharge nrg = (BurstCharge) card;
 				victim.removeBill(nrg);
 				damager.addBill(nrg);
 			} else {
-				takePart0((SWeaponPart) card);
+				takePart0((WeaponPart) card);
 			}
 		});
 	}
@@ -222,7 +222,7 @@ public class Payment {
 	 *            the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean giveProperty(SWeaponPart weaponPart) {
+	public boolean giveProperty(WeaponPart weaponPart) {
 		// TO DO: check prop ref.
 		if (partsGiven.contains(weaponPart)) {
 			return false;
@@ -285,7 +285,7 @@ public class Payment {
 	 *            the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean requestProperty(SWeaponPart weaponPart) {
+	public boolean requestProperty(WeaponPart weaponPart) {
 		// TO DO: check prop ref.
 		if (partsRequested.contains(weaponPart)) {
 			return false;
@@ -321,7 +321,7 @@ public class Payment {
 
 		if (!partsRequested.isEmpty()) {
 			partsRequested.stream()
-					.map(SWeaponPart::getPropertyName)
+					.map(WeaponPart::getPropertyName)
 					.forEach(requests::add);
 		}
 
@@ -333,7 +333,7 @@ public class Payment {
 		}
 
 		if (debt > 0) {
-			requests.add(SEnergy.moneyString(debt, true));
+			requests.add(BurstCharge.moneyString(debt, true));
 		}
 
 		if (requests.isEmpty()) {
@@ -342,7 +342,7 @@ public class Payment {
 
 		if (!partsGiven.isEmpty()) {
 			partsGiven.stream()
-					.map(SWeaponPart::getPropertyName)
+					.map(WeaponPart::getPropertyName)
 					.forEach(gives::add);
 		}
 
@@ -368,7 +368,7 @@ public class Payment {
 				.toString();
 	}
 
-	private void givePart0(SWeaponPart prop) {
+	private void givePart0(WeaponPart prop) {
 		transferProp(damager, victim, prop);
 	}
 
@@ -391,7 +391,7 @@ public class Payment {
 		}
 	}
 
-	private void takePart0(SWeaponPart prop) {
+	private void takePart0(WeaponPart prop) {
 		transferProp(victim, damager, prop);
 	}
 

@@ -5,7 +5,7 @@
  */
 package armsgame.card;
 
-public class SMajorUpgrade extends SMinorUpgrade {
+public class EUpgrade extends MUpgrade {
 	/**
 	 * 
 	 */

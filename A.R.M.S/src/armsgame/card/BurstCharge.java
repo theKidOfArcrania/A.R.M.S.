@@ -7,7 +7,7 @@ import armsgame.impl.SupportedActions;
 
 //TO DO: remove bank, and have contiguous energy boosts.
 
-public final class SEnergy extends Card implements Valuable {
+public final class BurstCharge extends Card implements Valuable {
 	private static final long serialVersionUID = 4350231484759060230L;
 
 	public static String moneyString(int amount, boolean shortString) {
@@ -32,13 +32,13 @@ public final class SEnergy extends Card implements Valuable {
 	}
 
 	private final int value;
-	private SAction convertee = null;
+	private Action convertee = null;
 
-	public SEnergy(int value) {
+	public BurstCharge(int value) {
 		this.value = value;
 	}
 
-	public SEnergy(String internalType) {
+	public BurstCharge(String internalType) {
 		if (internalType.startsWith("$")) {
 			this.value = Integer.parseInt(internalType.substring(1)) * StandardCardDefaults.getCardDefaults()
 					.getScale();
@@ -47,7 +47,7 @@ public final class SEnergy extends Card implements Valuable {
 		}
 	}
 
-	SEnergy(SAction convertee) {
+	BurstCharge(Action convertee) {
 		this.value = convertee.getEnergyValue();
 		if (this.value == 0) {
 			throw new IllegalArgumentException();

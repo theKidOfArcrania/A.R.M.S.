@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 import armsgame.card.Card;
 import armsgame.card.CardDefaults;
 import armsgame.card.Response;
-import armsgame.card.SEnergy;
-import armsgame.card.SWeaponPart;
+import armsgame.card.BurstCharge;
+import armsgame.card.WeaponPart;
 import armsgame.card.WeaponSet;
 import armsgame.card.WeaponSpec;
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -26,7 +26,7 @@ import javafx.collections.ObservableList;
  */
 public abstract class Player {
 
-	private static boolean hasPropertyInColumn(SWeaponPart card, WeaponSet column) {
+	private static boolean hasPropertyInColumn(WeaponPart card, WeaponSet column) {
 		return column.stream()
 				.parallel()
 				.anyMatch((prop) -> prop == card);
@@ -35,7 +35,7 @@ public abstract class Player {
 	private final ReadOnlyIntegerProperty cashAmount;
 	private final CardDefaults defs;
 	private final String name;
-	private final ObservableList<SEnergy> bank;
+	private final ObservableList<BurstCharge> bank;
 	private int cashCache = -1;
 	private int setCache = -1;
 	private Board game = null;
@@ -55,7 +55,7 @@ public abstract class Player {
 		playerHistory = FXCollections.observableArrayList();
 		cashAmount = new ReadOnlyIntegerPropertyBase() {
 			{
-				bank.addListener((ListChangeListener<SEnergy>) event -> {
+				bank.addListener((ListChangeListener<BurstCharge>) event -> {
 
 					if (event.wasPermutated()) {
 						// no change needed to fire.
@@ -65,11 +65,11 @@ public abstract class Player {
 					} else {
 						cashCache += event.getAddedSubList()
 								.parallelStream()
-								.mapToInt(SEnergy::getValue)
+								.mapToInt(BurstCharge::getValue)
 								.sum();
 						cashCache -= event.getRemoved()
 								.parallelStream()
-								.mapToInt(SEnergy::getValue)
+								.mapToInt(BurstCharge::getValue)
 								.sum();
 					}
 
@@ -82,7 +82,7 @@ public abstract class Player {
 
 				if (cashCache == -1) { // invalidated
 					return cashCache = bank.parallelStream()
-							.mapToInt(SEnergy::getValue)
+							.mapToInt(BurstCharge::getValue)
 							.sum();
 				}
 				return cashCache;
@@ -141,7 +141,7 @@ public abstract class Player {
 		};
 	}
 
-	public void addBill(SEnergy card) {
+	public void addBill(BurstCharge card) {
 		bank.add(card);
 		// TO DO: add ref.
 	}
@@ -159,7 +159,7 @@ public abstract class Player {
 		return bank.indexOf(c);
 	}
 
-	public Stream<SEnergy> bankStream() {
+	public Stream<BurstCharge> bankStream() {
 		return bank.stream();
 	}
 
@@ -186,7 +186,7 @@ public abstract class Player {
 		hand.addAll(Arrays.asList(cards));
 	}
 
-	public ObservableList<SEnergy> getBankAccount() {
+	public ObservableList<BurstCharge> getBankAccount() {
 		return FXCollections.unmodifiableObservableList(bank);
 	}
 
@@ -242,7 +242,7 @@ public abstract class Player {
 		return weaponSets.get(index);
 	}
 
-	public WeaponSet getPropertyColumn(SWeaponPart card) {
+	public WeaponSet getPropertyColumn(WeaponPart card) {
 		return weaponSets.parallelStream()
 				.filter(column -> hasPropertyInColumn(card, column))
 				.findAny()
@@ -326,7 +326,7 @@ public abstract class Player {
 		this.game = game;
 	}
 
-	public void removeBill(SEnergy card) {
+	public void removeBill(BurstCharge card) {
 		bank.remove(card);
 		// TO DO: remove ref.
 	}
@@ -434,7 +434,7 @@ public abstract class Player {
 	 *
 	 * @return the property the player selected.
 	 */
-	public SWeaponPart selectProperty() {
+	public WeaponPart selectProperty() {
 		return selectProperty("Please select a property column to use.");
 	}
 
@@ -446,7 +446,7 @@ public abstract class Player {
 	 *            the selectRequest that the player will see.
 	 * @return the property the player selected.
 	 */
-	public SWeaponPart selectProperty(String prompt) {
+	public WeaponPart selectProperty(String prompt) {
 		return selectProperty(prompt, card -> true);
 	}
 
@@ -460,7 +460,7 @@ public abstract class Player {
 	 *            filter for properties
 	 * @return the property the player selected.
 	 */
-	public SWeaponPart selectProperty(String prompt, Predicate<SWeaponPart> filter) {
+	public WeaponPart selectProperty(String prompt, Predicate<WeaponPart> filter) {
 		return selectProperty(prompt, filter, this);
 	}
 
@@ -476,7 +476,7 @@ public abstract class Player {
 	 *            the property columns that the player will select from.
 	 * @return the property the player selected.
 	 */
-	public abstract SWeaponPart selectProperty(String prompt, Predicate<SWeaponPart> filter, Player context);
+	public abstract WeaponPart selectProperty(String prompt, Predicate<WeaponPart> filter, Player context);
 
 	/**
 	 * This prompts the player to select a property column to use (convenience method)

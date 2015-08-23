@@ -5,7 +5,7 @@ import armsgame.impl.CardActionType.Likeness;
 import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
 
-public class SShield extends Response {
+public class EmpBarrier extends Response {
 	private static final long serialVersionUID = -1356787074424595137L;
 
 	@Override

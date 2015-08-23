@@ -15,13 +15,13 @@ import static java.util.Objects.requireNonNull;
 /**
  * This class encapsulates a property card, used for winning, and also for renting from. This also has implementation for wild cards, based on the two properties that determine the color type of a property: <code>propertyColors</code> and <code>propertyColor2</code>. In a regular property card, you
  * would have just <code>propertyColors</code> filled as the color of this property. In a bi-color wild card, both of these properties will be filled as to which colors it can rotate to. In an all-color wild card, both of these properties are left to be NULL. Note: when determining rents, don't use
- * these two properties directly, rather, use the helper functions {@link #compatibleWith(armsgame.card.SWeaponPart)} and {@link #canStandAlone()} to determine whether if this can
+ * these two properties directly, rather, use the helper functions {@link #compatibleWith(armsgame.card.WeaponPart)} and {@link #canStandAlone()} to determine whether if this can
  * <p>
  *
  * @author HW
  */
 @SuppressWarnings("FinalClass")
-public final class SWeaponPart extends Card implements Valuable {
+public final class WeaponPart extends Card implements Valuable {
 
 	/**
 	 *
@@ -35,7 +35,7 @@ public final class SWeaponPart extends Card implements Valuable {
 	/**
 	 * Constructs an all-color wild card (except gold, if applicable).
 	 */
-	public SWeaponPart() {
+	public WeaponPart() {
 		propertyColors = new DualColor();
 	}
 
@@ -48,7 +48,7 @@ public final class SWeaponPart extends Card implements Valuable {
 	 * @param weaponSpec
 	 *            What color this property card represents.
 	 */
-	public SWeaponPart(int propNumber, WeaponSpec weaponSpec) {
+	public WeaponPart(int propNumber, WeaponSpec weaponSpec) {
 		// all parameters MUST be non-null.
 		requireNonNull(propNumber);
 		requireNonNull(weaponSpec);
@@ -62,7 +62,7 @@ public final class SWeaponPart extends Card implements Valuable {
 	 * @param internalType
 	 *            the internal type of the property-card color
 	 */
-	public SWeaponPart(String internalType) {
+	public WeaponPart(String internalType) {
 		if (internalType.contains("$")) {
 			int propNumIndex = internalType.indexOf("$");
 			propertyColors = new DualColor(internalType.substring(0, propNumIndex));
@@ -84,7 +84,7 @@ public final class SWeaponPart extends Card implements Valuable {
 	 * @param propertyColor2
 	 *            The second color of this wild card.
 	 */
-	public SWeaponPart(WeaponSpec propertyColor1, WeaponSpec propertyColor2) {
+	public WeaponPart(WeaponSpec propertyColor1, WeaponSpec propertyColor2) {
 		// all parameters MUST be non-null;
 		requireNonNull(propertyColor1);
 		requireNonNull(propertyColor2);
@@ -116,7 +116,7 @@ public final class SWeaponPart extends Card implements Valuable {
 	 *            the other property to compare against.
 	 * @return true if this is compatible, false otherwise.
 	 */
-	public boolean compatibleWith(SWeaponPart other) {
+	public boolean compatibleWith(WeaponPart other) {
 
 		return propertyColors.compatibleWith(other.getDualColors());
 	}

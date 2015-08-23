@@ -15,7 +15,7 @@ import armsgame.impl.SupportedActions;
  *
  * @author HW
  */
-public abstract class SAction extends Card {
+public abstract class Action extends Card {
 	private static final long serialVersionUID = -8876027487042225439L;
 
 	@SuppressWarnings("unused")
@@ -25,8 +25,8 @@ public abstract class SAction extends Card {
 		return true;
 	}
 
-	public SEnergy convertToCash() {
-		return new SEnergy(this);
+	public BurstCharge convertToCash() {
+		return new BurstCharge(this);
 	}
 
 	public String getActionInternalType() {

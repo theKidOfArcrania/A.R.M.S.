@@ -32,8 +32,8 @@ public class WeaponSet implements Iterable<Card>, Serializable, Observable {
 	private static final long serialVersionUID = 5264125689357215996L;
 
 	private static int getValue(Card card) {
-		if (card instanceof SWeaponPart) {
-			return ((SWeaponPart) card).getValue();
+		if (card instanceof WeaponPart) {
+			return ((WeaponPart) card).getValue();
 		}
 		return card.getEnergyValue();
 	}
@@ -106,18 +106,18 @@ public class WeaponSet implements Iterable<Card>, Serializable, Observable {
 	 *
 	 * @return an array of cash that was the former houses/ hotels.
 	 */
-	public SEnergy[] downgrade() {
+	public BurstCharge[] downgrade() {
 		if (isMoveable()) {
-			return new SEnergy[0];
+			return new BurstCharge[0];
 		}
-		SAction[] houses = properties.parallelStream()
-				.filter(card -> card instanceof SAction)
-				.toArray(SAction[]::new);
+		Action[] houses = properties.parallelStream()
+				.filter(card -> card instanceof Action)
+				.toArray(Action[]::new);
 		properties.removeAll(Arrays.asList(houses));
 		return Arrays.stream(houses)
 				.parallel()
-				.map(SAction::convertToCash)
-				.toArray(SEnergy[]::new);
+				.map(Action::convertToCash)
+				.toArray(BurstCharge[]::new);
 	}
 
 	public Card get(int index) {
@@ -140,7 +140,7 @@ public class WeaponSet implements Iterable<Card>, Serializable, Observable {
 	 */
 	public int getPropertyCount() {
 		return properties.parallelStream()
-				.mapToInt((card) -> (card instanceof SWeaponPart) ? 1 : 0)
+				.mapToInt((card) -> (card instanceof WeaponPart) ? 1 : 0)
 				.sum();
 	}
 
@@ -200,8 +200,8 @@ public class WeaponSet implements Iterable<Card>, Serializable, Observable {
 	 */
 	public boolean isRentable() {
 		return properties.parallelStream()
-				.filter((card) -> (card instanceof SWeaponPart))
-				.anyMatch(card -> ((SWeaponPart) card).canStandAlone());
+				.filter((card) -> (card instanceof WeaponPart))
+				.anyMatch(card -> ((WeaponPart) card).canStandAlone());
 	}
 
 	@Override
@@ -231,14 +231,14 @@ public class WeaponSet implements Iterable<Card>, Serializable, Observable {
 		int fullSet = defs.getPropertyFullSet(weaponSpec);
 		for (int i = 0; i < fullSet; i++) {
 			Card removed = properties.remove(0);
-			if (!(removed instanceof SWeaponPart)) {
+			if (!(removed instanceof WeaponPart)) {
 				throw new AssertionError();
 			}
 			set.add(removed);
 		}
 
 		ArrayList<Card> misc = properties.parallelStream()
-				.filter(card -> !(card instanceof SWeaponPart))
+				.filter(card -> !(card instanceof WeaponPart))
 				.collect(Collectors.toCollection(ArrayList::new));
 		set.addAll(misc);
 		properties.removeAll(misc);
@@ -261,7 +261,7 @@ public class WeaponSet implements Iterable<Card>, Serializable, Observable {
 	}
 
 	public void sort() {
-		Comparator<Card> comp = comparing((card) -> !(card instanceof SWeaponPart));// property cards first.
+		Comparator<Card> comp = comparing((card) -> !(card instanceof WeaponPart));// property cards first.
 		comp = comp.thenComparing(WeaponSet::getValue) // order by lowest value to highest
 				.thenComparing(Card::getCardName) // order by alphabetical order (based on card name).
 				.thenComparing(Card::getCardId); // order finally, by card id.
@@ -279,16 +279,16 @@ public class WeaponSet implements Iterable<Card>, Serializable, Observable {
 
 	private void checkCard(Card card) {
 		if (properties.contains(card)) {
-			throw new IllegalArgumentException("SWeaponPart already exists: " + card);
+			throw new IllegalArgumentException("WeaponPart already exists: " + card);
 		}
-		if (card instanceof SAction) {
+		if (card instanceof Action) {
 			if (!(card instanceof Upgrade)) {
 				throw new IllegalArgumentException("Must be a property card or a house/hotel card");
 			}
 			return;
 		}
 
-		if (!((SWeaponPart) card).getDualColors()
+		if (!((WeaponPart) card).getDualColors()
 				.compatibleWith(weaponSpec)) {
 			throw new IllegalArgumentException("Must be a property card that has the color " + weaponSpec);
 		}
