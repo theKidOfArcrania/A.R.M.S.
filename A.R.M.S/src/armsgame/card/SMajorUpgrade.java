@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card.standard;
+package armsgame.card;
 
 public class SMajorUpgrade extends SMinorUpgrade {
 	/**

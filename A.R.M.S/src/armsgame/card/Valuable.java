@@ -11,7 +11,7 @@ package armsgame.card;
  *
  * @author HW
  */
-public interface Valuable extends Card {
+public interface Valuable {
 
 	/**
 	 * Retrives the energy value that this card is worth.

@@ -6,8 +6,8 @@ import java.util.function.BiFunction;
 
 import armsgame.ResourceDefaults;
 import armsgame.card.Card;
-import armsgame.card.Energy;
-import armsgame.card.standard.SAction;
+import armsgame.card.SAction;
+import armsgame.card.SEnergy;
 import common.util.Lambdas;
 
 public class CardActionType {
@@ -35,7 +35,7 @@ public class CardActionType {
 	};
 	public static BiFunction<? super Card, ? super Player, ? extends Boolean> ACTION_CASHIN = Lambdas.convertType(SAction.class)
 			.andThen(SAction::convertToCash)
-			.filterReturn(Energy::actionPlayed);
+			.filterReturn(SEnergy::actionPlayed);
 	public static BiFunction<? super Card, ? super Player, ? extends Boolean> ACTION_ACTION = (card, player) -> {
 		boolean action = card.actionPlayed(player);
 		if (action) {

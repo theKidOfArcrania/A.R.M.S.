@@ -7,11 +7,11 @@ import java.util.stream.Stream;
 
 import armsgame.card.Card;
 import armsgame.card.CardDefaults;
-import armsgame.card.Energy;
-import armsgame.card.WeaponPart;
-import armsgame.card.WeaponSpec;
-import armsgame.card.WeaponSet;
 import armsgame.card.Response;
+import armsgame.card.SEnergy;
+import armsgame.card.SWeaponPart;
+import armsgame.card.WeaponSet;
+import armsgame.card.WeaponSpec;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerPropertyBase;
 import javafx.collections.FXCollections;
@@ -26,7 +26,7 @@ import javafx.collections.ObservableList;
  */
 public abstract class Player {
 
-	private static boolean hasPropertyInColumn(WeaponPart card, WeaponSet column) {
+	private static boolean hasPropertyInColumn(SWeaponPart card, WeaponSet column) {
 		return column.stream()
 				.parallel()
 				.anyMatch((prop) -> prop == card);
@@ -35,14 +35,14 @@ public abstract class Player {
 	private final ReadOnlyIntegerProperty cashAmount;
 	private final CardDefaults defs;
 	private final String name;
-	private final ObservableList<Energy> bank;
+	private final ObservableList<SEnergy> bank;
 	private int cashCache = -1;
 	private int setCache = -1;
 	private Board game = null;
 	// this is all the cards a player has in his/her hand.
 	private final ObservableList<Card> hand;
 	private int moves = 0;
-	private final ObservableList<WeaponSet> weaponSet;
+	private final ObservableList<WeaponSet> weaponSets;
 	private final ObservableList<CardAction> playerHistory;
 	private final ReadOnlyIntegerProperty propertySets;
 
@@ -50,12 +50,12 @@ public abstract class Player {
 		this.name = name;
 		this.defs = defs;
 		bank = FXCollections.observableArrayList();
-		weaponSet = FXCollections.observableArrayList();
+		weaponSets = FXCollections.observableArrayList();
 		hand = FXCollections.observableArrayList();
 		playerHistory = FXCollections.observableArrayList();
 		cashAmount = new ReadOnlyIntegerPropertyBase() {
 			{
-				bank.addListener((ListChangeListener<Energy>) event -> {
+				bank.addListener((ListChangeListener<SEnergy>) event -> {
 
 					if (event.wasPermutated()) {
 						// no change needed to fire.
@@ -65,11 +65,11 @@ public abstract class Player {
 					} else {
 						cashCache += event.getAddedSubList()
 								.parallelStream()
-								.mapToInt(Energy::getValue)
+								.mapToInt(SEnergy::getValue)
 								.sum();
 						cashCache -= event.getRemoved()
 								.parallelStream()
-								.mapToInt(Energy::getValue)
+								.mapToInt(SEnergy::getValue)
 								.sum();
 					}
 
@@ -82,7 +82,7 @@ public abstract class Player {
 
 				if (cashCache == -1) { // invalidated
 					return cashCache = bank.parallelStream()
-							.mapToInt(Energy::getValue)
+							.mapToInt(SEnergy::getValue)
 							.sum();
 				}
 				return cashCache;
@@ -106,7 +106,7 @@ public abstract class Player {
 					setCache = -1;
 					this.fireValueChangedEvent();
 				};
-				weaponSet.addListener((ListChangeListener<WeaponSet>) event -> {
+				weaponSets.addListener((ListChangeListener<WeaponSet>) event -> {
 					if (event.wasAdded()) {
 						event.getAddedSubList()
 								.parallelStream()
@@ -121,7 +121,7 @@ public abstract class Player {
 			@Override
 			public int get() {
 				if (setCache == -1) { // invalidated
-					return setCache = (int) weaponSet.parallelStream()
+					return setCache = (int) weaponSets.parallelStream()
 							.filter(WeaponSet::isFullSet)
 							.count();
 				}
@@ -141,7 +141,7 @@ public abstract class Player {
 		};
 	}
 
-	public void addBill(Energy card) {
+	public void addBill(SEnergy card) {
 		bank.add(card);
 		// TO DO: add ref.
 	}
@@ -159,7 +159,7 @@ public abstract class Player {
 		return bank.indexOf(c);
 	}
 
-	public Stream<Energy> bankStream() {
+	public Stream<SEnergy> bankStream() {
 		return bank.stream();
 	}
 
@@ -168,14 +168,14 @@ public abstract class Player {
 	}
 
 	public boolean checkWin() {
-		int fullSets = weaponSet.stream()
+		int fullSets = weaponSets.stream()
 				.parallel()
 				.reduce(0, (count, column) -> count + (column.isFullSet() ? 1 : 0), (count1, count2) -> count1 + count2);
 		return fullSets >= 3;
 	}
 
 	public Stream<WeaponSet> columnStream() {
-		return weaponSet.stream();
+		return weaponSets.stream();
 	}
 
 	// starts a player's turn with drawing cards.
@@ -186,7 +186,7 @@ public abstract class Player {
 		hand.addAll(Arrays.asList(cards));
 	}
 
-	public ObservableList<Energy> getBankAccount() {
+	public ObservableList<SEnergy> getBankAccount() {
 		return FXCollections.unmodifiableObservableList(bank);
 	}
 
@@ -235,33 +235,33 @@ public abstract class Player {
 	}
 
 	public ObservableList<WeaponSet> getPropColumns() {
-		return FXCollections.unmodifiableObservableList(weaponSet);
+		return FXCollections.unmodifiableObservableList(weaponSets);
 	}
 
 	public WeaponSet getPropertyColumn(int index) {
-		return weaponSet.get(index);
+		return weaponSets.get(index);
 	}
 
-	public WeaponSet getPropertyColumn(WeaponPart card) {
-		return weaponSet.parallelStream()
+	public WeaponSet getPropertyColumn(SWeaponPart card) {
+		return weaponSets.parallelStream()
 				.filter(column -> hasPropertyInColumn(card, column))
 				.findAny()
 				.orElse(null);
 	}
 
 	public WeaponSet getPropertyColumn(WeaponSpec color) {
-		return weaponSet.parallelStream()
+		return weaponSets.parallelStream()
 				.filter(column -> column.getPropertyColor() == color)
 				.findAny()
 				.orElseGet(() -> {
 					WeaponSet newColumn = new WeaponSet(defs, color);
-					weaponSet.add(newColumn);
+					weaponSets.add(newColumn);
 					return newColumn;
 				});
 	}
 
 	public int getPropertyColumnCount() {
-		return weaponSet.size();
+		return weaponSets.size();
 	}
 
 	public int getPropertySets() {
@@ -273,12 +273,12 @@ public abstract class Player {
 	}
 
 	public boolean hasCompleteSet() {
-		return weaponSet.parallelStream()
+		return weaponSets.parallelStream()
 				.anyMatch(WeaponSet::isFullSet);
 	}
 
 	public boolean hasIncompleteSet() {
-		return weaponSet.parallelStream()
+		return weaponSets.parallelStream()
 				.anyMatch(WeaponSet::hasIncompleteSet);
 	}
 
@@ -326,7 +326,7 @@ public abstract class Player {
 		this.game = game;
 	}
 
-	public void removeBill(Energy card) {
+	public void removeBill(SEnergy card) {
 		bank.remove(card);
 		// TO DO: remove ref.
 	}
@@ -434,7 +434,7 @@ public abstract class Player {
 	 *
 	 * @return the property the player selected.
 	 */
-	public WeaponPart selectProperty() {
+	public SWeaponPart selectProperty() {
 		return selectProperty("Please select a property column to use.");
 	}
 
@@ -446,7 +446,7 @@ public abstract class Player {
 	 *            the selectRequest that the player will see.
 	 * @return the property the player selected.
 	 */
-	public WeaponPart selectProperty(String prompt) {
+	public SWeaponPart selectProperty(String prompt) {
 		return selectProperty(prompt, card -> true);
 	}
 
@@ -460,7 +460,7 @@ public abstract class Player {
 	 *            filter for properties
 	 * @return the property the player selected.
 	 */
-	public WeaponPart selectProperty(String prompt, Predicate<WeaponPart> filter) {
+	public SWeaponPart selectProperty(String prompt, Predicate<SWeaponPart> filter) {
 		return selectProperty(prompt, filter, this);
 	}
 
@@ -476,7 +476,7 @@ public abstract class Player {
 	 *            the property columns that the player will select from.
 	 * @return the property the player selected.
 	 */
-	public abstract WeaponPart selectProperty(String prompt, Predicate<WeaponPart> filter, Player context);
+	public abstract SWeaponPart selectProperty(String prompt, Predicate<SWeaponPart> filter, Player context);
 
 	/**
 	 * This prompts the player to select a property column to use (convenience method)

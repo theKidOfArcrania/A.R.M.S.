@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card.standard;
+package armsgame.card;
 
-import armsgame.card.DualColor;
-import armsgame.card.WeaponSpec;
-import armsgame.card.WeaponSet;
 import armsgame.impl.Player;
 import armsgame.impl.CardActionType.Likeness;
 
