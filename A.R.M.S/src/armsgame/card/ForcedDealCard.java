@@ -3,33 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card.standard;
+package armsgame.card;
 
-import armsgame.card.WeaponSet;
-import armsgame.impl.CardActionType.Likeness;
 import armsgame.impl.Payment;
 import armsgame.impl.Player;
+import armsgame.impl.CardActionType.Likeness;
 
 /**
  *
  * @author Henry
  */
-public class SPartPicker extends SAction {
+public class ForcedDealCard extends SAction {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -8036992382008611576L;
+	private static final long serialVersionUID = -7696673622785225864L;
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		Player target = self.selectPlayer("Please select another player to take a property from.", Player::hasIncompleteSet);
+		Player target = self.selectPlayer("Please select another player to take a property set from.", Player::hasIncompleteSet);
 
 		if (target == null) {
 			return false;
 		}
 
 		SWeaponPart take = (SWeaponPart) self.selectProperty("Please select a property to take.", (card) -> {
-			// Has to not be part of the full weapon
+			// Has to not be part of the full set.
 			WeaponSet column = target.getPropertyColumn(card);
 			column.sort();
 			return !column.isFullSet() || column.indexOf(card) >= column.getFullSet();
@@ -39,14 +38,18 @@ public class SPartPicker extends SAction {
 			return false;
 		}
 
-		Payment slyDeal = new Payment(self, target, take);
-		slyDeal.finishRequest();
+		SWeaponPart give = (SWeaponPart) self.selectProperty("Please select a property to give", (card) -> true);
+
+		Payment forceDeal = new Payment(self, target);
+		forceDeal.requestProperty(take);
+		forceDeal.giveProperty(give);
+		forceDeal.finishRequest();
 		return true;
 	}
 
 	@Override
 	public String getInternalType() {
-		return "action.sly";
+		return "action.forced";
 	}
 
 	@Override
@@ -56,6 +59,8 @@ public class SPartPicker extends SAction {
 					.playerStream()
 					.parallel()
 					.anyMatch(Player::hasIncompleteSet);
+			return !self.columnStream()
+					.allMatch(WeaponSet::isEmpty);
 		}
 		return true;
 	}

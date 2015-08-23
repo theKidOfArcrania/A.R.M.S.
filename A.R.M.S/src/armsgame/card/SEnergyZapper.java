@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card.standard;
+package armsgame.card;
 
 import armsgame.impl.Player;
 import armsgame.impl.CardActionType.Likeness;
@@ -12,25 +12,32 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class SScavenge extends SAction {
+public class SEnergyZapper extends SAction {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -5079013509619766826L;
+	private static final long serialVersionUID = -882780157673704376L;
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		self.drawCards();
-		return true;
+		return payRequest(self, isGlobal(), getPayAmount());
 	}
 
 	@Override
 	public String getInternalType() {
-		return "action.go";
+		return "action.debtCollector";
+	}
+
+	public int getPayAmount() {
+		return this.getInternalIntProperty("amount", 0);
 	}
 
 	@Override
 	public boolean isEnabled(Player self, Likeness action) {
 		return true;
+	}
+
+	public boolean isGlobal() {
+		return this.getInternalIntProperty("global", 0) != 0;
 	}
 }

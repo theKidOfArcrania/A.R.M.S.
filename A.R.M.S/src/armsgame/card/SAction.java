@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card.standard;
+package armsgame.card;
 
-import armsgame.card.Action;
+import armsgame.impl.CardActionType;
 import armsgame.impl.Player;
+import armsgame.impl.SupportedActions;
 
 /**
  * This card contains all the default impl. for any action card.
@@ -14,14 +15,8 @@ import armsgame.impl.Player;
  *
  * @author HW
  */
-public abstract class SAction extends StandardCard implements Action {
-	/**
-	 *
-	 */
+public abstract class SAction extends Card {
 	private static final long serialVersionUID = -8876027487042225439L;
-
-	SAction() {
-	}
 
 	@SuppressWarnings("unused")
 	@Override
@@ -30,17 +25,14 @@ public abstract class SAction extends StandardCard implements Action {
 		return true;
 	}
 
-	@Override
-	public SCharge convertToCash() {
-		return new SCharge(this);
+	public SEnergy convertToCash() {
+		return new SEnergy(this);
 	}
 
-	@Override
 	public String getActionInternalType() {
 		return this.getInternalProperty("actionInternalType", "move.action");
 	}
 
-	@Override
 	public String getActionName() {
 		return this.getInternalProperty("actionName", "Play " + getCardName());
 	}
@@ -58,6 +50,14 @@ public abstract class SAction extends StandardCard implements Action {
 	@Override
 	public int getEnergyValue() {
 		return getInternalIntProperty("sellValue", 0);
+	}
+
+	@Override
+	public SupportedActions getSupportedTypes() {
+		SupportedActions actions = new SupportedActions();
+		actions.addAction(new CardActionType(getActionName(), getActionInternalType()));
+		actions.addAction(new CardActionType("Discard", "move.discard"));
+		return actions;
 	}
 
 }

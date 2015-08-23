@@ -1,10 +1,8 @@
-package armsgame.card.standard;
+package armsgame.card;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import armsgame.card.CardDefaults;
 
 public class StandardCardDefaults extends CardDefaults {
 	private static final long serialVersionUID = 5753795010090212920L;

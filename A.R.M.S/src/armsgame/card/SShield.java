@@ -1,12 +1,11 @@
-package armsgame.card.standard;
+package armsgame.card;
 
-import armsgame.card.Response;
 import armsgame.impl.CardActionType;
+import armsgame.impl.CardActionType.Likeness;
 import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
-import armsgame.impl.CardActionType.Likeness;
 
-public class SEmp extends SAction implements Response {
+public class SShield extends Response {
 	private static final long serialVersionUID = -1356787074424595137L;
 
 	@Override

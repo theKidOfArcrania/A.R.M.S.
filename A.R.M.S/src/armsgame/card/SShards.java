@@ -1,6 +1,6 @@
-package armsgame.card.standard;
+package armsgame.card;
 
-public class SShards extends SFocusedShot {
+public class SShards extends SEnergyZapper {
 	/**
 	 * 
 	 */

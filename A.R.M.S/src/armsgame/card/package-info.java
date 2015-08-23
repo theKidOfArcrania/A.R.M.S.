@@ -1,5 +1,5 @@
 /**
- * This package holds the basic abstractions of Card and helper classes.
+ * This package holds some card abstractions and also implementation for each card.
  *
  * @author Henry
  *

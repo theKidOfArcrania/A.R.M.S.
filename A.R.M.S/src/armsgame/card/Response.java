@@ -1,11 +1,11 @@
 package armsgame.card;
 
-public interface Response extends Action {
+public abstract class Response extends SAction {
 
 	public enum ResponseType {
 		SHIELD;
 	}
 
-	ResponseType getResponseType();
+	public abstract ResponseType getResponseType();
 
 }
