@@ -12,7 +12,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class GoCard extends SAction {
+public class SScavenge extends SAction {
 	/**
 	 *
 	 */

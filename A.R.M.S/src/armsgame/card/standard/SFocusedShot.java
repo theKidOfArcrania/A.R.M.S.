@@ -12,7 +12,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class SEnergyZapper extends SAction {
+public class SFocusedShot extends SAction {
 	/**
 	 *
 	 */
