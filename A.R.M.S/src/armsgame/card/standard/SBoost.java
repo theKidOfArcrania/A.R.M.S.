@@ -17,7 +17,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class DoubleTheRentCard extends SAction {
+public class SBoost extends SAction {
 	/**
 	 *
 	 */
@@ -25,7 +25,7 @@ public class DoubleTheRentCard extends SAction {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		ArrayList<DoubleTheRentCard> extraDoubles = new ArrayList<>(10);
+		ArrayList<SBoost> extraDoubles = new ArrayList<>(10);
 		CardAction played;
 		CenterPlay centerPlay = self.getGame()
 				.getCenterPlay();
@@ -34,7 +34,7 @@ public class DoubleTheRentCard extends SAction {
 		do {
 			played = self
 					.selectHand("Select a rent card to rent others with.",
-							card -> ((!self.isLastTurn() && card instanceof DoubleTheRentCard)
+							card -> ((!self.isLastTurn() && card instanceof SBoost)
 									|| (card instanceof SDamageCard && card.isEnabled(self, Likeness.Action))),
 							cardAction -> cardAction.getInternalType()
 									.equals("move.action"));
@@ -42,11 +42,11 @@ public class DoubleTheRentCard extends SAction {
 			if (played == null) {
 				return false;
 			}
-			if (played.getPlayed() instanceof DoubleTheRentCard) {
-				extraDoubles.add((DoubleTheRentCard) played.getPlayed());
+			if (played.getPlayed() instanceof SBoost) {
+				extraDoubles.add((SBoost) played.getPlayed());
 				multiplier *= 2;
 			}
-		} while (played.getPlayed() instanceof DoubleTheRentCard);
+		} while (played.getPlayed() instanceof SBoost);
 		SDamageCard sDamageCard = (SDamageCard) played.getPlayed();
 
 		int rent = self.columnStream()
