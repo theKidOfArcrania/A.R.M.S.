@@ -36,7 +36,7 @@ import javafx.util.Duration;
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 
 public class PlayerInfoTest extends Application {
-	private final PerspectiveCamera cameraView = new PerspectiveCamera();
+	
 	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
 	private final double dispWidth = displayRes.getWidth();
@@ -63,11 +63,11 @@ public class PlayerInfoTest extends Application {
 	public PlayerInfoTest() {
 		sRatio = checkSmallRatio();
 		alph = new SimpleDoubleProperty(.4);
-		shieldLevel = new SimpleIntegerProperty(0);
+		shieldLevel = new SimpleIntegerProperty(100);
 		shieldScale = new SimpleDoubleProperty(1.0);
-		shieldScale.bind(shieldLevel.divide(100.0));
+		shieldScale.bind(shieldLevel.divide(200.0));
 		
-		energyLevel = new SimpleIntegerProperty(100);
+		energyLevel = new SimpleIntegerProperty(50);
 		energyScale = new SimpleDoubleProperty(1.0);
 		energyScale.bind(energyLevel.divide(100.0));
 	}
@@ -81,7 +81,8 @@ public class PlayerInfoTest extends Application {
 		
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		AnchorPane root = new AnchorPane();
-		Scene scene = new Scene(root, 290*wRatio, 190*hRatio);
+		
+		Scene scene = new Scene(root, 290*wRatio, 220*hRatio);
 		scene.setFill(Color.color(.85, .85, .85,.4));
 		
 		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
@@ -89,17 +90,24 @@ public class PlayerInfoTest extends Application {
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
 		InnerShadow greenShade = new InnerShadow(2.0, Color.DARKGREEN.darker());
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
+		
 	
 		ImageView profileView = Tools.createImageView(Tools.createImage("blank-profile.jpg"), 60, 60, 10, 15,  sRatio, wRatio, hRatio, smallShade);
 		Image screw = Tools.createImage("screw.png");
 		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
 		ImageView screw2 = Tools.createImageView(screw, 15, 15, 269, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 170, sRatio, wRatio, hRatio, out);
-		ImageView screw4 = Tools.createImageView(screw, 15, 15, 269, 170, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 200, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, 269, 200, sRatio, wRatio, hRatio, out);
+		
+		Image blueButton = Tools.createImage("BlueButton.png");
+		ImageView opener = Tools.createImageView(blueButton, 40, 60, 205, 150, sRatio, wRatio, hRatio, out);
+			opener.setOnMouseEntered(e->opener.setEffect(largeShade));
+			opener.setOnMouseExited(e->opener.setEffect(out));
+			opener.setOnMouseClicked(e->createTransparentStage(primaryStage));
 		
 		Text name = Tools.createText(80,15,  wRatio, hRatio,"MyUsername", Color.GRAY, smallShade, Tools.createBoldFont(24,sRatio));
 		//name.textProperty().bind(playerName);
-		Text weapons = Tools.createText(10, 150,  wRatio, hRatio,"Complete Weapons: ", Color.GRAY, smallShade, Tools.createRegularFont(14,sRatio));
+		Text weapons = Tools.createText(10, 150,  wRatio, hRatio,"Complete\nWeapons: ", Color.GRAY, smallShade, Tools.createRegularFont(14,sRatio));
 		Text weaponDisplay = Tools.createText(170, 150,  wRatio, hRatio,"0", Color.GRAY, smallShade, Tools.createRegularFont(14,sRatio));
 		
 		Text energy = Tools.createText(10, 85,  wRatio, hRatio,"Energy:", Color.rgb(116,229,135), out, Tools.createRegularFont(16,sRatio));
@@ -107,8 +115,8 @@ public class PlayerInfoTest extends Application {
 			energyDisplay.textProperty().bind(energyLevel.asString().concat(" / 100V"));
 	
 		Text shield = Tools.createText(10, 117.5,  wRatio, hRatio,"Shields:", Color.LIGHTBLUE, out, Tools.createRegularFont(16,sRatio));
-		Text shieldDisplay = Tools.createText(135, 122.5,  wRatio, hRatio,"0 / 100V", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
-			shieldDisplay.textProperty().bind(shieldLevel.asString().concat(" / 100V"));
+		Text shieldDisplay = Tools.createText(135, 122.5,  wRatio, hRatio,"0 / 200V", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
+			shieldDisplay.textProperty().bind(shieldLevel.asString().concat(" / 200V"));
 		
 		Text playerRank = Tools.createText(85.0, 57.0,  wRatio, hRatio,"Rank: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
 		Text playerGames = Tools.createText(150.0, 57.0,  wRatio, hRatio,"Games: ", Color.WHITE, out, Tools.createRegularFont(10,sRatio));
@@ -141,7 +149,7 @@ public class PlayerInfoTest extends Application {
 		Rectangle panel = Tools.createRoundedRectangle(190,25,5,5,80,50,sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
 		
 		root.getChildren().addAll(name, weapons, energy,shieldEmpty, shieldBar,energyEmpty, energyBar,weaponDisplay, energyDisplay, shieldDisplay, shield,  profileView, screw1
-				,screw2, screw3,screw4, panel, playerRank, playerGames);
+				,screw2, screw3,screw4, panel, playerRank, playerGames, opener);
 		root.opacityProperty().bind(alph);
 		
 		//scene settings
@@ -152,11 +160,8 @@ public class PlayerInfoTest extends Application {
 		
 		primaryStage.setY(0);
 		primaryStage.setScene(scene);
-		scene.setCamera(cameraView);
 		primaryStage.show();
-
-
-
+		
 		// Timeline
 		solid.getKeyFrames()
 		.add(new KeyFrame(Duration.ZERO, new KeyValue(alph, .4),
@@ -189,8 +194,22 @@ public class PlayerInfoTest extends Application {
 		}
 
 	}
+	
 	public double checkSmallRatio()
 	{
 	   return (wRatio>hRatio)?hRatio:wRatio;
+	}
+	
+	public void createTransparentStage(Stage primaryStage)
+	{
+		Stage second = new Stage();
+		second.initStyle(StageStyle.TRANSPARENT);
+		second.initOwner(primaryStage);
+		
+		AnchorPane root = new AnchorPane();
+		Scene scene = new Scene(root, 1400*wRatio, 700*hRatio);
+		scene.setFill(Color.rgb(100, 100, 100, .5));
+		second.setScene(scene);
+		second.show();
 	}
 }

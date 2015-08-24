@@ -11,28 +11,27 @@ Player Energy: 100 Volts
 Player Shield: Starts at 0 Volts, charges by attacking with a weapon that uses energy or drawing shields.
 You can gain shield by selling cards (energy worth is shown on the card)
 
->Weapon Upgrades: Weapons can be upgraded when they are completed
-Basic Upgrade (BU) or Extreme Upgrade (EU)
-EU can only be applied after BU
-When attached, will change the weapon visual to more awesome one.
+>Weapon Upgrades: You can add an energy crystal to a completed weapon, changing the weapon to its crystal form
 
->10 Total Weapon Sets: (Still coming up with ideas)
-1. Brown - Wooden Club(Physical Dmg): 2 Parts
-Club(5 DMG)- Spikes(5 DMG) 
-Completed = 10 DMG
-BU - Electric Barbed Club(B4 Model) - The next time the players who are attacked move, will inflict extra 15 damage (15 shields gained)
-EU - Explosive Barbed Club (R60T Model)- The next time the players who are attacked move, will inflict extra 20 damage(20 shields gained)
+>9 Total Weapon Sets: (Still coming up with ideas)
+Each robot by default is equipped with 8 basic weapon.
+Weapons can be upgraded with parts.
 
-2. Dark Blue - Dagger (Physical DMG): 3 parts
-Hilt(5 DMG)- Blade(
-3. Gray - Sword
-4. Purple- Bow and Arrow
-5. Orange - Bayonett
-6. Yellow- machinegun
-7. Red- flamethrower 
-8. Black- Grenade Launcher
-9. Green- Nuke (Nuke has no upgrades)
-10.Light Blue- Raygun 
+1. Brown - Basic Throwing Knife
+  - A: Blade Upgrade: Longer length and serrated edges 
+  - B: Grip Upgrade: Increased ease of use and allows shooting of blade.
+  - Crystal Form: Energy Sword 
+  
+2. Dark Blue - Pistol /  Energy Pulser
+3. Red - Mine Kit / Plasma Mines
+4. Purple- Shotgun / Charge Blaster
+5. Orange - Assault Rifle / Rapidfire Pulser
+6. LightBlue - Sniper / Beam Raygun
+7. Black - Rocket Launcher / Splashing Plasma Rockets
+8. Green- Vampiric Tendrils / Plasma Leecher
+9. Yellow- Nuclear Bomb
+
+
 
 >Gameplay: Turn by turn players go, 3 moves per turn
 In one turn, players draw two cards, then can play three cards
@@ -60,23 +59,25 @@ Single target barrage: "FOCUSED SHOT"
 
 Multi target small fire: "RAIN OF FIRE"
 
-Prevent any attack or swap: "EMP BARRIER"
+Prevent any attack or swap: "BARRIER"
 
 Single Ammunition for fire on one person: "SINGLE TARGET AMMUNITION"
 
 Ammunition specific to one - three weapons: (Dagger/sword/club, BowArrow/ Spear, Bayonett/MachineGun, Flamethrower/GrenadeLauncher, Nuke)
 Hits Everyone, MULTI TARGET AMMUNITION
 
-Weapon Upgrade: "Versatile Basic Upgrade" or "Extreme Upgrade" (explained above)
+Weapon Upgrade: "Energy Crystal" (explained above)
 
 Shield Filler: "SHIELD CHARGE"
+
+Health Pack: "ENERGY PACK"
 
 Draw two cards: "SCAVENGE THE JUNKYARD"
 
 Another turn: "TIME WARP"
 
 >(optional) Event Cards: When drawn using a turn, card is unknown until played.
-1. Lucky Battery: Increases shields by 10 if full health
+1. Lucky Battery: Heals Energy or Shield by 10
 2. Weapon Malfunction: If ___ is owned, the weapon is destroyed and put into the discard pile, unless it is part of a full set
 3. Robot Malfunction: Glitches and turn ends
 4. Weapon of Choice:
@@ -84,3 +85,7 @@ Another turn: "TIME WARP"
 
 2. Second mode: Weapons race- First player to reach a combined health and shields of 200 and gains 3 weapons wins
 -description yet to be implemented-
+
+Currency and shop implemented later
+
+
