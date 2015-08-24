@@ -100,15 +100,16 @@ public class PlayerInfoTest extends Application {
 		ImageView screw4 = Tools.createImageView(screw, 15, 15, 269, 200, sRatio, wRatio, hRatio, out);
 		
 		Image blueButton = Tools.createImage("BlueButton.png");
-		ImageView opener = Tools.createImageView(blueButton, 40, 60, 205, 150, sRatio, wRatio, hRatio, out);
+		ImageView opener = Tools.createImageView(blueButton, 60, 60, 140, 150, sRatio, wRatio, hRatio, out);
 			opener.setOnMouseEntered(e->opener.setEffect(largeShade));
 			opener.setOnMouseExited(e->opener.setEffect(out));
 			opener.setOnMouseClicked(e->createTransparentStage(primaryStage));
+		Text wDescription = Tools.createText(205, 160, wRatio, hRatio, "Weapons\nManager",  Color.web("#a9e1f7"), smallShade,Tools.createRegularFont(12, sRatio));
 		
 		Text name = Tools.createText(80,15,  wRatio, hRatio,"MyUsername", Color.GRAY, smallShade, Tools.createBoldFont(24,sRatio));
 		//name.textProperty().bind(playerName);
-		Text weapons = Tools.createText(10, 150,  wRatio, hRatio,"Complete\nWeapons: ", Color.GRAY, smallShade, Tools.createRegularFont(14,sRatio));
-		Text weaponDisplay = Tools.createText(170, 150,  wRatio, hRatio,"0", Color.GRAY, smallShade, Tools.createRegularFont(14,sRatio));
+		Text weapons = Tools.createText(30, 147,  wRatio, hRatio,"Weapons\n Status:", Color.GRAY, smallShade, Tools.createRegularFont(14.5,sRatio));
+		Text weaponDisplay = Tools.createText(30, 182,  wRatio, hRatio,"0 Complete", Color.GRAY, smallShade, Tools.createRegularFont(12,sRatio));
 		
 		Text energy = Tools.createText(10, 85,  wRatio, hRatio,"Energy:", Color.rgb(116,229,135), out, Tools.createRegularFont(16,sRatio));
 		Text energyDisplay = Tools.createText(135, 90,  wRatio, hRatio, "100 / 100V", Color.WHITE, out, Tools.createRegularFont(10,sRatio));	
@@ -149,7 +150,7 @@ public class PlayerInfoTest extends Application {
 		Rectangle panel = Tools.createRoundedRectangle(190,25,5,5,80,50,sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
 		
 		root.getChildren().addAll(name, weapons, energy,shieldEmpty, shieldBar,energyEmpty, energyBar,weaponDisplay, energyDisplay, shieldDisplay, shield,  profileView, screw1
-				,screw2, screw3,screw4, panel, playerRank, playerGames, opener);
+				,screw2, screw3,screw4, panel, playerRank, playerGames, opener, wDescription);
 		root.opacityProperty().bind(alph);
 		
 		//scene settings

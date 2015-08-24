@@ -23,13 +23,12 @@ Weapons can be upgraded with parts.
   - Crystal Form: Energy Sword 
   
 2. Dark Blue - Pistol /  Energy Pulser
-3. Red - Mine Kit / Plasma Mines
+3. Green - Mine Kit / Plasma Mines
 4. Purple- Shotgun / Charge Blaster
 5. Orange - Assault Rifle / Rapidfire Pulser
 6. LightBlue - Sniper / Beam Raygun
-7. Black - Rocket Launcher / Splashing Plasma Rockets
-8. Green- Vampiric Tendrils / Plasma Leecher
-9. Yellow- Nuclear Bomb
+7. Red - Rocket Launcher / Splashing Plasma Rockets
+8. Yellow- Nuclear Bomb
 
 
 
