@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author HW
  */
-public class WeaponSet implements Iterable<Card>, Serializable, Observable {
+public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable {
 
 	private static final long serialVersionUID = 5264125689357215996L;
 

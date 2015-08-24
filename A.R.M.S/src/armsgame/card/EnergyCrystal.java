@@ -12,7 +12,7 @@ import armsgame.impl.Player;
  *
  * @author Henry
  */
-public class MUpgrade extends Upgrade {
+public class EnergyCrystal extends Action {
 
 	/**
 	 *
@@ -33,11 +33,6 @@ public class MUpgrade extends Upgrade {
 	@Override
 	public String getInternalType() {
 		return "action.house";
-	}
-
-	@Override
-	public int getRaiseValue() {
-		return getInternalIntProperty("raiseValue");
 	}
 
 	// TO DO: implement support type for building
