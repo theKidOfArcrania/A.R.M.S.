@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+//This class runs a Pane.
 public class TestRun extends Application {
 	private static Supplier<Pane> testView = Pane::new;
 

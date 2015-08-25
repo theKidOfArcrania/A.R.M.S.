@@ -5,7 +5,7 @@ import javafx.scene.layout.AnchorPane;
 
 public class BluePrintTest extends AnchorPane {
 	public static void main(String[] args) {
-		// This opens the window in the middle.
+		// This opens the window in the middle..
 		TestRun.setTestView(BluePrintTest::new);
 		Application.launch(TestRun.class);
 	}

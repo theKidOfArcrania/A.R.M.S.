@@ -46,7 +46,7 @@ public class PlayerInfoTest extends Application {
 	private final double hRatio = dispHeight/900.0;
 	public double sRatio;
 	
-	//user variables
+	//user variables.
 	private IntegerProperty energy;
 	private StringProperty playerName;
 	private DoubleProperty alph;
