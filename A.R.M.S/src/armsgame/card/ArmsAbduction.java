@@ -13,7 +13,7 @@ import armsgame.impl.CardActionType.Likeness;
  *
  * @author Henry
  */
-public class SMultiTargetRaid extends Action {
+public class ArmsAbduction extends Action {
 	/**
 	 *
 	 */

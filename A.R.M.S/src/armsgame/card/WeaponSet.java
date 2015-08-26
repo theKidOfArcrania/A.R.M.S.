@@ -205,7 +205,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	@Override
-	public Iterator<Card> iterator() {
+	public Iterator<WeaponPart> iterator() {
 		return properties.iterator();
 	}
 

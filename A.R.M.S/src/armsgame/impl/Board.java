@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import armsgame.card.CardDefaults;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 //TO DO: RMI settings.
 
@@ -21,7 +23,7 @@ import armsgame.card.CardDefaults;
 public class Board {
 
 	private final CenterPlay centerPlay;
-	private volatile Player current = null;
+	private final SimpleObjectProperty<Player> current = new SimpleObjectProperty<Player>(null);
 	private final ArrayList<Player> players = new ArrayList<>(10);
 	private volatile String progress;
 	// private final HashMap<Card, Player> references = new HashMap<>(10);
@@ -41,6 +43,7 @@ public class Board {
 		}
 		player.drawCards();
 		players.add(player);
+
 	}
 
 	public void checkStarted() {
@@ -55,12 +58,16 @@ public class Board {
 				.toArray(Player[]::new);
 	}
 
+	public ObjectProperty<Player> currentProperty() {
+		return current;
+	}
+
 	public CenterPlay getCenterPlay() {
 		return centerPlay;
 	}
 
 	public Player getCurrent() {
-		return current;
+		return current.get();
 	}
 
 	public Player getPlayer(int index) {
@@ -117,7 +124,8 @@ public class Board {
 		// start game!
 		int playerIndex = 0;
 		while ((winner = checkWin()).length == 0) {
-			current = players.get(playerIndex);
+			Player current = players.get(playerIndex);
+			this.current.set(current);
 			current.drawCards();
 			current.selectTurn();
 

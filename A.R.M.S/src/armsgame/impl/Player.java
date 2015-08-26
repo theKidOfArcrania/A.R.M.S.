@@ -8,12 +8,13 @@ import java.util.stream.Stream;
 import armsgame.card.Card;
 import armsgame.card.CardDefaults;
 import armsgame.card.Response;
-import armsgame.card.BurstCharge;
 import armsgame.card.WeaponPart;
 import armsgame.card.WeaponSet;
 import armsgame.card.WeaponSpec;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerPropertyBase;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -32,11 +33,11 @@ public abstract class Player {
 				.anyMatch((prop) -> prop == card);
 	}
 
-	private final ReadOnlyIntegerProperty cashAmount;
 	private final CardDefaults defs;
 	private final String name;
-	private final ObservableList<BurstCharge> bank;
-	private int cashCache = -1;
+	private final IntegerProperty shieldLevel = new SimpleIntegerProperty(0);
+	private final IntegerProperty energyLevel = new SimpleIntegerProperty(0);
+	private final int cashCache = -1;
 	private int setCache = -1;
 	private Board game = null;
 	// this is all the cards a player has in his/her hand.
@@ -49,56 +50,9 @@ public abstract class Player {
 	public Player(CardDefaults defs, String name) {
 		this.name = name;
 		this.defs = defs;
-		bank = FXCollections.observableArrayList();
 		weaponSets = FXCollections.observableArrayList();
 		hand = FXCollections.observableArrayList();
 		playerHistory = FXCollections.observableArrayList();
-		cashAmount = new ReadOnlyIntegerPropertyBase() {
-			{
-				bank.addListener((ListChangeListener<BurstCharge>) event -> {
-
-					if (event.wasPermutated()) {
-						// no change needed to fire.
-						return;
-					} else if (event.wasUpdated()) {
-						cashCache = -1;
-					} else {
-						cashCache += event.getAddedSubList()
-								.parallelStream()
-								.mapToInt(BurstCharge::getValue)
-								.sum();
-						cashCache -= event.getRemoved()
-								.parallelStream()
-								.mapToInt(BurstCharge::getValue)
-								.sum();
-					}
-
-					this.fireValueChangedEvent();
-				});
-			}
-
-			@Override
-			public int get() {
-
-				if (cashCache == -1) { // invalidated
-					return cashCache = bank.parallelStream()
-							.mapToInt(BurstCharge::getValue)
-							.sum();
-				}
-				return cashCache;
-			}
-
-			@Override
-			public Object getBean() {
-				return this;
-			}
-
-			@Override
-			public String getName() {
-				return "cashAmount";
-			}
-
-		};
 
 		propertySets = new ReadOnlyIntegerPropertyBase() {
 			{
@@ -141,11 +95,6 @@ public abstract class Player {
 		};
 	}
 
-	public void addBill(BurstCharge card) {
-		bank.add(card);
-		// TO DO: add ref.
-	}
-
 	/**
 	 * This alerts the player of a message.
 	 * <p>
@@ -154,18 +103,6 @@ public abstract class Player {
 	 *            the selectRequest to tell the player.
 	 */
 	public abstract void alert(String prompt);
-
-	public int bankIndexOf(Card c) {
-		return bank.indexOf(c);
-	}
-
-	public Stream<BurstCharge> bankStream() {
-		return bank.stream();
-	}
-
-	public ReadOnlyIntegerProperty cashAmountProperty() {
-		return cashAmount;
-	}
 
 	public boolean checkWin() {
 		int fullSets = weaponSets.stream()
@@ -186,24 +123,12 @@ public abstract class Player {
 		hand.addAll(Arrays.asList(cards));
 	}
 
-	public ObservableList<BurstCharge> getBankAccount() {
-		return FXCollections.unmodifiableObservableList(bank);
-	}
-
-	public Card getBankCard(int index) {
-		return bank.get(index);
-	}
-
-	public int getBankCount() {
-		return bank.size();
-	}
-
-	public int getCashAmount() {
-		return cashAmount.get();
-	}
-
 	public CardDefaults getDefaults() {
 		return defs;
+	}
+
+	public IntegerProperty getEnergyLevel() {
+		return energyLevel;
 	}
 
 	public ObservableList<Card> getFullHand() {
@@ -268,6 +193,10 @@ public abstract class Player {
 		return propertySets.get();
 	}
 
+	public IntegerProperty getShieldLevel() {
+		return shieldLevel;
+	}
+
 	public Stream<Card> handStream() {
 		return hand.stream();
 	}
@@ -324,11 +253,6 @@ public abstract class Player {
 			throw new IllegalStateException("This player is already registered to a started game.");
 		}
 		this.game = game;
-	}
-
-	public void removeBill(BurstCharge card) {
-		bank.remove(card);
-		// TO DO: remove ref.
 	}
 
 	public void resetTurn() {
