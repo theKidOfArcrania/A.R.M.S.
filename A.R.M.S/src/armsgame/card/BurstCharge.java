@@ -5,8 +5,6 @@ import armsgame.impl.CardActionType.Likeness;
 import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
 
-//TO DO: remove bank, and have contiguous energy boosts.
-
 public final class BurstCharge extends Card implements Valuable {
 	private static final long serialVersionUID = 4350231484759060230L;
 

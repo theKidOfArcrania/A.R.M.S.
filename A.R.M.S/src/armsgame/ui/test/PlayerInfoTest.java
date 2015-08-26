@@ -238,7 +238,7 @@ public class PlayerInfoTest extends Application {
 		second.initStyle(StageStyle.TRANSPARENT);
 		second.initOwner(primaryStage);
 		
-		AnchorPane root = new AnchorPane();
+		AnchorPane root = new BluePrintTest();
 		Scene scene = new Scene(root, 1400*wRatio, 700*hRatio);
 		scene.setFill(Color.rgb(100, 100, 100, .5));
 		second.setScene(scene);
