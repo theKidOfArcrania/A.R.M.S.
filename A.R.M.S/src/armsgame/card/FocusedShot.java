@@ -20,7 +20,7 @@ public class FocusedShot extends Action {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		return payRequest(self, isGlobal(), getPayAmount());
+		return payRequest(self, isGlobal(), false, getPayAmount());
 	}
 
 	@Override

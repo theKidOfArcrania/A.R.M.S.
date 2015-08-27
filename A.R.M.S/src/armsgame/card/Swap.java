@@ -5,7 +5,7 @@
  */
 package armsgame.card;
 
-import armsgame.impl.Payment;
+import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
 import armsgame.impl.CardActionType.Likeness;
 
@@ -40,7 +40,7 @@ public class Swap extends Action {
 
 		WeaponPart give = (WeaponPart) self.selectProperty("Please select a property to give", (card) -> true);
 
-		Payment forceDeal = new Payment(self, target);
+		DamageReport forceDeal = new DamageReport(self, target);
 		forceDeal.requestProperty(take);
 		forceDeal.giveProperty(give);
 		forceDeal.finishRequest();

@@ -9,7 +9,7 @@ import armsgame.impl.CardActionType.Likeness;
 
 import static armsgame.card.StandardCardDefaults.getCardDefaults;
 
-import armsgame.impl.Payment;
+import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
 
@@ -17,17 +17,17 @@ public abstract class Card {
 
 	private static final long serialVersionUID = -8288322516558088995L;
 
-	protected static boolean payRequest(Player self, boolean global, int amount) {
-		return payRequest(self, global, amount, "pay");
+	protected static boolean payRequest(Player self, boolean global, boolean zapMode, int amount) {
+		return payRequest(self, global, zapMode, amount,  "pay");
 	}
 
-	protected static boolean payRequest(Player self, boolean global, int amount, String payType) {
+	protected static boolean payRequest(Player self, boolean global, boolean zapMode, int amount, String payType) {
 		if (global) {
 			Board game = self.getGame();
 			for (int i = 0; i < game.getPlayerCount(); i++) {
 				Player target = game.getPlayer(i);
 				if (target != self) {
-					Payment rentPay = new Payment(self, target, amount);
+					DamageReport rentPay = new DamageReport(self, target, amount, zapMode);
 					rentPay.finishRequest();
 				}
 			}
@@ -38,7 +38,7 @@ public abstract class Card {
 				return false;
 			}
 
-			Payment rentPay = new Payment(self, target, amount);
+			DamageReport rentPay = new DamageReport(self, target, amount, zapMode);
 			rentPay.finishRequest();
 			return true;
 		}

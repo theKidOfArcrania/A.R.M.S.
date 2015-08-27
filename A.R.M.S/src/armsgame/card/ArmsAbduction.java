@@ -5,7 +5,7 @@
  */
 package armsgame.card;
 
-import armsgame.impl.Payment;
+import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
 import armsgame.impl.CardActionType.Likeness;
 
@@ -33,7 +33,7 @@ public class ArmsAbduction extends Action {
 			return false;
 		}
 
-		Payment dealBreaker = new Payment(self, target);
+		DamageReport dealBreaker = new DamageReport(self, target);
 		dealBreaker.requestPropertySet(takeSet.getPropertyColor());
 		dealBreaker.finishRequest();
 		return true;

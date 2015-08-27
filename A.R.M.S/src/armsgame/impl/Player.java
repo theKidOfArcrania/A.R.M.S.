@@ -316,7 +316,7 @@ public abstract class Player {
 	 * @param amount
 	 *            the debt amount.
 	 */
-	public abstract void selectPayment(Payment amount);
+	public abstract void selectPayment(DamageReport amount);
 
 	/**
 	 * This prompts the player to select another player
@@ -476,4 +476,22 @@ public abstract class Player {
 	 * This method allows for a pause before player starts a turn... ie if player needs to be prompted to start turn and draw cards.
 	 */
 	public abstract void selectTurn();
+
+	public void increaseBurst(int value) {
+		shieldLevel.set(Math.min(shieldLevel.get() + value, 200));
+	}
+
+	public void damageShield(int damage) {
+		int shieldLeft = shieldLevel.get();
+		if (shieldLeft >= damage) {
+			shieldLevel.set(shieldLeft - damage);
+		}else {
+			shieldLevel.set(0);
+			energyLevel.set(Math.max(0, energyLevel.get() - (damage - shieldLeft)));
+		}
+	}
+	
+	public void damageEnergy(int damage) {
+		energyLevel.set(Math.max(0, energyLevel.get() - damage));
+	}
 }

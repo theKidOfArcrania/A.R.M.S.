@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author HW
  */
-public class Payment {
+public class DamageReport {
 
 	private static int getValue(Card c) {
 		if (!(c instanceof BurstCharge) && !(c instanceof WeaponPart)) {
@@ -80,17 +80,14 @@ public class Payment {
 	private final ArrayList<Card> bills = new ArrayList<>(10);
 	private final Player damager;
 
-	private int debt;
+	private int hp;
 	private final Player victim;
 	private int paidAmount = 0;
 	private final ArrayList<WeaponPart> partsRequested = new ArrayList<>(3);
-
 	private final ArrayList<WeaponSpec> weaponsRequested = new ArrayList<>(3);
-
 	private final ArrayList<WeaponPart> partsGiven = new ArrayList<>(3);
-
 	private final ArrayList<WeaponSpec> weaponsGiven = new ArrayList<>(3);
-
+	private boolean energyZapMode = false;
 	private boolean canceled = false;
 
 	/**
@@ -102,12 +99,12 @@ public class Payment {
 	 * @param victim
 	 *            the player who is recieving this damage.
 	 */
-	public Payment(Player damager, Player victim) {
+	public DamageReport(Player damager, Player victim) {
 		requireNonNull(damager);
 		requireNonNull(victim);
 		this.damager = damager;
 		this.victim = victim;
-		this.debt = 0;
+		this.hp = 0;
 	}
 
 	/**
@@ -118,18 +115,19 @@ public class Payment {
 	 *            the player who dealed the damage.
 	 * @param victim
 	 *            the player who is recieving this damage.
-	 * @param debt
+	 * @param hp
 	 *            the amount of debt to pay
 	 */
-	public Payment(Player creditor, Player debtor, int debt) {
-		requireNonNull(creditor);
-		requireNonNull(debtor);
-		if (debt <= 0) {
+	public DamageReport(Player damager, Player victim, int hp, boolean energyZapMode) {
+		requireNonNull(damager);
+		requireNonNull(victim);
+		if (hp <= 0) {
 			throw new IllegalArgumentException("Debt must be positive");
 		}
-		this.damager = creditor;
-		this.victim = debtor;
-		this.debt = debt;
+		this.damager = damager;
+		this.victim = victim;
+		this.hp = hp;
+		this.energyZapMode = energyZapMode;
 	}
 
 	/**
@@ -143,13 +141,13 @@ public class Payment {
 	 * @param partsRequested
 	 *            the requested property
 	 */
-	public Payment(Player creditor, Player debtor, WeaponPart propRequested) {
+	public DamageReport(Player creditor, Player debtor, WeaponPart propRequested) {
 		requireNonNull(creditor);
 		requireNonNull(debtor);
 		requireNonNull(propRequested);
 		this.damager = creditor;
 		this.victim = debtor;
-		this.debt = 0;
+		this.hp = 0;
 		this.partsRequested.add(propRequested);
 	}
 
@@ -164,14 +162,22 @@ public class Payment {
 	 * @param propSetRequested
 	 *            the requested property set
 	 */
-	public Payment(Player creditor, Player debtor, WeaponSpec propSetRequested) {
+	public DamageReport(Player creditor, Player debtor, WeaponSpec propSetRequested) {
 		requireNonNull(creditor);
 		requireNonNull(debtor);
 		requireNonNull(partsRequested);
 		this.damager = creditor;
 		this.victim = debtor;
-		this.debt = 0;
+		this.hp = 0;
 		this.weaponsRequested.add(propSetRequested);
+	}
+
+	public boolean isEnergyZapMode() {
+		return energyZapMode;
+	}
+
+	public void setEnergyZapMode(boolean energyZapMode) {
+		this.energyZapMode = energyZapMode;
 	}
 
 	public void finishPay() {
@@ -188,8 +194,11 @@ public class Payment {
 			// TO DO: check ref. and also shift ref.
 			if (card instanceof BurstCharge) {
 				BurstCharge nrg = (BurstCharge) card;
-				victim.removeBill(nrg);
-				damager.addBill(nrg);
+				
+				victim.damageShield(nrg.getEnergyValue());
+				if (energyZapMode) {
+					damager.increaseBurst(nrg.getEnergyValue());
+				}
 			} else {
 				takePart0((WeaponPart) card);
 			}
@@ -248,11 +257,11 @@ public class Payment {
 	}
 
 	public boolean metPayment() {
-		return debt <= paidAmount;
+		return hp <= paidAmount;
 	}
 
 	public boolean payBill(Card bill) {
-		if (getValue(bill) <= 0 || debt <= paidAmount) {
+		if (getValue(bill) <= 0 || hp <= paidAmount) {
 			return false;
 		}
 		bills.add(bill);
@@ -265,7 +274,7 @@ public class Payment {
 		c.forEach(card -> {
 			// omit any repeated cards or cards that have no value or if the
 			// debt is already met.
-			if (debt > paidAmount && getValue(card) > 0 && !bills.contains(card) && !c.contains(card)) {
+			if (hp > paidAmount && getValue(card) > 0 && !bills.contains(card) && !c.contains(card)) {
 				paidAmount += getValue(card);
 				bills.add(card);
 			}
@@ -310,8 +319,8 @@ public class Payment {
 		return true;
 	}
 
-	public void setDebt(int debt) {
-		this.debt = debt;
+	public void setHpDamage(int debt) {
+		this.hp = debt;
 	}
 
 	@Override
@@ -332,8 +341,8 @@ public class Payment {
 					.forEach(requests::add);
 		}
 
-		if (debt > 0) {
-			requests.add(BurstCharge.moneyString(debt, true));
+		if (hp > 0) {
+			requests.add(BurstCharge.moneyString(hp, true));
 		}
 
 		if (requests.isEmpty()) {

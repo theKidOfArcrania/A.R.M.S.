@@ -5,7 +5,7 @@ import armsgame.impl.CardActionType.Likeness;
 import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
 
-public final class BurstCharge extends Card implements Valuable {
+public final class BurstCharge extends Card {
 	private static final long serialVersionUID = 4350231484759060230L;
 
 	public static String moneyString(int amount, boolean shortString) {
@@ -55,7 +55,7 @@ public final class BurstCharge extends Card implements Valuable {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		self.addBill(this);
+		self.increaseBurst(value);
 		return true;
 	}
 
@@ -83,11 +83,6 @@ public final class BurstCharge extends Card implements Valuable {
 		actions.addAction(new CardActionType("Add to bank", "move.cash"));
 		actions.addAction(new CardActionType("Discard", "move.discard"));
 		return actions;
-	}
-
-	@Override
-	public int getValue() {
-		return value;
 	}
 
 	@SuppressWarnings("unused")

@@ -6,7 +6,7 @@
 package armsgame.card;
 
 import armsgame.impl.CardActionType.Likeness;
-import armsgame.impl.Payment;
+import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
 
 /**
@@ -38,7 +38,7 @@ public class PartPicker extends Action {
 			return false;
 		}
 
-		Payment slyDeal = new Payment(self, target, take);
+		DamageReport slyDeal = new DamageReport(self, target, take);
 		slyDeal.finishRequest();
 		return true;
 	}
