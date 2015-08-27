@@ -130,6 +130,10 @@ public final class WeaponPart extends Card implements Valuable {
 		return propertyColors;
 	}
 
+	public int modifyDamage(int base) {
+		return base + getInternalIntProperty("damage");
+	}
+	
 	@Override
 	public int getEnergyValue() {
 		return 0;
