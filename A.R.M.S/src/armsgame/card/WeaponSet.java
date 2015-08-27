@@ -98,6 +98,7 @@ public class WeaponSet implements Iterable<PartCard>, Serializable, Observable {
 
 	public void addListener(ListChangeListener<? super PartCard> listener) {
 		parts.addListener(listener);
+
 	}
 
 	public void clear() {
