@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import armsgame.card.Card;
-import armsgame.card.Response;
 import armsgame.card.BurstCharge;
+import armsgame.card.Card;
 import armsgame.card.PartCard;
+import armsgame.card.Response;
 import armsgame.card.Valuable;
 import armsgame.card.WeaponSet;
 import armsgame.card.WeaponSpec;
@@ -51,7 +51,7 @@ public class DamageReport {
 
 		String last = list.remove(list.size() - 1);
 		return list.stream()
-				.collect(Collectors.joining(", ")) + ", and " + last;
+			.collect(Collectors.joining(", ")) + ", and " + last;
 	}
 
 	private static void transferProp(Player giver, Player reciever, PartCard prop) {
@@ -172,14 +172,6 @@ public class DamageReport {
 		this.weaponsRequested.add(propSetRequested);
 	}
 
-	public boolean isEnergyZapMode() {
-		return energyZapMode;
-	}
-
-	public void setEnergyZapMode(boolean energyZapMode) {
-		this.energyZapMode = energyZapMode;
-	}
-
 	public void finishPay() {
 		// if (!metPayment()) {
 		// throw new IllegalStateException("Debt has not been fully met");
@@ -194,7 +186,7 @@ public class DamageReport {
 			// TO DO: check ref. and also shift ref.
 			if (card instanceof BurstCharge) {
 				BurstCharge nrg = (BurstCharge) card;
-				
+
 				victim.damageShield(nrg.getEnergyValue());
 				if (energyZapMode) {
 					damager.increaseBurst(nrg.getEnergyValue());
@@ -254,6 +246,10 @@ public class DamageReport {
 		}
 		weaponsGiven.add(set);
 		return true;
+	}
+
+	public boolean isEnergyZapMode() {
+		return energyZapMode;
 	}
 
 	public boolean metPayment() {
@@ -319,6 +315,10 @@ public class DamageReport {
 		return true;
 	}
 
+	public void setEnergyZapMode(boolean energyZapMode) {
+		this.energyZapMode = energyZapMode;
+	}
+
 	public void setHpDamage(int debt) {
 		this.hp = debt;
 	}
@@ -330,15 +330,15 @@ public class DamageReport {
 
 		if (!partsRequested.isEmpty()) {
 			partsRequested.stream()
-					.map(PartCard::getPropertyName)
-					.forEach(requests::add);
+				.map(PartCard::getPropertyName)
+				.forEach(requests::add);
 		}
 
 		if (!weaponsRequested.isEmpty()) {
 			weaponsRequested.stream()
-					.map(WeaponSpec::toString)
-					.map(color -> color + " set")
-					.forEach(requests::add);
+				.map(WeaponSpec::toString)
+				.map(color -> color + " set")
+				.forEach(requests::add);
 		}
 
 		if (hp > 0) {
@@ -351,30 +351,30 @@ public class DamageReport {
 
 		if (!partsGiven.isEmpty()) {
 			partsGiven.stream()
-					.map(PartCard::getPropertyName)
-					.forEach(gives::add);
+				.map(PartCard::getPropertyName)
+				.forEach(gives::add);
 		}
 
 		if (!weaponsGiven.isEmpty()) {
 			weaponsGiven.stream()
-					.map(WeaponSpec::toString)
-					.map(color -> color + " set")
-					.forEach(gives::add);
+				.map(WeaponSpec::toString)
+				.map(color -> color + " set")
+				.forEach(gives::add);
 		}
 
 		String requestsString = joinList(requests);
 		String givesString = joinList(gives);
 		StringBuilder description = new StringBuilder(25 + requestsString.length() + givesString.length()).append("Player ")
-				.append(damager.getName())
-				.append(" wants ");
+			.append(damager.getName())
+			.append(" wants ");
 		description.append(requestsString);
 
 		if (!givesString.isEmpty()) {
 			description.append(" for ")
-					.append(givesString);
+				.append(givesString);
 		}
 		return description.append(".")
-				.toString();
+			.toString();
 	}
 
 	private void givePart0(PartCard prop) {

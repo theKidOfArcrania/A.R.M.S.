@@ -22,7 +22,7 @@ public abstract class Card {
 
 	private static void processDamage(DamageReport damage, AttackModifiers[] modifiers) {
 		Arrays.stream(modifiers)
-				.forEachOrdered(mod -> mod.modifyAttack(damage));
+			.forEachOrdered(mod -> mod.modifyAttack(damage));
 		damage.finishRequest();
 	}
 
@@ -30,10 +30,10 @@ public abstract class Card {
 		if (global) {
 			Board game = self.getGame();
 			game.playerStream()
-					.parallel()
-					.filter(Predicate.isEqual(self)
-							.negate())
-					.forEach(target -> processDamage(new DamageReport(self, target, base, zapMode), modifiers));
+				.parallel()
+				.filter(Predicate.isEqual(self)
+					.negate())
+				.forEach(target -> processDamage(new DamageReport(self, target, base, zapMode), modifiers));
 			return true;
 		} else {
 			Player target = self.selectPlayer("Please select a player to damage.");
