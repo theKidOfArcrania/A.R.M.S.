@@ -23,6 +23,11 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -55,6 +60,7 @@ public class PlayerInfoTest extends Application {
 	private IntegerProperty shieldLevel;
 	private DoubleProperty shieldScale;
 	private IntegerProperty weaponSets;
+	private boolean player;
 	private final Timeline solid = new Timeline();
 	
 	public static void main(String[] args) {
@@ -63,7 +69,7 @@ public class PlayerInfoTest extends Application {
 
 	public PlayerInfoTest() {
 		sRatio = checkSmallRatio();
-		alph = new SimpleDoubleProperty(.4);
+		alph = new SimpleDoubleProperty(1.0);
 		shieldLevel = new SimpleIntegerProperty(100);
 		shieldScale = new SimpleDoubleProperty(1.0);
 		shieldScale.bind(shieldLevel.divide(200.0));
@@ -95,10 +101,10 @@ public class PlayerInfoTest extends Application {
 	
 		ImageView profileView = Tools.createImageView(Tools.createImage("blank-profile.jpg"), 60, 60, 10, 15,  sRatio, wRatio, hRatio, smallShade);
 		Image screw = Tools.createImage("screw.png");
-		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw2 = Tools.createImageView(screw, 15, 15, 269, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 200, sRatio, wRatio, hRatio, out);
-		ImageView screw4 = Tools.createImageView(screw, 15, 15, 269, 200, sRatio, wRatio, hRatio, out);
+		ImageView screw1 = Tools.createImageView(screw, 15, 15, 3, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, 275, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 3, 200, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, 275, 200, sRatio, wRatio, hRatio, out);
 		
 		Image blueButton = Tools.createImage("BlueButton.png");
 		ImageView opener = Tools.createImageView(blueButton, 60, 60, 140, 150, sRatio, wRatio, hRatio, out);
@@ -157,10 +163,13 @@ public class PlayerInfoTest extends Application {
 		root.opacityProperty().bind(alph);
 		
 		//scene settings
-		scene.setOnMouseEntered(e->trans(true));
-		scene.setOnMouseExited(e->trans(false));
-		root.setId("ROOTNODE");
-		scene.getStylesheets().add("/armsgame/ui/test/border.css");
+		/*scene.setOnMouseEntered(e->trans(true));
+		scene.setOnMouseExited(e->trans(false));*/
+		 Image background = Tools.createImage("background.jpg");
+		 BackgroundImage back = new BackgroundImage(background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+	               new BackgroundSize(scene.getWidth(), scene.getHeight(), false, false, false, false));
+		root.setBackground(new Background(back));
+		root.setEffect(largeShade);
 		
 		primaryStage.setY(0);
 		primaryStage.setScene(scene);
@@ -209,6 +218,7 @@ public class PlayerInfoTest extends Application {
 				energyAni.setDelay(shieldAni.getCycleDuration());
 				shieldAni.play();
 				energyAni.play();
+				
 	}
 
 	
@@ -231,16 +241,23 @@ public class PlayerInfoTest extends Application {
 	{
 	   return (wRatio>hRatio)?hRatio:wRatio;
 	}
-	
+	public void createMoveCounter(Stage primaryStage)
+	{
+		Stage countWindow = new Stage();
+		countWindow.initStyle(StageStyle.TRANSPARENT);
+		countWindow.initOwner(primaryStage);
+		AnchorPane root = new AnchorPane();
+		
+	}
 	public void createTransparentStage(Stage primaryStage)
 	{
 		Stage second = new Stage();
 		second.initStyle(StageStyle.TRANSPARENT);
 		second.initOwner(primaryStage);
 		
-		AnchorPane root = new BluePrintTest();
-		Scene scene = new Scene(root, 1400*wRatio, 700*hRatio);
-		scene.setFill(Color.rgb(100, 100, 100, .5));
+		AnchorPane root = new AnchorPane();
+		Blueprint scene = new Blueprint(root, 1300*wRatio, 800*hRatio);
+		
 		second.setScene(scene);
 		second.show();
 	}

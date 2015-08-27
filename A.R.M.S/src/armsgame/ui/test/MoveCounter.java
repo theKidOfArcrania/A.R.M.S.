@@ -19,6 +19,12 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Border;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -37,7 +43,6 @@ public class MoveCounter extends Application {
 		launch(args);
 	}
 	
-	private final PerspectiveCamera cameraView = new PerspectiveCamera();
 	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
 	private final double dispWidth = displayRes.getWidth();
@@ -75,13 +80,14 @@ public class MoveCounter extends Application {
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
 		
 		Rectangle panel = Tools.createRoundedRectangle(217,140, 60, 60, 22, 52, sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
-		Text name = Tools.createText(0, 12, wRatio, hRatio,"Move Counter", Color.GRAY, smallShade, Tools.createBoldFont(28,sRatio));
+		Text name = Tools.createText(0, 15, wRatio, hRatio,"Number of Moves", Color.GRAY, smallShade, Tools.createBoldFont(24,sRatio));
 		name.setWrappingWidth(dispWidth/6);
 		name.setTextAlignment(TextAlignment.CENTER);
 		
         Image lightoff = Tools.createImage("lightoff.png");
         Image light = Tools.createImage("Greenlight.png");
         Image screw = Tools.createImage("screw.png");
+        Image background = Tools.createImage("background.jpg");
         ImageView light1= Tools.createImageView(light, 56, 56, 36, 91.5, sRatio, wRatio, hRatio, mediumShade); lightList.add(light1);
         ImageView light2= Tools.createImageView(light, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light2);
         ImageView light3= Tools.createImageView(light, 56, 56, 168, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light3);
@@ -89,23 +95,22 @@ public class MoveCounter extends Application {
 		ImageView light2off = Tools.createImageView(lightoff, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio, largeShade);
 		ImageView light3off = Tools.createImageView(lightoff, 56, 56, 168, 91.5, sRatio, wRatio, hRatio, largeShade);
 		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw2 = Tools.createImageView(screw, 15, 15, 246, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, 250, 0.0, sRatio, wRatio, hRatio, out);
 		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 205, sRatio, wRatio, hRatio, out);
-		ImageView screw4 = Tools.createImageView(screw, 15, 15, 246, 205, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, 250, 205, sRatio, wRatio, hRatio, out);
         
-        
+        BackgroundImage back = new BackgroundImage(background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
 		root.getChildren().addAll(name, panel, light1off, light2off, light3off, light1, 
 				light2, light3,screw1,screw2,screw3,screw4);
 		root.setOnMouseClicked(e->lightOff(lightList));
-   
-		
-		root.setId("ROOTNODE");
-		scene.getStylesheets().add("/armsgame/ui/test/border.css");
+		root.setBackground(new Background(back));
+		root.setEffect(largeShade);
 		primaryStage.setX(0);
 		primaryStage.setY(dispHeight - scene.getHeight());
 
 		primaryStage.setScene(scene);
-		scene.setCamera(cameraView);
+		
 		primaryStage.show();
 
 	}
@@ -149,7 +154,7 @@ public class MoveCounter extends Application {
 		count = lightList.size();
 		for(ImageView light: lightList)
 		{
-			light.setOpacity(1.0);
+			light.setOpacity(1.0);	
 		}
 	}
 	
