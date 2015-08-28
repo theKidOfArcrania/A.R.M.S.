@@ -9,6 +9,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class Tools {
 	static
@@ -68,5 +70,9 @@ public class Tools {
 		AnchorPane.setTopAnchor(sv, y*hRatio);
 		
 		return sv;
+	}
+	public void setOwner(Stage t,Window p)
+	{
+		t.initOwner(p);
 	}
 }

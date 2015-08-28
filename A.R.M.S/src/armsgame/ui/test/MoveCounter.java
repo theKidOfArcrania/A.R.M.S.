@@ -73,31 +73,29 @@ public class MoveCounter extends Application {
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		
 		AnchorPane root = new AnchorPane();
-		Scene scene = new Scene(root, 267*wRatio, 225*hRatio);
+		Scene scene = new Scene(root, 290*wRatio, 140*hRatio);
 		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
 		InnerShadow mediumShade = new InnerShadow(3.0, Color.BLACK);
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
 		
-		Rectangle panel = Tools.createRoundedRectangle(217,140, 60, 60, 22, 52, sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
-		Text name = Tools.createText(0, 15, wRatio, hRatio,"Number of Moves", Color.GRAY, smallShade, Tools.createBoldFont(24,sRatio));
-		name.setWrappingWidth(dispWidth/6);
-		name.setTextAlignment(TextAlignment.CENTER);
+		Rectangle panel = Tools.createRoundedRectangle(246,80, 30, 30, 22, 47, sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
+		Text name = Tools.createText(50, 10, wRatio, hRatio,"Moves Left", Color.GRAY.darker(), smallShade, Tools.createBoldFont(28.5,sRatio));
 		
         Image lightoff = Tools.createImage("lightoff.png");
         Image light = Tools.createImage("Greenlight.png");
         Image screw = Tools.createImage("screw.png");
-        Image background = Tools.createImage("background.jpg");
-        ImageView light1= Tools.createImageView(light, 56, 56, 36, 91.5, sRatio, wRatio, hRatio, mediumShade); lightList.add(light1);
-        ImageView light2= Tools.createImageView(light, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light2);
-        ImageView light3= Tools.createImageView(light, 56, 56, 168, 91.5, sRatio, wRatio, hRatio,mediumShade); lightList.add(light3);
-		ImageView light1off = Tools.createImageView(lightoff, 56, 56, 36, 91.5, sRatio, wRatio, hRatio, largeShade);
-		ImageView light2off = Tools.createImageView(lightoff, 56, 56, 102.5, 91.5, sRatio, wRatio, hRatio, largeShade);
-		ImageView light3off = Tools.createImageView(lightoff, 56, 56, 168, 91.5, sRatio, wRatio, hRatio, largeShade);
+        Image background = Tools.createImage("dirtymetal.jpg");
+        ImageView light1= Tools.createImageView(light, 56, 56, 42.5, 60, sRatio, wRatio, hRatio, mediumShade); lightList.add(light1);
+        ImageView light2= Tools.createImageView(light, 56, 56, 114, 60, sRatio, wRatio, hRatio,mediumShade); lightList.add(light2);
+        ImageView light3= Tools.createImageView(light, 56, 56, 184.5, 60, sRatio, wRatio, hRatio,mediumShade); lightList.add(light3);
+		ImageView light1off = Tools.createImageView(lightoff, 56, 56, 42.5, 60, sRatio, wRatio, hRatio, largeShade);
+		ImageView light2off = Tools.createImageView(lightoff, 56, 56, 114, 60, sRatio, wRatio, hRatio, largeShade);
+		ImageView light3off = Tools.createImageView(lightoff, 56, 56, 184.5, 60, sRatio, wRatio, hRatio, largeShade);
 		ImageView screw1 = Tools.createImageView(screw, 15, 15, 0.0, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw2 = Tools.createImageView(screw, 15, 15, 250, 0.0, sRatio, wRatio, hRatio, out);
-		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 205, sRatio, wRatio, hRatio, out);
-		ImageView screw4 = Tools.createImageView(screw, 15, 15, 250, 205, sRatio, wRatio, hRatio, out);
+		ImageView screw2 = Tools.createImageView(screw, 15, 15, 273, 0.0, sRatio, wRatio, hRatio, out);
+		ImageView screw3 = Tools.createImageView(screw, 15, 15, 0.0, 125, sRatio, wRatio, hRatio, out);
+		ImageView screw4 = Tools.createImageView(screw, 15, 15, 273, 125, sRatio, wRatio, hRatio, out);
         
         BackgroundImage back = new BackgroundImage(background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
