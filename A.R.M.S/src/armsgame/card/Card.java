@@ -18,10 +18,6 @@ public abstract class Card {
 	private static final long serialVersionUID = -8288322516558088995L;
 
 	protected static boolean payRequest(Player self, boolean global, boolean zapMode, int amount) {
-		return payRequest(self, global, zapMode, amount,  "pay");
-	}
-
-	protected static boolean payRequest(Player self, boolean global, boolean zapMode, int amount, String payType) {
 		if (global) {
 			Board game = self.getGame();
 			for (int i = 0; i < game.getPlayerCount(); i++) {
@@ -33,7 +29,7 @@ public abstract class Card {
 			}
 			return true;
 		} else {
-			Player target = self.selectPlayer("Please select a player to " + payType + " you.");
+			Player target = self.selectPlayer("Please select a player to damage.");
 			if (target == null) {
 				return false;
 			}

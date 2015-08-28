@@ -17,9 +17,6 @@ import armsgame.impl.CardActionType.Likeness;
  * @author Henry
  */
 public class Boost extends Action {
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -5163764459341688966L;
 
 	@Override
@@ -32,7 +29,7 @@ public class Boost extends Action {
 
 		do {
 			played = self
-					.selectHand("Select a rent card to rent others with.",
+					.selectHand("Select an ammunition card to attack with.",
 							card -> ((!self.isLastTurn() && card instanceof Boost)
 									|| (card instanceof Ammunition && card.isEnabled(self, Likeness.Action))),
 							cardAction -> cardAction.getInternalType()
@@ -47,18 +44,9 @@ public class Boost extends Action {
 			}
 		} while (played.getPlayed() instanceof Boost);
 		Ammunition ammunition = (Ammunition) played.getPlayed();
+		WeaponSet weapon = self.selectPropertyColumn("Choose your weapon to attack with.", ammunition::isValidRent);
 
-		int rent = self.columnStream()
-				.parallel()
-				.filter(ammunition::isValidRent)
-				.mapToInt(WeaponSet::getRent)
-				.max()
-				.orElse(0);
-		if (rent == 0) {
-			return false;
-		}
-
-		if (payRequest(self, ammunition.isGlobal(), rent * multiplier, "rent")) {
+		if (payRequest(self, ammunition.isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints() * multiplier)) {
 			extraDoubles.forEach((doubling) -> {
 				self.pushTurn(new CardAction(doubling, getSupportedTypes().getActionType(Likeness.Action)));
 				centerPlay.discard(doubling);

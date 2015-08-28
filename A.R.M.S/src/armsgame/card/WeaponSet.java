@@ -6,12 +6,8 @@
 package armsgame.card;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javafx.beans.InvalidationListener;
@@ -32,7 +28,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	private static final long serialVersionUID = 5264125689357215996L;
 
 
-	private final ObservableList<WeaponPart> properties = FXCollections.observableArrayList();
+	private final ObservableList<WeaponPart> parts = FXCollections.observableArrayList();
 	private EnergyCrystal crystalBoost = new EnergyCrystal();
 	private final CardDefaults defs;
 	private final WeaponSpec weaponSpec;
@@ -58,7 +54,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		requireNonNull(prop);
 		checkCard(prop);
 		// TO DO: check ref.
-		return properties.add(prop);
+		return parts.add(prop);
 	}
 
 	public void addAll(Collection<WeaponPart> prop) {
@@ -83,32 +79,43 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		sort();
 	}
 
-	public void addAndSort(Card prop) {
+	public boolean addAndSort(EnergyCrystal crystal) {
+		if (crystalBoost != null) return false; //There already is a crystal attached to this.
+		this.crystalBoost = crystal;
+		sort();
+		return true;
+	}
+	
+	public void addAndSort(WeaponPart prop) {
 		requireNonNull(prop);
 		checkCard(prop);
-		properties.add(prop);
+		parts.add(prop);
 		sort();
 	}
 
 	@Override
 	public void addListener(InvalidationListener listener) {
-		properties.addListener(listener);
+		parts.addListener(listener);
 	}
 
 	public void addListener(ListChangeListener<? super WeaponPart> listener) {
-		properties.addListener(listener);
+		parts.addListener(listener);
 	}
 
 	public void clear() {
-		properties.clear();
+		parts.clear();
 	}
 
 	public boolean contains(WeaponPart o) {
-		return properties.contains(o);
+		return parts.contains(o);
 	}
 
+	public boolean isEnergetic() {
+		return crystalBoost != null;
+	}
+	
 	public Card get(int index) {
-		return properties.get(index);
+		return parts.get(index);
 	}
 
 	public int getFullSet() {
@@ -138,19 +145,17 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 				if (other instanceof PartWrapper) {
 					return ((PartWrapper)other).getPart().getInternalType().equals(part.getInternalType());
 				}
+				return false;
 			}
 		}
 		
-		return properties.parallelStream().map(PartWrapper::new).distinct().map(PartWrapper::getPart)
+		return parts.parallelStream().map(PartWrapper::new).distinct().map(PartWrapper::getPart)
 				.mapToInt((card) -> (card instanceof WeaponPart) ? 1 : 0)
 				.sum();
 	}
 
-	public int getRent() {
-		if (isRentable()) {
-			//properties
-		}
-		return 0;
+	public int getAttackPoints() {
+		return 1;
 	}
 
 	/**
@@ -163,7 +168,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	public int indexOf(Object o) {
-		return properties.indexOf(o);
+		return parts.indexOf(o);
 	}
 
 	public boolean isEmpty() {
@@ -190,79 +195,71 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		return getPropertyCount() >= defs.getPropertyFullSet(weaponSpec);
 	}
 
-	/**
-	 * This describes whether if it contains any stand-alone property cards.
-	 *
-	 * @return true if it is rentable, false otherwise.
-	 */
-	public boolean isRentable() {
-		return properties.parallelStream()
-				.filter((card) -> (card instanceof WeaponPart))
-				.anyMatch(card -> ((WeaponPart) card).canStandAlone());
-	}
-
 	@Override
 	public Iterator<WeaponPart> iterator() {
-		return properties.iterator();
+		return parts.iterator();
 	}
 
 	public Stream<WeaponPart> parallelStream() {
-		return properties.parallelStream();
+		return parts.parallelStream();
 	}
 
-	public boolean remove(Card o) {
-		return properties.remove(o);
+	public boolean remove(WeaponPart o) {
+		return parts.remove(o);
 	}
 
-	public Card remove(int index) {
-		return properties.remove(index);
+	public WeaponPart remove(int index) {
+		return parts.remove(index);
 	}
 
 	public WeaponSet removeFullSet() {
 		if (!isFullSet()) {
 			throw new IllegalStateException("Not a full set.");
 		}
+		
+		WeaponSet set = extractFullSet();
+		parts.removeAll(set.parts);
 
-		sort(); // make sure props come first.
-		WeaponSet set = new WeaponSet(defs, weaponSpec);
-		int fullSet = defs.getPropertyFullSet(weaponSpec);
-		for (int i = 0; i < fullSet; i++) {
-			Card removed = properties.remove(0);
-			if (!(removed instanceof WeaponPart)) {
-				throw new AssertionError();
-			}
-			set.add(removed);
+		if (crystalBoost != null) {
+			set.add(crystalBoost);
+			crystalBoost = null;
 		}
-
-		ArrayList<Card> misc = properties.parallelStream()
-				.filter(card -> !(card instanceof WeaponPart))
-				.collect(Collectors.toCollection(ArrayList::new));
-		set.addAll(misc);
-		properties.removeAll(misc);
+		
 		set.sort();
 
 		return set;
 	}
 
+	private WeaponSet extractFullSet() {
+		WeaponSet set = new WeaponSet(defs, weaponSpec);
+		for (int i = 0; i < this.size(); i++) {
+			WeaponPart part = parts.get(i);
+			if (!set.stream().map(WeaponPart::getInternalType).equals(part.getInternalType())) {
+				set.add(part);
+			}
+		}
+		return set;
+	}
+	
 	@Override
 	public void removeListener(InvalidationListener listener) {
-		properties.removeListener(listener);
+		parts.removeListener(listener);
 	}
 
 	public void removeListener(ListChangeListener<? super Card> listener) {
-		properties.removeListener(listener);
+		parts.removeListener(listener);
 	}
 
 	public int size() {
-		return properties.size();
+		return parts.size();
 	}
 
 	public void sort() {
-		properties.sort(comparing(Card::getCardName)); //sort by weapon name.
+		parts.sort(comparing(Card::getCardName)); //sort by weapon name.
 	}
 
 	public Stream<WeaponPart> stream() {
-		return properties.stream();
+		return parts.stream();
 	}
 
 	@Override
@@ -271,7 +268,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	private void checkCard(WeaponPart card) {
-		if (properties.contains(card)) {
+		if (parts.contains(card)) {
 			throw new IllegalArgumentException("WeaponPart already exists: " + card);
 		}
 

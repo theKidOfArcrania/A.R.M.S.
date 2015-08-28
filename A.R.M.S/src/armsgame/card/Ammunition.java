@@ -69,16 +69,8 @@ public class Ammunition extends Action {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		int rent = self.columnStream()
-				.parallel()
-				.filter(this::isValidRent)
-				.mapToInt(WeaponSet::getRent)
-				.max()
-				.orElse(0);
-		if (rent == 0) {
-			return false;
-		}
-		return payRequest(self, isGlobal(), rent, "rent");
+		WeaponSet weapon = self.selectPropertyColumn("Choose your weapon to attack with.", this::isValidRent);
+		return payRequest(self, isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints());
 	}
 
 	@Override
@@ -106,7 +98,7 @@ public class Ammunition extends Action {
 	}
 
 	public boolean isValidRent(WeaponSet column) {
-		return propertyColors.compatibleWith(column.getPropertyColor()) && column.getRent() > 0;
+		return propertyColors.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
 	}
 
 }
