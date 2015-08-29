@@ -39,16 +39,32 @@ Each upgrade adds a new grenade to the package.
 	- A: Recoil Reducing Pads: Squishy pad at the end of shotgun reduces kick of the weapon.
 	- B: Magazine Upgrade: Increased magazine allows more more shots every load. 
 		(Same upgrade as pistol, but they must choose one for it to apply to, permanently)
-	- C: Sights Upgrade: Adds finely tuned sights to improve accuracy of the weapon
-	-Crystal Form: Charging Blaster
+	- Crystal Form: Charging Blaster
 	
-5. Orange - Assault Rifle / Rapidfire Pulser
-	-A: 
+5. Orange - Machine Gun
+	- A: Holographic Sight: Sight added, increasing accuracy greatly.
+	- B: Heat Dissipation Upgrade: Diamond heatsink located in the barrel, allows for much longer periods of fire
+	- C: Fire Rate Upgrade: Six Barrels  greatly increases the amount of bullets fired
+	- D: Kickstand Upgrade: A folding kickstand reduces kick of the bullets fired, permitting contiuous fire.
+	- Crystal Form: Rapidfire Energy Pulser
 
-6. LightBlue - Sniper / Beam Raygun
-7. Red - Rocket Launcher / Splashing Plasma Rockets
-8. Yellow- Nuclear Bomb
-
+6. LightBlue - Sniper
+	- A: Bullet Upgrade - Penetrating bullets rip through most materials, inflicting heavy damage
+	- B: Scope Upgrade - Scope added with enhanced zoom capabilities, and night vision, for increased ease of use and accuracy
+	- C: Suppressor Upgrade - Reduces the gases that escape from the firing chamber, reducing noise and recoil of the weapon.
+	- Crystal Form: Beam Raygun
+	
+7. Red - Rocket Launcher
+	- A: Warhead Upgrade: Shaped charge warhead is highly explosive and breaks through most armor
+	- B: Launcher Upgrade: Turbocharged Launcher fires the rocket at incredible speeds.
+	- Crystal Form: Splashing Plasma Rockets
+	
+8. Yellow- Nuclear Bomb (Nuclear explosion occurs when two sources of plutonium are rammed together by an Explosive
+	- A: Uranium-235 Supply- Must be played and enriched, takes X amount of turns to reach 100%
+	- B: Nuclear Shell - Shell to hold Material
+	- C: Explosives: Trinitrotoluene (TNT) is used to compress stores of plutonium
+	- D: Remote Detonator- Uses radio technology to ignite the TNT
+	- No Crystal Form
 
 
 >Gameplay: Turn by turn players go, 3 moves per turn
