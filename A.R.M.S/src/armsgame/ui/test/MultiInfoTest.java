@@ -207,7 +207,7 @@ public class MultiInfoTest extends Application{
 				new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85,1.0))));
 		
 		// This is an animation test run... in the real code we will remove this.
-			/*	Transition energyAni = new Transition() {
+				Transition energyAni = new Transition() {
 					{
 						this.setCycleDuration(Duration.seconds(3));
 					}
@@ -233,7 +233,7 @@ public class MultiInfoTest extends Application{
 				energyAni.setDelay(shieldAni.getCycleDuration());
 				shieldAni.play();
 				energyAni.play();
-				*/
+				
 				return primaryStage;
 				
 	}

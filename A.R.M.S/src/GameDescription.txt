@@ -14,18 +14,37 @@ You can gain shield by selling cards (energy worth is shown on the card)
 >Weapon Upgrades: You can add an energy crystal to a completed weapon, changing the weapon to its crystal form
 
 >9 Total Weapon Sets: (Still coming up with ideas)
-Each robot by default is equipped with 8 basic weapon.
+Each robot by default is equipped with 8 basic weapons.
 Weapons can be upgraded with parts.
 
 1. Brown - Basic Throwing Knife
-  - A: Blade Upgrade: Longer length and serrated edges 
-  - B: Grip Upgrade: Increased ease of use and allows shooting of blade.
-  - Crystal Form: Energy Sword 
-  
-2. Dark Blue - Pistol /  Energy Pulser
-3. Green - Mine Kit / Plasma Mines
-4. Purple- Shotgun / Charge Blaster
+	- A: Blade Upgrade: Longer length and serrated edges 
+	- B: Handle Upgrade: Increased ease of use and allows shooting of blade.
+	- Crystal Form: Energy Sword 
+ 
+2. Green - Grenade:
+Each upgrade adds a new grenade to the package.
+	- A: Fragmentation Grenade: Shell of grenade is made of a different material that splits into fragments upon explosion
+	- B: Concussion Grenade: Shell of grenade is thin, and the filler is heavier, creating a powerful explosion.
+	- C: Incendiary Grenade: This grenade explodes, splashing searing fire at intense temperatures
+	- Crystal Form: Plasma Grenade
+	
+3. Dark Blue - Pistol
+	- A: Barrel Upgrade: Longer barrel allows for increased precision
+	- B: Grip Upgrade: Increased ease of use and reduced recoil
+	- C: Magazine Upgrade: A larger magazine increases the number of bullets fired per load
+	- Crystal Form: Energy Pulser 
+
+4. Purple- Shotgun 
+	- A: Recoil Reducing Pads: Squishy pad at the end of shotgun reduces kick of the weapon.
+	- B: Magazine Upgrade: Increased magazine allows more more shots every load. 
+		(Same upgrade as pistol, but they must choose one for it to apply to, permanently)
+	- C: Sights Upgrade: Adds finely tuned sights to improve accuracy of the weapon
+	-Crystal Form: Charging Blaster
+	
 5. Orange - Assault Rifle / Rapidfire Pulser
+	-A: 
+
 6. LightBlue - Sniper / Beam Raygun
 7. Red - Rocket Launcher / Splashing Plasma Rockets
 8. Yellow- Nuclear Bomb
