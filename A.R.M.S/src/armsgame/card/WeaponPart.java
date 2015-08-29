@@ -78,11 +78,6 @@ public final class WeaponPart extends Card implements Valuable {
 	}
 
 	@Override
-	public int getEnergyValue() {
-		return 0; // TO DO: Value.
-	}
-
-	@Override
 	public String getInternalType() {
 		return "props." + weaponSpec.getCodeName() + "." + propNumber;
 	}

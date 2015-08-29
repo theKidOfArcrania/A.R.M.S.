@@ -99,7 +99,9 @@ public abstract class Card {
 	 *
 	 * @return the energy conversion value of this card, or 0 if it cannot be converted.
 	 */
-	public abstract int getEnergyValue();
+	public int getEnergyValue() {
+		return getInternalIntProperty("energyValue");
+	}
 
 	/**
 	 * This retrieves the image of the card when face up. Default implementations will look to the carddefs.
