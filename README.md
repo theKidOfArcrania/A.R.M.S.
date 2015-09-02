@@ -7,15 +7,15 @@ Game Concepts
 
 - In this game mode, players play as robots and they must gain as many weapons as possible using them to attack and destroy all the opponents.
 Last survivor wins, death -> elimination
->Specs:
+Specs:
 Player Energy: 100 Volts
 Player Shield: Starts at 0 Volts, charges by attacking with a weapon that uses energy or drawing shields.
 You can gain shield by selling cards (energy worth is shown on the card)
 
->Weapon Upgrades: You can add an energy crystal to a completed weapon, changing the weapon to its crystal form
+Weapon Upgrades: You can add an energy crystal to a completed weapon, changing the weapon to its crystal form
 You can use the crystal to destroy all upgrades on an opponents weapon, but it will consume the crystal
 
->9 Total Weapon Sets: (Still coming up with ideas)
+9 Total Weapon Sets: (Still coming up with ideas)
 Each robot by default is equipped with 8 basic weapons.
 Weapons can be upgraded with parts. 
 
@@ -71,7 +71,7 @@ Each upgrade adds a new grenade to the package.
 	- No Crystal Form
 
 
-> Robots: There are 7 robots, each specializing in one weapon. Each robot also has unique traits, passives, and event cards.
+Robots: There are 7 robots, each specializing in one weapon. Each robot also has unique traits, passives, and event cards.
 1. Nightv0 - Specializes in Dagger
 	Unique passive: Stealth: Takes reduced single target damage.
 	- If dagger is complete, becomes Untouchable: cannot be attacked by single target damage
@@ -118,7 +118,7 @@ Each upgrade adds a new grenade to the package.
 	Event Card 4:
 	
 
-> Gameplay: Turn by turn players go, 3 moves per turn
+Gameplay: Turn by turn players go, 3 moves per turn
 In one turn, players draw two cards, then can play three cards
 At the end of each turn, players can have up to 7 cards in their hand. Or else, the turn cannot be ended.
 
@@ -131,7 +131,7 @@ Win Conditions: When all other players are dead, winner will gain X amount of po
 
 Games are matched based on ranking
 
->Card Types:
+Card Types:
 One use ammunition upgrade: "BOOST!"
 
 Stealing one weapon part: "PART PICKER"
@@ -161,7 +161,7 @@ Draw two cards: "SCAVENGE THE JUNKYARD"
 
 Another turn: "TIME WARP"
 
->(optional) Event Cards: When drawn using a turn, card is unknown until played.
+(optional) Event Cards: When drawn using a turn, card is unknown until played.
 1. Lucky Battery: Heals Energy or Shield by 10
 2. Weapon Malfunction: If ___ is owned, the weapon is destroyed and put into the discard pile, unless it is part of a full set
 3. Robot Malfunction: Glitches and turn ends
