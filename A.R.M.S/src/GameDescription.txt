@@ -30,7 +30,7 @@ Weapons can be upgraded with parts.
 	- Crystal Form: Energy Pulser: Threeburst pulser which fires large bursts of splattering plasma with large range. 
 	
 
-3. Purple- Shotgun- Takes one turns to charge when ammo is put in, but inflicts heavy damage Effective for "Bulk XR"
+3. Purple- Shotgun- Takes one turns to charge when ammo is put in, but inflicts heavy damage: Effective for "Bulk XR"
 	- A: Cone of Fire: The gun's cone width is upgraded, allowing for higher damage.
 	- B: Magazine Upgrade: Increased magazine allows more more shots every load. 
 		(Same upgrade as pistol, but they must choose one for it to apply to, permanently)
@@ -80,25 +80,25 @@ Each upgrade adds a new grenade to the package.
 2. 1B1 Kinetic Fingers - Specializes in Pistol
 	Unique Passive: Energetic - Random chance that shooting a weapon will not take up a turn
 	- If pistol is complete, becomes Trigger Happy: takes no turns to shoot all weapons
-	Event Card 1: It Was an Accident!: Fires a random weapon at a random target
+	Event Card 1: It Was an Accident!: Fires a random weapon at a target
 	Event Card 2: Happy Feet: Robot buzzes around and steals X shields from each player
 	
 3. Bulk XR - Specializes in Shotgun
-	Unique Passive:
-	-
-	Event Card 1:
+	Unique Passive: Tanky: Takes reduced damage from all attacks
+	- If shotgun is complete, becomes Courage: Reduces the damage more, and increases damage inflicted on others
+	Event Card 1: 
 	Event Card 2:
 	
 4. R24 Lockload - Specializes in Machinegun
-	Unique Passive:
-	-
+	Unique Passive: Scattered Fire: Random chance that a single target attack will also inflict collateral damage on another opponent
+	- If machine gun is complete, becomes Spray and Pray: multitarget attacks do increased damage, and single target attacks will always do collateral damage.
 	Event Card 1:
 	Event Card 2:
 	
-5. PP3 Skyjack - Specializes in Sniper\
-	Unique Passive:
+5. PP3 Skyjack - Specializes in Sniper
+	Unique Passive: 
 	-
-	Event Card 1:
+	Event Card 1: Hijack Tool: Disable one weapon for one opponents for their next turn
 	Event Card 2:
 	
 6. Boom - Specializes in Grenade
@@ -108,7 +108,7 @@ Each upgrade adds a new grenade to the package.
 	Event Card 2:
 	
 7. Techomaniac T1 - Specializes in Rocket Launcher
-	Unique Passive:
+	Unique Passive: Jackpot: Small chance to draw an extra card at the start of each turn.
 	-
 	Event Card 1: Time Machine: Builds a time machine which resets the players turn. Allows player to draw two more cards and play 3 more moves.
 	Event Card 2: 
