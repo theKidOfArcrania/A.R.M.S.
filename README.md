@@ -81,41 +81,41 @@ Robots: There are 7 robots, each specializing in one weapon. Each robot also has
 2. 1B1 Kinetic Fingers - Specializes in Pistol
 	Unique Passive: Energetic - Random chance that shooting a weapon will not take up a turn
 	- If pistol is complete, becomes Trigger Happy: takes no turns to shoot all weapons
-	Event Card 1: It Was an Accident!: Fires a random weapon at a target
-	Event Card 2: Happy Feet: Robot buzzes around and steals X shields from each player
+	- Event Card 1: It Was an Accident!: Fires a random weapon at a target
+	- Event Card 2: Happy Feet: Robot buzzes around and steals X shields from each player
 	
 3. Bulk XR - Specializes in Shotgun
 	Unique Passive: Tanky: Takes reduced damage from all attacks
 	- If shotgun is complete, becomes Reflection: Attackers damage themselves a little if they directly damage Bulk.
-	Event Card 1: 
-	Event Card 2:
+	- Event Card 1: 
+	- Event Card 2:
 	
 4. R24 Lock n'load - Specializes in Machinegun
 	Unique Passive: Scattered Fire: Random chance that a single target attack will also inflict collateral damage on another opponent
 	- If machine gun is complete, becomes Spray and Pray: multitarget attacks do increased damage, and single target attacks will always do collateral damage.
-	Event Card 1:
-	Event Card 2: 
+	- Event Card 1:
+	- Event Card 2: 
 	
 5. PP3 Skyjack - Specializes in Sniper (All about assassinating single targets and outlasting the others)
 	Unique Passive: Camper: If not attacked for X turns, heals X hp (no shield gain)
 	- If sniper is complete, becomes Survivor: heals X hp per turn
-	Event Card 1: Care Package: Select either shield or ammo to a weapon
-	Event Card 2: Headshot!: Increased damage on next attack
+	- Event Card 1: Care Package: Select either shield or ammo to a weapon
+	- Event Card 2: Headshot!: Increased damage on next attack
 	
 6. Scrap rm7 - Specializes in Grenade (All about maintaining card advantage and using resources well)
 	Unique Passive: 3 passives based on the number of upgrades on grenade
 	- 0 Upgrades: Rummage: Small chance to draw more than 2 cards.
 	- If grenades is complete, becomes Leftovers: Each card played grants a bit of shield
-	Event Card 1:
-	Event Card 2:
+	- Event Card 1:
+	- Event Card 2:
 	
 7. Techomaniac T1 - Specializes in Rocket Launcher
 	Unique Passive: Innovator: Playing action cards have a small chance to summon a random bot.
 	-  If rocket launcher is complete, gains Creator: Playing action cards summons a random bot
-	Event Card 1: Time Bot: Reset the players turn. Allows player to play 3 more moves.
-	Event Card 2: Hijack Bot: Disable one weapon for one opponents for their next turn
-	Event Card 3: 
-	Event Card 4:
+	- Event Card 1: Time Bot: Reset the players turn. Allows player to play 3 more moves.
+	- Event Card 2: Hijack Bot: Disable one weapon for one opponents for their next turn
+	- Event Card 3: 
+	- Event Card 4:
 	
 
 Gameplay: Turn by turn players go, 3 moves per turn
