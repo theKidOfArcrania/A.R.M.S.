@@ -27,7 +27,7 @@ public final class WeaponPart extends Card {
 	 */
 	private static final long serialVersionUID = -4847169645075457537L;
 
-	private final MultiSpec weaponSpec;
+	private final MultiSpecs weaponSpec;
 
 	/**
 	 * Constructs a regular property card.
