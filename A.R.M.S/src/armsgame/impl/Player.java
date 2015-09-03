@@ -115,6 +115,20 @@ public abstract class Player {
 		return weaponSets.stream();
 	}
 
+	public void damageEnergy(int damage) {
+		energyLevel.set(Math.max(0, energyLevel.get() - damage));
+	}
+
+	public void damageShield(int damage) {
+		int shieldLeft = shieldLevel.get();
+		if (shieldLeft >= damage) {
+			shieldLevel.set(shieldLeft - damage);
+		} else {
+			shieldLevel.set(0);
+			energyLevel.set(Math.max(0, energyLevel.get() - (damage - shieldLeft)));
+		}
+	}
+
 	// starts a player's turn with drawing cards.
 	@SuppressWarnings("FinalMethod")
 	public final void drawCards() {
@@ -123,12 +137,16 @@ public abstract class Player {
 		hand.addAll(Arrays.asList(cards));
 	}
 
+	public IntegerProperty energyLevelProperty() {
+		return energyLevel;
+	}
+
 	public CardDefaults getDefaults() {
 		return defs;
 	}
 
-	public IntegerProperty getEnergyLevel() {
-		return energyLevel;
+	public int getEnergyLevel() {
+		return energyLevel.get();
 	}
 
 	public ObservableList<Card> getFullHand() {
@@ -193,8 +211,8 @@ public abstract class Player {
 		return propertySets.get();
 	}
 
-	public IntegerProperty getShieldLevel() {
-		return shieldLevel;
+	public int getShieldLevel() {
+		return shieldLevel.get();
 	}
 
 	public Stream<Card> handStream() {
@@ -209,6 +227,10 @@ public abstract class Player {
 	public boolean hasIncompleteSet() {
 		return weaponSets.parallelStream()
 				.anyMatch(WeaponSet::hasIncompleteSet);
+	}
+
+	public void increaseBurst(int value) {
+		shieldLevel.set(Math.min(shieldLevel.get() + value, 200));
 	}
 
 	public final boolean isLastTurn() {
@@ -477,21 +499,7 @@ public abstract class Player {
 	 */
 	public abstract void selectTurn();
 
-	public void increaseBurst(int value) {
-		shieldLevel.set(Math.min(shieldLevel.get() + value, 200));
-	}
-
-	public void damageShield(int damage) {
-		int shieldLeft = shieldLevel.get();
-		if (shieldLeft >= damage) {
-			shieldLevel.set(shieldLeft - damage);
-		}else {
-			shieldLevel.set(0);
-			energyLevel.set(Math.max(0, energyLevel.get() - (damage - shieldLeft)));
-		}
-	}
-	
-	public void damageEnergy(int damage) {
-		energyLevel.set(Math.max(0, energyLevel.get() - damage));
+	public IntegerProperty shieldLevelProperty() {
+		return shieldLevel;
 	}
 }
