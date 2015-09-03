@@ -5,6 +5,7 @@ import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 
+import armsgame.res.Tools;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;

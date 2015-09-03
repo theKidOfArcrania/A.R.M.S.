@@ -3,7 +3,8 @@ package armsgame.ui.test;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.util.ArrayList;
-import armsgame.ui.test.Tools;
+
+import armsgame.res.Tools;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;

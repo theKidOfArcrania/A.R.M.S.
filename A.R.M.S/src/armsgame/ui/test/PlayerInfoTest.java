@@ -2,7 +2,8 @@ package armsgame.ui.test;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;
-import armsgame.ui.test.Tools;
+
+import armsgame.res.Tools;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;

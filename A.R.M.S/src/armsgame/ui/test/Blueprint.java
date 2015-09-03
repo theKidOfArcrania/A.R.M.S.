@@ -1,6 +1,6 @@
 package armsgame.ui.test;
 
-import armsgame.ui.test.Tools;
+import armsgame.res.Tools;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.effect.InnerShadow;
