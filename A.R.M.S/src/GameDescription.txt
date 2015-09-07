@@ -23,7 +23,7 @@ Weapons can be upgraded with parts.
 	- B: Handle Upgrade: Increased ease of use and allows shooting of blade.
 	- Crystal Form: Energy Sword: Breaks through shield, dealing direct damage to health. 
 
-2. Dark Blue - Pistol Especially effective for "1B1 Kinetic Fingers"
+2. Dark Blue - Pistol Especially effective for "DualDestiny"
 	- A: Barrel Upgrade: Longer barrel allows for increased precision
 	- B: Grip Upgrade: Increased ease of use and reduced recoil
 	- C: Magazine Upgrade: A larger magazine increases the number of bullets fired per load
@@ -77,7 +77,7 @@ Each upgrade adds a new grenade to the package.
 	Event Card 1: Backstab: Instantly deal X damage to the player of choice
 	Event Card 2: Invisibility Cloak: Become unattackable for the next turn
 	
-2. 1B1 Kinetic Fingers - Specializes in Pistol
+2. DualDestiny - Specializes in Pistol
 	Unique Passive: Energetic - Random chance that shooting a weapon will not take up a turn
 	- If pistol is complete, becomes Trigger Happy: takes no turns to shoot all weapons
 	Event Card 1: It Was an Accident!: Fires a random weapon at a target
