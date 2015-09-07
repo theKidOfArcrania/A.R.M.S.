@@ -14,7 +14,7 @@ import armsgame.ResourceDefaults;
 
 //TO DO: change "rent" to "fire"
 //TO DO: change "props"
-//TO DO: change "money" or "cash"
+//TO DO: change "money" or "cash" into energy
 //TO DO: reimplement damage dealing... and also change rent to damage
 
 //action.[actionName].* --> this set of properties describes an action of that name.
@@ -60,7 +60,7 @@ public class CardDefaults extends ResourceDefaults {
 			defs = new CardDefaults("carddefs.PROPERTIES");
 		} catch (IOException ex) {
 			Logger.getLogger(CardDefaults.class.getName())
-					.log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
+				.log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
 			System.exit(1);
 			throw new InternalError(); // this should not be called.
 		}
@@ -73,7 +73,7 @@ public class CardDefaults extends ResourceDefaults {
 	private static String colorString(WeaponSpec propertyType) {
 		String propName = propertyType.name();
 		return propName.substring(0, 1)
-				.toLowerCase() + propName.substring(1);
+			.toLowerCase() + propName.substring(1);
 	}
 
 	protected CardDefaults(String propFile) throws IOException {
@@ -94,11 +94,11 @@ public class CardDefaults extends ResourceDefaults {
 
 				if (subType == null) {
 					Class.forName(className)
-							.newInstance();
+						.newInstance();
 				} else {
 					Class.forName(className)
-							.getConstructor(String.class)
-							.newInstance(subType);
+						.getConstructor(String.class)
+						.newInstance(subType);
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {

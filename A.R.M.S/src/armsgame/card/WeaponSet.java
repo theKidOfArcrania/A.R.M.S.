@@ -113,10 +113,11 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	public int getAttackPoints() {
-		int damage;
-		for (WeaponPart part: parts) {
-			part
+		int damage = CardDefaults.getCardDefaults();
+		for (WeaponPart part : parts) {
+			damage = part.modifyDamage(damage);
 		}
+		return damage;
 	}
 
 	public int getFullSet() {
