@@ -6,10 +6,11 @@ import java.awt.DisplayMode;
 import armsgame.impl.Board;
 import armsgame.impl.Player;
 import armsgame.res.Tools;
-import armsgame.ui.test.Blueprint;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.binding.IntegerExpression;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Group;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
@@ -27,8 +28,6 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 
@@ -53,15 +52,16 @@ public class PlayerInfo extends Group
 	private final DoubleExpression shieldScale;
 	private final IntegerExpression weaponSets;
 	private final BooleanExpression playerTurn;
+
+	private final SimpleBooleanProperty detailView = new SimpleBooleanProperty();
+
 	private final Player player;
 	private final Board game;
-	private final Stage parent;
 
-	public PlayerInfo(Stage parent, Player player)
+	public PlayerInfo(Player player)
 	{
 		this.game = player.getGame();
 		this.player = player;
-		this.parent = parent;
 
 		playerName = player.getName();
 
@@ -79,17 +79,14 @@ public class PlayerInfo extends Group
 		init();
 	}
 
-	private void createTransparentStage(Stage primaryStage)
+	public boolean isDetailView()
 	{
-		Stage second = new Stage();
-		second.initStyle(StageStyle.TRANSPARENT);
-		second.initOwner(primaryStage);
+		return detailView.get();
+	}
 
-		AnchorPane root = new AnchorPane();
-		Blueprint scene = new Blueprint(root, 1300 * wRatio, 800 * hRatio);
-
-		second.setScene(scene);
-		second.show();
+	public void setDetailView(boolean detailView)
+	{
+		this.detailView.set(detailView);
 	}
 
 	// public void createMoveCounter(Stage primaryStage)
@@ -100,6 +97,19 @@ public class PlayerInfo extends Group
 	//
 	// AnchorPane root = new AnchorPane();
 	// }
+
+	public BooleanProperty viewPlayerDetailProperty()
+	{
+		return detailView;
+	}
+
+	/*
+	 * private void createTransparentStage(Stage primaryStage) { Stage second = new Stage(); second.initStyle(StageStyle.TRANSPARENT); second.initOwner(primaryStage);
+	 * 
+	 * AnchorPane root = new AnchorPane(); Blueprint scene = new Blueprint(root, 1300 * wRatio, 800 * hRatio);
+	 * 
+	 * second.setScene(scene); second.show(); }
+	 */
 
 	private double getSmallRatio()
 	{
@@ -113,6 +123,7 @@ public class PlayerInfo extends Group
 
 		double width = 290 * wRatio;
 		double height = 190 * hRatio;
+
 		root.resize(width, height);
 		root.setMinSize(width, height);
 		root.setPrefSize(width, height);
@@ -133,7 +144,7 @@ public class PlayerInfo extends Group
 		ImageView opener = Tools.createImageView(blueButton, 45, 45, 155, 145, sRatio, wRatio, hRatio, out);
 		opener.setOnMouseEntered(e -> opener.setEffect(largeShade));
 		opener.setOnMouseExited(e -> opener.setEffect(out));
-		opener.setOnMouseClicked(e -> createTransparentStage(parent));
+		opener.setOnMouseClicked(e -> detailView.set(true));
 		Text wDescription = Tools.createText(205, 150, wRatio, hRatio, "Weapons\nManager", Color.web("#a9e1f7"), smallShade, Tools.createRegularFont(12, sRatio));
 
 		Text name = Tools.createText(80, 10, wRatio, hRatio, playerName, Color.GRAY, smallShade, Tools.createBoldFont(24, sRatio));
