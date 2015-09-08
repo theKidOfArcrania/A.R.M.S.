@@ -7,12 +7,10 @@ import armsgame.impl.Board;
 import armsgame.impl.Player;
 import armsgame.res.Tools;
 import armsgame.ui.test.Blueprint;
-import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.binding.DoubleExpression;
 import javafx.beans.binding.IntegerExpression;
-import javafx.scene.Scene;
+import javafx.scene.Group;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -34,8 +32,10 @@ import javafx.stage.StageStyle;
 
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 
-public class PlayerInfo extends Application
+public class PlayerInfo extends Group
 {
+
+	// TO DO: remove stage part and have animations in blueprint.
 
 	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
@@ -55,17 +55,17 @@ public class PlayerInfo extends Application
 	private final BooleanExpression playerTurn;
 	private final Player player;
 	private final Board game;
+	private final Stage parent;
 
-	private final Timeline solid = new Timeline();
-
-	public PlayerInfo(Player player)
+	public PlayerInfo(Stage parent, Player player)
 	{
 		this.game = player.getGame();
 		this.player = player;
+		this.parent = parent;
 
 		playerName = player.getName();
 
-		sRatio = checkSmallRatio();
+		sRatio = getSmallRatio();
 		shieldLevel = player.shieldLevelProperty();
 		shieldScale = shieldLevel.divide(200.0);
 
@@ -75,26 +75,8 @@ public class PlayerInfo extends Application
 		playerTurn = game.currentProperty().isEqualTo(player);
 
 		weaponSets = player.propertySetsProperty();
-	}
 
-	public double checkSmallRatio()
-	{
-		return (wRatio > hRatio) ? hRatio : wRatio;
-	}
-
-	public void createMoveCounter(Stage primaryStage)
-	{
-		Stage countWindow = new Stage();
-		countWindow.initStyle(StageStyle.TRANSPARENT);
-		countWindow.initOwner(primaryStage);
-		AnchorPane root = new AnchorPane();
-
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception
-	{
-		init(primaryStage);
+		init();
 	}
 
 	private void createTransparentStage(Stage primaryStage)
@@ -110,19 +92,34 @@ public class PlayerInfo extends Application
 		second.show();
 	}
 
-	private void init(Stage primaryStage)
+	// public void createMoveCounter(Stage primaryStage)
+	// {
+	// Stage countWindow = new Stage();
+	// countWindow.initStyle(StageStyle.TRANSPARENT);
+	// countWindow.initOwner(primaryStage);
+	//
+	// AnchorPane root = new AnchorPane();
+	// }
+
+	private double getSmallRatio()
 	{
+		return (wRatio > hRatio) ? hRatio : wRatio;
+	}
 
-		primaryStage.initStyle(StageStyle.TRANSPARENT);
+	private void init()
+	{
 		AnchorPane root = new AnchorPane();
+		this.getChildren().add(root);
 
-		Scene scene = new Scene(root, 290 * wRatio, 190 * hRatio);
-		scene.setFill(Color.color(.85, .85, .85, .4));
+		double width = 290 * wRatio;
+		double height = 190 * hRatio;
+		root.resize(width, height);
+		root.setMinSize(width, height);
+		root.setPrefSize(width, height);
+		root.setMaxSize(width, height);
 
 		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
-		InnerShadow mediumShade = new InnerShadow(3.0, Color.BLACK);
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
-		InnerShadow greenShade = new InnerShadow(2.0, Color.DARKGREEN.darker());
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
 
 		ImageView profileView = Tools.createImageView(Tools.createImage("blank-profile.jpg"), 60, 60, 10, 10, sRatio, wRatio, hRatio, smallShade);
@@ -136,7 +133,7 @@ public class PlayerInfo extends Application
 		ImageView opener = Tools.createImageView(blueButton, 45, 45, 155, 145, sRatio, wRatio, hRatio, out);
 		opener.setOnMouseEntered(e -> opener.setEffect(largeShade));
 		opener.setOnMouseExited(e -> opener.setEffect(out));
-		opener.setOnMouseClicked(e -> createTransparentStage(primaryStage));
+		opener.setOnMouseClicked(e -> createTransparentStage(parent));
 		Text wDescription = Tools.createText(205, 150, wRatio, hRatio, "Weapons\nManager", Color.web("#a9e1f7"), smallShade, Tools.createRegularFont(12, sRatio));
 
 		Text name = Tools.createText(80, 10, wRatio, hRatio, playerName, Color.GRAY, smallShade, Tools.createBoldFont(24, sRatio));
@@ -152,8 +149,10 @@ public class PlayerInfo extends Application
 		Text shieldDisplay = Tools.createText(135, 117.5, wRatio, hRatio, "0 / 200V", Color.WHITE, out, Tools.createRegularFont(10, sRatio));
 		shieldDisplay.textProperty().bind(shieldLevel.asString().concat(" / 200V"));
 
-		Text playerRank = Tools.createText(85.0, 47.0, wRatio, hRatio, "Rank: ", Color.WHITE, out, Tools.createRegularFont(10, sRatio));
-		Text playerGames = Tools.createText(150.0, 47.0, wRatio, hRatio, "Games: ", Color.WHITE, out, Tools.createRegularFont(10, sRatio));
+		Text playerRank = Tools.createText(85.0, 47.0, wRatio, hRatio, "Rank: "
+				+ player.getPlayerAccount().getRank(), Color.WHITE, out, Tools.createRegularFont(10, sRatio));
+		Text playerGames = Tools.createText(150.0, 47.0, wRatio, hRatio, "Games: "
+				+ player.getPlayerAccount().getGamesPlayed(), Color.WHITE, out, Tools.createRegularFont(10, sRatio));
 
 		Rectangle shieldEmpty = Tools.createRoundedRectangle(170, 22.5, 5, 5, 85, 111.5, sRatio, wRatio, hRatio, Color.DARKGRAY.darker(), largeShade);
 		Stop[] list = { new Stop(0.0, Color.WHITE), new Stop(0.2, Color.web("#c4e0f4")), new Stop(.49, Color.web("#acd5f2")),
@@ -177,13 +176,8 @@ public class PlayerInfo extends Application
 
 		Image background = Tools.createImage("background.jpg");
 		BackgroundImage back = new BackgroundImage(background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-				new BackgroundSize(scene.getWidth(), scene.getHeight(), false, false, false, false));
+				new BackgroundSize(width, height, false, false, false, false));
 		root.setBackground(new Background(back));
 		root.setEffect(largeShade);
-
-		primaryStage.setY(3);
-		primaryStage.setX(0);
-		primaryStage.setScene(scene);
-		primaryStage.show();
 	}
 }

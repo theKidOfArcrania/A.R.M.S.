@@ -36,6 +36,11 @@ public class Account
 		this.userID = userID;
 	}
 
+	public int getGamesPlayed()
+	{
+		return stats.getGamesPlayed();
+	}
+
 	/**
 	 * Obtains the name of this player
 	 *
@@ -49,7 +54,7 @@ public class Account
 	/**
 	 * Obtains the profile image of this player
 	 *
-	 * @return
+	 * @return the profile javafx-image
 	 */
 	public Image getProfileImage()
 	{
@@ -58,6 +63,16 @@ public class Account
 			return Tools.createImage("armsgame/res/blank-profile.jpg");
 		}
 		return profileImage;
+	}
+
+	public int getRank()
+	{
+		return stats.getRank();
+	}
+
+	public int getScore()
+	{
+		return stats.getScore();
 	}
 
 	/**
