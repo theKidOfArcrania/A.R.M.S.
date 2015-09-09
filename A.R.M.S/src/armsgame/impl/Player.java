@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 
 import armsgame.card.Card;
 import armsgame.card.CardDefaults;
-import armsgame.card.Response;
 import armsgame.card.PartCard;
+import armsgame.card.Response;
 import armsgame.card.WeaponSet;
 import armsgame.card.WeaponSpec;
 import javafx.beans.property.IntegerProperty;
