@@ -4,7 +4,9 @@ import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;
+import java.util.ArrayList;
 
+import armsgame.res.Tools;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -68,7 +70,9 @@ public class MoveHistory extends Application{
 		Stage s = initMain("dirtymetal3.png", 290*wRatio);
 		s.initOwner(primaryStage);
 		s.show();
+		ArrayList<Stage> moves = new ArrayList<Stage>();
 		
+		//test
 		Stage part1 = moveInit("Turn "+moveCount, "blank-profile.jpg","blank-profile.jpg", 0);
 		part1.initOwner(primaryStage);
 		part1.show();
@@ -115,7 +119,7 @@ public class MoveHistory extends Application{
 		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
 		InnerShadow mediumShade = new InnerShadow(3.0, Color.BLACK);
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
-		DropShadow out = new DropShadow(2.0, Color.BLACK);
+		InnerShadow whiteShade = new InnerShadow(3.0, Color.WHITE);
 		
 		Text name = Tools.createText(5,10,  wRatio, hRatio, string, Color.GRAY.darker(), smallShade, Tools.createBoldFont(14,sRatio));
 		Image cardIcon= Tools.createImage(image);
@@ -130,6 +134,11 @@ public class MoveHistory extends Application{
 	               new BackgroundSize(scene.getWidth(), scene.getHeight(), false, false, false, false));
 		root.setBackground(new Background(back));
 		root.setEffect(largeShade);
+		
+		root.setOnMouseEntered(e -> root.setEffect(whiteShade));
+		root.setOnMouseExited(e -> root.setEffect(largeShade));
+		root.setOnMouseClicked(e -> createTransparentStage(primaryStage,positions[position]));
+		primaryStage.setAlwaysOnTop(true);
 		primaryStage.setY(5);
 		primaryStage.setX(positions[position]);
 		primaryStage.setScene(scene);
@@ -186,16 +195,18 @@ public class MoveHistory extends Application{
 		AnchorPane root = new AnchorPane();
 		
 	}
-	public void createTransparentStage(Stage primaryStage)
+	public void createTransparentStage(Stage primaryStage, double x)
 	{
 		Stage second = new Stage();
 		second.initStyle(StageStyle.TRANSPARENT);
 		second.initOwner(primaryStage);
 		
 		AnchorPane root = new AnchorPane();
-		Blueprint scene = new Blueprint(root, 1300*wRatio, 800*hRatio);
+		Blueprint scene = new Blueprint(root, 300*wRatio, 200*hRatio);
 		
 		second.setScene(scene);
+		second.setX(x);
+		second.setY(90);
 		second.show();
 	}
 }

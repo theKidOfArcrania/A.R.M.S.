@@ -20,6 +20,7 @@ public class Blueprint extends Scene {
 		((AnchorPane) root).setBackground(new Background(new BackgroundImage(Tools.createImage("blueprint.png"), BackgroundRepeat.REPEAT,
 				BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(this.getWidth(), this.getHeight(), false, false, false, false))));
 		root.setEffect(largeShade);
+		
 		this.setOnMouseClicked(e -> ((Stage) this.getWindow()).close());
 
 	}
