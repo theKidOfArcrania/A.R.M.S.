@@ -7,21 +7,11 @@ import java.awt.DisplayMode;
 import java.util.ArrayList;
 
 import armsgame.res.Tools;
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.animation.Animation.Status;
-
-=======
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.animation.Transition;
-import javafx.animation.Animation.Status;
->>>>>>> 52c8122 Getting stuff updated
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -48,7 +38,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
+//
 public class MoveHistory extends Application{
 	
 	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
@@ -80,17 +70,10 @@ public class MoveHistory extends Application{
 		Stage s = initMain("dirtymetal3.png", 290*wRatio);
 		s.initOwner(primaryStage);
 		s.show();
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-
 		ArrayList<Stage> moves = new ArrayList<Stage>();
 		
 		//test
 		Stage part1 = moveInit("Turn "+moveCount, "blank-profile.jpg","blank-profile.jpg", 0);
-
-=======
-		
-		Stage part1 = moveInit("Turn "+moveCount, "blank-profile.jpg","blank-profile.jpg", 0);
->>>>>>> 52c8122 Getting stuff updated
 		part1.initOwner(primaryStage);
 		part1.show();
 		moveCount++;
@@ -123,21 +106,12 @@ public class MoveHistory extends Application{
 		part8.show();
 		
 	}
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-
-	
-
-=======
->>>>>>> 52c8122 Getting stuff updated
 	private Stage moveInit(String string, String image, String playerImage, int position)
 	{
 		Stage primaryStage = new Stage();
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
 		AnchorPane root = new AnchorPane();
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-=======
 		
->>>>>>> 52c8122 Getting stuff updated
 		Scene scene = new Scene(root, 134*wRatio, 80*hRatio);
 		scene.setFill(Color.color(.85, .85, .85,.4));
 		double w = scene.getWidth();
@@ -203,29 +177,14 @@ public class MoveHistory extends Application{
 		primaryStage.setY(0);
 		primaryStage.setX(x*wRatio);
 		primaryStage.setScene(scene);
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-
-		return primaryStage;	
-=======
 		
 		return primaryStage;
 				
->>>>>>> 52c8122 Getting stuff updated
 	}
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-	public void createTransparentStage(Stage primaryStage, double x)
-=======
 
 	
 	public double checkSmallRatio()
->>>>>>> 52c8122 Getting stuff updated
 	{
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-		Stage second = new Stage();
-		second.initStyle(StageStyle.TRANSPARENT);
-		second.initOwner(primaryStage);
-		
-=======
 	   return (wRatio>hRatio)?hRatio:wRatio;
 	}
 	public void createMoveCounter(Stage primaryStage)
@@ -233,16 +192,7 @@ public class MoveHistory extends Application{
 		Stage countWindow = new Stage();
 		countWindow.initStyle(StageStyle.TRANSPARENT);
 		countWindow.initOwner(primaryStage);
->>>>>>> 52c8122 Getting stuff updated
 		AnchorPane root = new AnchorPane();
-<<<<<<< Upstream, based on branch 'DWork' of https://github.com/theKidOfArcrania/A.R.M.S.
-		Blueprint scene = new Blueprint(root, 300*wRatio, 200*hRatio);
-		
-		second.setScene(scene);
-		second.setX(x);
-		second.setY(90);
-		second.show();
-=======
 		
 	}
 	public void createTransparentStage(Stage primaryStage, double x)
@@ -258,6 +208,5 @@ public class MoveHistory extends Application{
 		second.setX(x);
 		second.setY(90);
 		second.show();
->>>>>>> 52c8122 Getting stuff updated
 	}
 }
