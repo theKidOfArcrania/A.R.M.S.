@@ -28,6 +28,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	private static final long serialVersionUID = 5264125689357215996L;
 
 	private final ObservableList<WeaponPart> parts = FXCollections.observableArrayList();
+
 	private EnergyCrystal crystalBoost = new EnergyCrystal();
 	private final CardDefaults defs;
 	private final WeaponSpec weaponSpec;
