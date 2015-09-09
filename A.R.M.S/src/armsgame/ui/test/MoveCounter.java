@@ -22,6 +22,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -48,19 +49,20 @@ public class MoveCounter extends Application {
 	private final double hRatio = dispHeight / 900;
 
 	public double sRatio;
-	private final SimpleDoubleProperty alph;
-	private final Timeline solid = new Timeline();
+	
+	
+	
 	public ArrayList<ImageView> lightList;
 
 	public MoveCounter() {
-		alph = new SimpleDoubleProperty(1.0);
-		sRatio = checkSmallRatio();
+		
+		sRatio = getSmallRatio();
 		lightList = new ArrayList<ImageView>();
 		count = 3;
 
 	}
 
-	public double checkSmallRatio() {
+	public double getSmallRatio() {
 		return (wRatio > hRatio) ? hRatio : wRatio;
 	}
 
@@ -88,11 +90,10 @@ public class MoveCounter extends Application {
 
 	public void lightOff(ArrayList<ImageView> lightList) {
 		count--;
-		if (count < 0) {
+		if (count < 0) 
 			resetMoves(lightList);
-		} else {
+		else 
 			genAnimation(lightList.get(count));
-		}
 	}
 
 	public void resetMoves(ArrayList<ImageView> lightList) {
@@ -118,6 +119,7 @@ public class MoveCounter extends Application {
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
 
 		Rectangle panel = Tools.createRoundedRectangle(246,80, 30, 30, 22, 47, sRatio, wRatio, hRatio,Color.DARKGRAY.darker().darker(), largeShade);
+		panel.setFill(new ImagePattern(Tools.createImage("rectback.jpg"), 0, 0, 1, 1, true));
 		Text name = Tools.createText(50, 10, wRatio, hRatio,"Moves Left", Color.GRAY.darker(), smallShade, Tools.createBoldFont(28.5,sRatio));
 		
         Image lightoff = Tools.createImage("lightoff.png");
