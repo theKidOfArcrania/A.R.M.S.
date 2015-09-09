@@ -27,7 +27,6 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 
 	private static final long serialVersionUID = 5264125689357215996L;
 
-
 	private final ObservableList<WeaponPart> parts = FXCollections.observableArrayList();
 	private EnergyCrystal crystalBoost = new EnergyCrystal();
 	private final CardDefaults defs;
@@ -38,18 +37,14 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		this.weaponSpec = weaponSpec;
 	}
 
-	public boolean remove(EnergyCrystal crystal) {
-		if (crystalBoost != crystal) return false;
-		this.crystalBoost = null;
-		return true;
-	}
-	
 	public boolean add(EnergyCrystal crystal) {
-		if (crystalBoost != null) return false; //There already is a crystal attached to this.
+		if (crystalBoost != null) {
+			return false; // There already is a crystal attached to this.
+		}
 		this.crystalBoost = crystal;
 		return true;
 	}
-	
+
 	public boolean add(WeaponPart prop) {
 		requireNonNull(prop);
 		checkCard(prop);
@@ -59,33 +54,35 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 
 	public void addAll(Collection<WeaponPart> prop) {
 		prop.stream()
-				.forEach(this::add);
+			.forEach(this::add);
 	}
 
 	public void addAll(WeaponSet prop) {
 		prop.stream()
-				.forEach(this::add);
+			.forEach(this::add);
 	}
 
 	public void addAllAndSort(Collection<WeaponPart> prop) {
 		prop.stream()
-				.forEach(this::add);
+			.forEach(this::add);
 		sort();
 	}
 
 	public void addAllAndSort(WeaponSet prop) {
 		prop.stream()
-				.forEach(this::add);
+			.forEach(this::add);
 		sort();
 	}
 
 	public boolean addAndSort(EnergyCrystal crystal) {
-		if (crystalBoost != null) return false; //There already is a crystal attached to this.
+		if (crystalBoost != null) {
+			return false; // There already is a crystal attached to this.
+		}
 		this.crystalBoost = crystal;
 		sort();
 		return true;
 	}
-	
+
 	public void addAndSort(WeaponPart prop) {
 		requireNonNull(prop);
 		checkCard(prop);
@@ -110,12 +107,12 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		return parts.contains(o);
 	}
 
-	public boolean isEnergetic() {
-		return crystalBoost != null;
-	}
-	
 	public Card get(int index) {
 		return parts.get(index);
+	}
+
+	public int getAttackPoints() {
+		return 1;
 	}
 
 	public int getFullSet() {
@@ -135,27 +132,32 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	public int getPropertyCount() {
 		class PartWrapper {
 			private final WeaponPart part;
+
 			public PartWrapper(WeaponPart part) {
 				this.part = part;
 			}
-			public WeaponPart getPart() {
-				return part;
-			}
+
+			@Override
 			public boolean equals(Object other) {
 				if (other instanceof PartWrapper) {
-					return ((PartWrapper)other).getPart().getInternalType().equals(part.getInternalType());
+					return ((PartWrapper) other).getPart()
+						.getInternalType()
+						.equals(part.getInternalType());
 				}
 				return false;
 			}
-		}
-		
-		return parts.parallelStream().map(PartWrapper::new).distinct().map(PartWrapper::getPart)
-				.mapToInt((card) -> (card instanceof WeaponPart) ? 1 : 0)
-				.sum();
-	}
 
-	public int getAttackPoints() {
-		return 1;
+			public WeaponPart getPart() {
+				return part;
+			}
+		}
+
+		return parts.parallelStream()
+			.map(PartWrapper::new)
+			.distinct()
+			.map(PartWrapper::getPart)
+			.mapToInt((card) -> (card instanceof WeaponPart) ? 1 : 0)
+			.sum();
 	}
 
 	/**
@@ -173,6 +175,10 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 
 	public boolean isEmpty() {
 		return getPropertyCount() == 0;
+	}
+
+	public boolean isEnergetic() {
+		return crystalBoost != null;
 	}
 
 	/**
@@ -204,19 +210,27 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		return parts.parallelStream();
 	}
 
-	public boolean remove(WeaponPart o) {
-		return parts.remove(o);
+	public boolean remove(EnergyCrystal crystal) {
+		if (crystalBoost != crystal) {
+			return false;
+		}
+		this.crystalBoost = null;
+		return true;
 	}
 
 	public WeaponPart remove(int index) {
 		return parts.remove(index);
 	}
 
+	public boolean remove(WeaponPart o) {
+		return parts.remove(o);
+	}
+
 	public WeaponSet removeFullSet() {
 		if (!isFullSet()) {
 			throw new IllegalStateException("Not a full set.");
 		}
-		
+
 		WeaponSet set = extractFullSet();
 		parts.removeAll(set.parts);
 
@@ -224,23 +238,12 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 			set.add(crystalBoost);
 			crystalBoost = null;
 		}
-		
+
 		set.sort();
 
 		return set;
 	}
 
-	private WeaponSet extractFullSet() {
-		WeaponSet set = new WeaponSet(defs, weaponSpec);
-		for (int i = 0; i < this.size(); i++) {
-			WeaponPart part = parts.get(i);
-			if (!set.stream().map(WeaponPart::getInternalType).equals(part.getInternalType())) {
-				set.add(part);
-			}
-		}
-		return set;
-	}
-	
 	@Override
 	public void removeListener(InvalidationListener listener) {
 		parts.removeListener(listener);
@@ -255,7 +258,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	public void sort() {
-		parts.sort(comparing(Card::getCardName)); //sort by weapon name.
+		parts.sort(comparing(Card::getCardName)); // sort by weapon name.
 	}
 
 	public Stream<WeaponPart> stream() {
@@ -272,11 +275,24 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 			throw new IllegalArgumentException("WeaponPart already exists: " + card);
 		}
 
-		if (!((WeaponPart) card).getDualColors()
-				.compatibleWith(weaponSpec)) {
+		if (!card.getDualColors()
+			.compatibleWith(weaponSpec)) {
 			throw new IllegalArgumentException("Must be a property card that has the color " + weaponSpec);
 		}
 
+	}
+
+	private WeaponSet extractFullSet() {
+		WeaponSet set = new WeaponSet(defs, weaponSpec);
+		for (int i = 0; i < this.size(); i++) {
+			WeaponPart part = parts.get(i);
+			if (!set.stream()
+				.map(WeaponPart::getInternalType)
+				.equals(part.getInternalType())) {
+				set.add(part);
+			}
+		}
+		return set;
 	}
 
 }
