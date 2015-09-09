@@ -11,7 +11,6 @@ import javafx.beans.binding.DoubleExpression;
 import javafx.beans.binding.IntegerExpression;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.Group;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -31,12 +30,12 @@ import javafx.scene.text.Text;
 
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 
-public class PlayerInfo extends Group
-{
+public class PlayerInfo extends AnchorPane {
 
 	// TO DO: remove stage part and have animations in blueprint.
 
-	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice()
+		.getDisplayMode();
 	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
 	private final double dispWidth = displayRes.getWidth();
 	private final double dispHeight = displayRes.getHeight();
@@ -58,8 +57,7 @@ public class PlayerInfo extends Group
 	private final Player player;
 	private final Board game;
 
-	public PlayerInfo(Player player)
-	{
+	public PlayerInfo(Player player) {
 		this.game = player.getGame();
 		this.player = player;
 
@@ -72,20 +70,19 @@ public class PlayerInfo extends Group
 		energyLevel = player.energyLevelProperty();
 		energyScale = energyLevel.divide(100.0);
 
-		playerTurn = game.currentProperty().isEqualTo(player);
+		playerTurn = game.currentProperty()
+			.isEqualTo(player);
 
 		weaponSets = player.propertySetsProperty();
 
 		init();
 	}
 
-	public boolean isDetailView()
-	{
+	public boolean isDetailView() {
 		return detailView.get();
 	}
 
-	public void setDetailView(boolean detailView)
-	{
+	public void setDetailView(boolean detailView) {
 		this.detailView.set(detailView);
 	}
 
@@ -98,36 +95,28 @@ public class PlayerInfo extends Group
 	// AnchorPane root = new AnchorPane();
 	// }
 
-	public BooleanProperty viewPlayerDetailProperty()
-	{
+	public BooleanProperty viewPlayerDetailProperty() {
 		return detailView;
 	}
 
 	/*
 	 * private void createTransparentStage(Stage primaryStage) { Stage second = new Stage(); second.initStyle(StageStyle.TRANSPARENT); second.initOwner(primaryStage);
-	 * 
+	 *
 	 * AnchorPane root = new AnchorPane(); Blueprint scene = new Blueprint(root, 1300 * wRatio, 800 * hRatio);
-	 * 
+	 *
 	 * second.setScene(scene); second.show(); }
 	 */
 
-	private double getSmallRatio()
-	{
+	private double getSmallRatio() {
 		return (wRatio > hRatio) ? hRatio : wRatio;
 	}
 
-	private void init()
-	{
-		AnchorPane root = new AnchorPane();
-		this.getChildren().add(root);
-
+	private void init() {
 		double width = 290 * wRatio;
 		double height = 190 * hRatio;
 
-		root.resize(width, height);
-		root.setMinSize(width, height);
-		root.setPrefSize(width, height);
-		root.setMaxSize(width, height);
+		this.setMinSize(width, height);
+		this.setPrefSize(width, height);
 
 		InnerShadow smallShade = new InnerShadow(2.0, Color.BLACK);
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
@@ -145,32 +134,40 @@ public class PlayerInfo extends Group
 		opener.setOnMouseEntered(e -> opener.setEffect(largeShade));
 		opener.setOnMouseExited(e -> opener.setEffect(out));
 		opener.setOnMouseClicked(e -> detailView.set(true));
-		Text wDescription = Tools.createText(205, 150, wRatio, hRatio, "Weapons\nManager", Color.web("#a9e1f7"), smallShade, Tools.createRegularFont(12, sRatio));
+		Text wDescription = Tools
+			.createText(205, 150, wRatio, hRatio, "Weapons\nManager", Color.web("#a9e1f7"), smallShade, Tools.createRegularFont(12, sRatio));
 
 		Text name = Tools.createText(80, 10, wRatio, hRatio, playerName, Color.GRAY, smallShade, Tools.createBoldFont(24, sRatio));
 		Text weapons = Tools.createText(12, 145, wRatio, hRatio, "Weapons Status:", Color.GRAY, smallShade, Tools.createBoldFont(13.5, sRatio));
 		Text weaponDisplay = Tools.createText(42, 163, wRatio, hRatio, "0 Complete", Color.GRAY, smallShade, Tools.createRegularFont(12, sRatio));
-		weaponDisplay.textProperty().bind(weaponSets.asString().concat(" complete"));
+		weaponDisplay.textProperty()
+			.bind(weaponSets.asString()
+				.concat(" complete"));
 
 		Text energy = Tools.createText(10, 80, wRatio, hRatio, "Energy:", Color.rgb(116, 229, 135), out, Tools.createRegularFont(15.5, sRatio));
 		Text energyDisplay = Tools.createText(135, 85, wRatio, hRatio, "100 / 100V", Color.WHITE, out, Tools.createRegularFont(10, sRatio));
-		energyDisplay.textProperty().bind(energyLevel.asString().concat(" / 100V"));
+		energyDisplay.textProperty()
+			.bind(energyLevel.asString()
+				.concat(" / 100V"));
 
 		Text shield = Tools.createText(10, 112.5, wRatio, hRatio, "Shields:", Color.LIGHTBLUE, out, Tools.createRegularFont(15.5, sRatio));
 		Text shieldDisplay = Tools.createText(135, 117.5, wRatio, hRatio, "0 / 200V", Color.WHITE, out, Tools.createRegularFont(10, sRatio));
-		shieldDisplay.textProperty().bind(shieldLevel.asString().concat(" / 200V"));
+		shieldDisplay.textProperty()
+			.bind(shieldLevel.asString()
+				.concat(" / 200V"));
 
-		Text playerRank = Tools.createText(85.0, 47.0, wRatio, hRatio, "Rank: "
-				+ player.getPlayerAccount().getRank(), Color.WHITE, out, Tools.createRegularFont(10, sRatio));
-		Text playerGames = Tools.createText(150.0, 47.0, wRatio, hRatio, "Games: "
-				+ player.getPlayerAccount().getGamesPlayed(), Color.WHITE, out, Tools.createRegularFont(10, sRatio));
+		Text playerRank = Tools.createText(85.0, 47.0, wRatio, hRatio, "Rank: " + player.getPlayerAccount()
+			.getRank(), Color.WHITE, out, Tools.createRegularFont(10, sRatio));
+		Text playerGames = Tools.createText(150.0, 47.0, wRatio, hRatio, "Games: " + player.getPlayerAccount()
+			.getGamesPlayed(), Color.WHITE, out, Tools.createRegularFont(10, sRatio));
 
 		Rectangle shieldEmpty = Tools.createRoundedRectangle(170, 22.5, 5, 5, 85, 111.5, sRatio, wRatio, hRatio, Color.DARKGRAY.darker(), largeShade);
 		Stop[] list = { new Stop(0.0, Color.WHITE), new Stop(0.2, Color.web("#c4e0f4")), new Stop(.49, Color.web("#acd5f2")),
 				new Stop(.5, Color.web("#74b2dd")), new Stop(1.0, Color.web("#a9e1f7")) };
 		LinearGradient shieldGrad = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, list);
 		Rectangle shieldBar = Tools.createRoundedRectangle((168) * shieldScale.getValue(), 20, 5, 5, 86, 112.5, sRatio, wRatio, hRatio, Color.WHITE, null);
-		shieldBar.widthProperty().bind(shieldScale.multiply(168 * wRatio));
+		shieldBar.widthProperty()
+			.bind(shieldScale.multiply(168 * wRatio));
 		shieldBar.setFill(shieldGrad);
 
 		Rectangle energyEmpty = Tools.createRoundedRectangle(170, 22.5, 5, 5, 85, 79, sRatio, wRatio, hRatio, Color.DARKGRAY.darker(), largeShade);
@@ -178,17 +175,20 @@ public class PlayerInfo extends Group
 				new Stop(.5, Color.rgb(116, 229, 135)), new Stop(1.0, Color.web("#c7f3ce")) };
 		LinearGradient energyGrad = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, elist);
 		Rectangle energyBar = Tools.createRoundedRectangle((168) * energyScale.getValue(), 20, 5, 5, 86, 80, sRatio, wRatio, hRatio, Color.WHITE, null);
-		energyBar.widthProperty().bind(energyScale.multiply(168 * wRatio));
+		energyBar.widthProperty()
+			.bind(energyScale.multiply(168 * wRatio));
 		energyBar.setFill(energyGrad);
 
-		Rectangle panel = Tools.createRoundedRectangle(190, 25, 5, 5, 80, 40, sRatio, wRatio, hRatio, Color.DARKGRAY.darker().darker(), largeShade);
+		Rectangle panel = Tools.createRoundedRectangle(190, 25, 5, 5, 80, 40, sRatio, wRatio, hRatio, Color.DARKGRAY.darker()
+			.darker(), largeShade);
 
-		root.getChildren().addAll(name, weapons, energy, shieldEmpty, shieldBar, energyEmpty, energyBar, weaponDisplay, energyDisplay, shieldDisplay, shield, profileView, screw1, screw2, screw3, screw4, panel, playerRank, playerGames, opener, wDescription);
+		this.getChildren()
+			.addAll(name, weapons, energy, shieldEmpty, shieldBar, energyEmpty, energyBar, weaponDisplay, energyDisplay, shieldDisplay, shield, profileView, screw1, screw2, screw3, screw4, panel, playerRank, playerGames, opener, wDescription);
 
 		Image background = Tools.createImage("background.jpg");
 		BackgroundImage back = new BackgroundImage(background, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 				new BackgroundSize(width, height, false, false, false, false));
-		root.setBackground(new Background(back));
-		root.setEffect(largeShade);
+		this.setBackground(new Background(back));
+		this.setEffect(largeShade);
 	}
 }
