@@ -18,10 +18,10 @@ public enum WeaponSpec {
 
 	public static WeaponSpec locateSpec(String internalType) {
 		return Arrays.stream(WeaponSpec.values())
-				.parallel()
-				.filter(spec -> spec.codeName.equals(internalType))
-				.findAny()
-				.orElse(null);
+			.parallel()
+			.filter(spec -> spec.codeName.equals(internalType))
+			.findAny()
+			.orElse(null);
 	}
 
 	private final String codeName;
@@ -38,12 +38,12 @@ public enum WeaponSpec {
 
 	public String getEnergyFormName() {
 		return CardDefaults.getCardDefaults()
-				.getProperty("specs." + getCodeName() + ".energyForm");
+			.getProperty("specs." + getCodeName() + ".energyForm");
 	}
 
 	public String getLongName() {
 		return CardDefaults.getCardDefaults()
-				.getProperty("specs." + getCodeName() + ".longName");
+			.getProperty("specs." + getCodeName() + ".longName");
 	}
 
 	public int getRGBColor() {

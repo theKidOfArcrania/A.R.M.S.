@@ -22,7 +22,7 @@ public class MultiSpecs implements Serializable {
 	private static String colorString(WeaponSpec propertyType) {
 		String propName = propertyType.name();
 		return propName.substring(0, 1)
-				.toLowerCase() + propName.substring(1);
+			.toLowerCase() + propName.substring(1);
 	}
 
 	private final EnumSet<WeaponSpec> weaponSpecs;
@@ -40,14 +40,14 @@ public class MultiSpecs implements Serializable {
 		weaponSpecs = EnumSet.noneOf(WeaponSpec.class);
 
 		Arrays.stream(typeSpecs)
-				.parallel()
-				.map(WeaponSpec::locateSpec)
-				.peek(spec -> {
-					if (spec == null) {
-						throw new IllegalArgumentException();
-					}
-				})
-				.forEach(weaponSpecs::add);
+			.parallel()
+			.map(WeaponSpec::locateSpec)
+			.peek(spec -> {
+				if (spec == null) {
+					throw new IllegalArgumentException();
+				}
+			})
+			.forEach(weaponSpecs::add);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class MultiSpecs implements Serializable {
 				sb.append(spec.getLongName());
 			} else {
 				sb.append("-")
-						.append(spec.getLongName());
+					.append(spec.getLongName());
 			}
 		}
 		return sb.toString();
@@ -90,7 +90,7 @@ public class MultiSpecs implements Serializable {
 				sb.append(spec.getCodeName());
 			} else {
 				sb.append("_")
-						.append(spec.getCodeName());
+					.append(spec.getCodeName());
 			}
 		}
 		return sb.toString();
