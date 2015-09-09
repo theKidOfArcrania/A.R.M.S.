@@ -72,7 +72,7 @@ Each upgrade adds a new grenade to the package.
 
 > Robots: There are 7 robots, each specializing in one weapon. Each robot also has unique traits, passives, and event cards.
 1. Nightv0 - Specializes in Dagger
-	Unique passive: Stealth: Takes reduced single target damage.
+	Unique passive: Unseen: Takes reduced single target damage.
 	- If dagger is complete, becomes Untouchable: cannot be attacked by single target damage
 	Event Card 1: Backstab: Instantly deal X damage to the player of choice
 	Event Card 2: Invisibility Cloak: Become unattackable for the next turn
@@ -85,37 +85,37 @@ Each upgrade adds a new grenade to the package.
 	
 3. Bulk XR - Specializes in Shotgun
 	Unique Passive: Tanky: Takes reduced damage from all attacks
-	- If shotgun is complete, becomes Reflection: Attackers damage themselves a little if they directly damage Bulk.
-	Event Card 1: 
-	Event Card 2:
+	- If shotgun is complete, becomes Thorny: Attackers damage themselves a little if they directly damage Bulk.
+	Event Card 1: Riot Shield: When played, blocks the next source of damage from anything
+	Event Card 2: Armor Suit: Grants X Shield for the next X turns that recharges.
 	
 4. R24 Lock n'load - Specializes in Machinegun
 	Unique Passive: Scattered Fire: Random chance that a single target attack will also inflict collateral damage on another opponent
 	- If machine gun is complete, becomes Spray and Pray: multitarget attacks do increased damage, and single target attacks will always do collateral damage.
-	Event Card 1:
-	Event Card 2: 
+	Event Card 1: Barbed Tips: Next multitarget attack does X increased damage over a few turns
+	Event Card 2: Hands up!: Force one player to show you his entire hand
 	
 5. PP3 Skyjack - Specializes in Sniper (All about assassinating single targets and outlasting the others)
 	Unique Passive: Camper: If not attacked for X turns, heals X hp (no shield gain)
 	- If sniper is complete, becomes Survivor: heals X hp per turn
-	Event Card 1: Care Package: Select either shield or ammo to a weapon
-	Event Card 2: Headshot!: Increased damage on next attack
+	Event Card 1: Care Package: Grants X amount of shield and health
+	Event Card 2: Headshot!: X Increased damage on next single target attack
 	
 6. Scrap rm7 - Specializes in Grenade (All about maintaining card advantage and using resources well)
-	Unique Passive: 3 passives based on the number of upgrades on grenade
-	- 0 Upgrades: Rummage: Small chance to draw more than 2 cards.
+	Unique Passive:  Rummage: Small chance to draw more than 2 cards.
 	- If grenades is complete, becomes Leftovers: Each card played grants a bit of shield
-	Event Card 1:
-	Event Card 2:
+	Event Card 1: Harvest: Adds a random action card to your hand
+	Event Card 2: Collection: Adds a random upgrade card to your hand
 	
-7. Techomaniac T1 - Specializes in Rocket Launcher
-	Unique Passive: Innovator: Playing action cards have a small chance to summon a random bot.
-	-  If rocket launcher is complete, gains Creator: Playing action cards summons a random bot
+7. Tech-o-maniac T1 - Specializes in Rocket Launcher
+	Unique Passive: Reuser Bot: Event cards can be activated two times.
+	-  If rocket launcher is complete, gains Construction Bot: Event cards are guaranteed to be bots
 	Event Card 1: Time Bot: Reset the players turn. Allows player to play 3 more moves.
-	Event Card 2: Hijack Bot: Disable one weapon for one opponents for their next turn
-	Event Card 3: 
-	Event Card 4:
-	
+	Event Card 2: Hijack Bot: Disable one weapon for one opponents for their next turn.
+	Event Card 3: Heal Bot: Restores Energy by X amount.
+	Event Card 4: Shield Bot: Grants X Shield.
+	Event Card 5: Ammo Bot: Gain ammo for a random weapon.
+	Event Card 6: Hack Bot: Look at 1 card from each persons hand
 
 > Gameplay: Turn by turn players go, 3 moves per turn
 In one turn, players draw two cards, then can play three cards
@@ -160,14 +160,23 @@ Draw two cards: "SCAVENGE THE JUNKYARD"
 
 Another turn: "TIME WARP"
 
->(optional) Event Cards: When drawn using a turn, card is unknown until played.
+> Event Cards: When drawn using a turn, card is unknown until played.
 1. Lucky Battery: Heals Energy or Shield by 10
-2. Weapon Malfunction: If ___ is owned, the weapon is destroyed and put into the discard pile, unless it is part of a full set
+2. Weapon Malfunction: If ___ is owned, the weapon upgrade is destroyed and put into the discard pile, unless it is part of a full set
 3. Robot Malfunction: Glitches and turn ends
-4. Weapon of Choice:
--new ideas welcome-
+4. Weapon of Choice: Can become any weapon upgrade.
+5.
 
-2. Second mode: Weapons race- First player to reach a combined health and shields of 200 and gains 3 weapons wins
--description yet to be implemented-
-
-Currency and shop implemented later
+> Currency: Each game a player plays will give them a "Scrap"
+ - Scraps can be spent on things in the "Shop"
+ Shop Inventory: 
+ 	Permanent Items:
+	1. Unlocking characters(robots) costs scraps, (X, 2X, 3X, etc for more and more robots)
+ 	2. Special Skins for each robot character (X, 2X, 3X for increasingly better ones)
+ 	3. Special Skins for player's information panel 
+ 	4. New Game Skins and music
+ 	Temporary Items:
+ 	- Boost to damage for next X games
+ 	- Boost to starting shield for next X games
+ 	- Boost to max shield and max energy for X games
+ 	
