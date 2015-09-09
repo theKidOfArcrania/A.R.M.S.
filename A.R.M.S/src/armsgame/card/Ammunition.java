@@ -5,8 +5,8 @@
  */
 package armsgame.card;
 
-import armsgame.impl.Player;
 import armsgame.impl.CardActionType.Likeness;
+import armsgame.impl.Player;
 
 import static java.util.Objects.requireNonNull;
 
@@ -20,67 +20,67 @@ public class Ammunition extends Action {
 	 *
 	 */
 	private static final long serialVersionUID = 9126449081012411183L;
-	private final DualColor propertyColors;
+	private final MultiSpecs weaponSpecs;
 
 	/**
-	 * Constructs an all-color wild rent (except gold, if applicable).
+	 * Constructs an rainbow-wild ammunition (except green, if applicable).
 	 */
 	public Ammunition() {
-		propertyColors = new DualColor();
+		weaponSpecs = new MultiSpecs();
 	}
 
 	/**
-	 * Constructs a one-color rent card.
+	 * Constructs an ammunition with the internal typing. This is the constructor called by card creator.
+	 *
+	 * @param internalType
+	 *            the internal type of the ammnunition usages
+	 */
+	public Ammunition(String internalType) {
+		weaponSpecs = new MultiSpecs(internalType);
+	}
+
+	/**
+	 * Constructs a one-weapon-spec ammunition card.
 	 *
 	 * @param weaponSpec
-	 *            What color this rent card represents.
+	 *            What weapon spec this ammunition can be used.
 	 */
 	public Ammunition(WeaponSpec weaponSpec) {
 		// all parameters MUST be non-null.
 		requireNonNull(weaponSpec);
-		propertyColors = new DualColor(weaponSpec);
+		weaponSpecs = new MultiSpecs(weaponSpec);
 	}
 
 	/**
-	 * Constructs a bi-color wild card rent card.
+	 * Constructs a bi-color wild card ammunition.
 	 * <p>
 	 *
-	 * @param propertyColor1
-	 *            The first color of this wild card.
-	 * @param propertyColor2
-	 *            The second color of this wild card.
+	 * @param spec1
+	 *            The first weapon-spec that this ammunition can be used.
+	 * @param spec2
+	 *            The second weapon-spec that this ammunition can be used.
 	 */
-	public Ammunition(WeaponSpec propertyColor1, WeaponSpec propertyColor2) {
+	public Ammunition(WeaponSpec spec1, WeaponSpec spec2) {
 		// all parameters MUST be non-null;
-		requireNonNull(propertyColor1);
-		requireNonNull(propertyColor2);
-		propertyColors = new DualColor(propertyColor1, propertyColor2);
-	}
-
-	/**
-	 * Constructs a Rent Card with the internal typing. This is the constructor called by card creator.
-	 *
-	 * @param internalType
-	 *            the internal type of the rent-card color
-	 */
-	public Ammunition(String internalType) {
-		propertyColors = new DualColor(internalType);
+		requireNonNull(spec1);
+		requireNonNull(spec2);
+		weaponSpecs = new MultiSpecs(spec1, spec2);
 	}
 
 	@Override
 	public boolean actionPlayed(Player self) {
 		WeaponSet weapon = self.selectPropertyColumn("Choose your weapon to attack with.", this::isValidRent);
-		return payRequest(self, isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints());
+		return processDamage(self, isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints());
 	}
 
 	@Override
 	public String getCardName() {
-		return propertyColors.getColorName() + " Rent";
+		return weaponSpecs.getColorName() + " Ammunition";
 	}
 
 	@Override
 	public String getInternalType() {
-		return "action.rent." + propertyColors.getInternalType();
+		return "action.rent." + weaponSpecs.getInternalType();
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class Ammunition extends Action {
 	}
 
 	public boolean isValidRent(WeaponSet column) {
-		return propertyColors.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
+		return weaponSpecs.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
 	}
 
 }

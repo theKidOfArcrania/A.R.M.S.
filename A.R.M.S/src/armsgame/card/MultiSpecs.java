@@ -5,53 +5,19 @@
  */
 package armsgame.card;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
+//TO DO: rewrite comments
 
-import static armsgame.card.WeaponSpec.Beige;
-import static armsgame.card.WeaponSpec.Black;
-import static armsgame.card.WeaponSpec.Blue;
-import static armsgame.card.WeaponSpec.Brown;
-import static armsgame.card.WeaponSpec.Green;
-import static armsgame.card.WeaponSpec.LightBlue;
-import static armsgame.card.WeaponSpec.Megenta;
-import static armsgame.card.WeaponSpec.Orange;
-import static armsgame.card.WeaponSpec.Red;
-import static armsgame.card.WeaponSpec.Yellow;
+import java.io.Serializable;
+
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author HW
  */
-public class DualColor implements Serializable {
+public class MultiSpecs implements Serializable {
 
 	private static final long serialVersionUID = -2188904758680736571L;
-	private static final Map<String, DualColor> internalTypingColors;
-
-	static {
-		DualColor[] availableWildColors = new DualColor[] { new DualColor(), // rainbow
-				// wild rent/wild card properties
-				new DualColor(LightBlue, Brown), new DualColor(Orange, Megenta), new DualColor(Red, Yellow), new DualColor(Blue, Green),
-				new DualColor(Beige, Black),
-				// wild-card properties only.
-				new DualColor(Black, Green), new DualColor(Black, LightBlue) };
-		DualColor[] singleColorEnum = Arrays.stream(WeaponSpec.class.getEnumConstants())
-				.parallel()
-				.map(DualColor::new)
-				.toArray(DualColor[]::new);
-		DualColor[] availableColors = new DualColor[availableWildColors.length + singleColorEnum.length];
-
-		System.arraycopy(singleColorEnum, 0, availableColors, 0, singleColorEnum.length);
-		System.arraycopy(availableWildColors, 0, availableColors, singleColorEnum.length, availableWildColors.length);
-
-		internalTypingColors = Arrays.stream(availableWildColors)
-				.collect(Collectors.toConcurrentMap(DualColor::getInternalType, UnaryOperator.identity()));
-
-	}
 
 	private static String colorString(WeaponSpec propertyType) {
 		String propName = propertyType.name();
@@ -66,25 +32,36 @@ public class DualColor implements Serializable {
 	private final WeaponSpec propertyColor2;
 
 	/**
-	 * Constructs an all-color wild card (except gold, if applicable) DualColor.
+	 * Constructs an all-color wild card (except gold, if applicable) MultiSpecs.
 	 */
-	public DualColor() {
+	public MultiSpecs() {
 		this.colorName = "Rainbow";
 		this.weaponSpec = null;
 		this.propertyColor2 = null;
 	}
 
+	public MultiSpecs(String internalType) {
+		MultiSpecs colors = internalTypingColors.get(internalType);
+		if (colors == null) {
+			throw new IllegalArgumentException();
+		}
+
+		this.weaponSpec = colors.weaponSpec;
+		this.propertyColor2 = colors.propertyColor2;
+		this.colorName = colors.colorName;
+	}
+
 	/**
-	 * Constructs a single color DualColor.
+	 * Constructs a single color MultiSpecs.
 	 * <p>
 	 *
 	 * @param weaponSpec
 	 *            What color this property card represents.
 	 */
-	public DualColor(WeaponSpec weaponSpec) {
+	public MultiSpecs(WeaponSpec weaponSpec) {
 		// all parameters MUST be non-null.
 		requireNonNull(weaponSpec);
-		this.colorName = weaponSpec.getClassName();
+		this.colorName = weaponSpec.getCodeName();
 		this.weaponSpec = weaponSpec;
 		// set it to null because this is a single color property.
 		propertyColor2 = null;
@@ -100,12 +77,12 @@ public class DualColor implements Serializable {
 	 *            The second color of this wild card.
 	 */
 	@SuppressWarnings("AssignmentToMethodParameter")
-	public DualColor(WeaponSpec propertyColor1, WeaponSpec propertyColor2) {
+	public MultiSpecs(WeaponSpec propertyColor1, WeaponSpec propertyColor2) {
 		// all parameters MUST be non-null;
 		requireNonNull(propertyColor1);
 		requireNonNull(propertyColor2);
 
-		if (propertyColor1 == WeaponSpec.Gold || propertyColor2 == WeaponSpec.Gold) {
+		if (propertyColor1 == WeaponSpec.Nuke || propertyColor2 == WeaponSpec.Nuke) {
 			throw new IllegalArgumentException("Gold cannot be included in wild card");
 		}
 
@@ -122,17 +99,6 @@ public class DualColor implements Serializable {
 		this.colorName = propertyColor1 + " -OR- " + propertyColor2;
 	}
 
-	public DualColor(String internalType) {
-		DualColor colors = internalTypingColors.get(internalType);
-		if (colors == null) {
-			throw new IllegalArgumentException();
-		}
-
-		this.weaponSpec = colors.weaponSpec;
-		this.propertyColor2 = colors.propertyColor2;
-		this.colorName = colors.colorName;
-	}
-
 	/**
 	 * This determines whether if this property card and the <code>other</code> property card can be put together under one property column.
 	 * <p>
@@ -141,11 +107,11 @@ public class DualColor implements Serializable {
 	 *            the other dual color to compare against.
 	 * @return true if this is compatible, false otherwise.
 	 */
-	public boolean compatibleWith(DualColor other) {
+	public boolean compatibleWith(MultiSpecs other) {
 		if (this.isAllWildCard()) {
-			return other.isWildCard() || other.getPropertyColor() != WeaponSpec.Gold;
+			return other.isWildCard() || other.getPropertyColor() != WeaponSpec.Nuke;
 		} else if (other.isAllWildCard()) {
-			return isWildCard() || getPropertyColor() != WeaponSpec.Gold;
+			return isWildCard() || getPropertyColor() != WeaponSpec.Nuke;
 		} else {
 			boolean compatible = getPropertyColor() == other.getPropertyColor() || getPropertyColor() == other.getPropertyColor2();
 			boolean compatible2 = getPropertyColor2() == other.getPropertyColor() || getPropertyColor2() == other.getPropertyColor2();
@@ -163,7 +129,7 @@ public class DualColor implements Serializable {
 	 */
 	public boolean compatibleWith(WeaponSpec other) {
 		if (this.isAllWildCard()) {
-			return other != WeaponSpec.Gold;
+			return other != WeaponSpec.Nuke;
 		} else {
 			boolean compatible = getPropertyColor() == other;
 			boolean compatible2 = getPropertyColor2() == other;
@@ -214,7 +180,7 @@ public class DualColor implements Serializable {
 	}
 
 	/**
-	 * Describes whether if this DualColor is a all-color wild.
+	 * Describes whether if this MultiSpecs is a all-color wild.
 	 * <p>
 	 *
 	 * @return true if this is all-color wild, false otherwise.
@@ -225,7 +191,7 @@ public class DualColor implements Serializable {
 	}
 
 	/**
-	 * Describes whether if this DualColor is a wild color.
+	 * Describes whether if this MultiSpecs is a wild color.
 	 * <p>
 	 *
 	 * @return true if this is wild, false if this is regular.

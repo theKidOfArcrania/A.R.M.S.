@@ -113,7 +113,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	public int getAttackPoints() {
-		return 1;
+		extractFullSet().stream();
 	}
 
 	public int getFullSet() {
@@ -131,34 +131,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	 * @return the number of property cards in this column.
 	 */
 	public int getPropertyCount() {
-		class PartWrapper {
-			private final WeaponPart part;
-
-			public PartWrapper(WeaponPart part) {
-				this.part = part;
-			}
-
-			@Override
-			public boolean equals(Object other) {
-				if (other instanceof PartWrapper) {
-					return ((PartWrapper) other).getPart()
-						.getInternalType()
-						.equals(part.getInternalType());
-				}
-				return false;
-			}
-
-			public WeaponPart getPart() {
-				return part;
-			}
-		}
-
-		return parts.parallelStream()
-			.map(PartWrapper::new)
-			.distinct()
-			.map(PartWrapper::getPart)
-			.mapToInt((card) -> (card instanceof WeaponPart) ? 1 : 0)
-			.sum();
+		return extractFullSet().size();
 	}
 
 	/**
@@ -268,7 +241,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 
 	@Override
 	public String toString() {
-		return weaponSpec.getClassName() + " set";
+		return weaponSpec.getCodeName() + " set";
 	}
 
 	private void checkCard(WeaponPart card) {

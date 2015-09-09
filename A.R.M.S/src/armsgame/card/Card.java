@@ -2,6 +2,8 @@ package armsgame.card;
 
 import java.awt.Image;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.function.Predicate;
 
 import armsgame.impl.Board;
 import armsgame.impl.CardActionType;
@@ -10,31 +12,35 @@ import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
 
+import static armsgame.card.CardDefaults.getCardDefaults;
+
 import static armsgame.card.StandardCardDefaults.getCardDefaults;
 
 public abstract class Card {
 
 	private static final long serialVersionUID = -8288322516558088995L;
 
-	protected static boolean payRequest(Player self, boolean global, boolean zapMode, int amount) {
+	private static void processDamage(DamageReport damage, AttackModifiers[] modifiers) {
+		Arrays.stream(modifiers)
+				.forEachOrdered(mod -> mod.modifyAttack(damage));
+		damage.finishRequest();
+	}
+
+	protected static boolean processDamage(Player self, boolean global, boolean zapMode, int base, AttackModifiers... modifiers) {
 		if (global) {
 			Board game = self.getGame();
-			for (int i = 0; i < game.getPlayerCount(); i++) {
-				Player target = game.getPlayer(i);
-				if (target != self) {
-					DamageReport rentPay = new DamageReport(self, target, amount, zapMode);
-					rentPay.finishRequest();
-				}
-			}
+			game.playerStream()
+					.parallel()
+					.filter(Predicate.isEqual(self)
+							.negate())
+					.forEach(target -> processDamage(new DamageReport(self, target, base, zapMode), modifiers));
 			return true;
 		} else {
 			Player target = self.selectPlayer("Please select a player to damage.");
 			if (target == null) {
 				return false;
 			}
-
-			DamageReport rentPay = new DamageReport(self, target, amount, zapMode);
-			rentPay.finishRequest();
+			processDamage(new DamageReport(self, target, base, zapMode), modifiers);
 			return true;
 		}
 	}
@@ -68,10 +74,6 @@ public abstract class Card {
 			return false;
 		}
 		return true;
-	}
-
-	public final int getCardId() {
-		return id;
 	}
 
 	/**
@@ -112,7 +114,7 @@ public abstract class Card {
 	}
 
 	/**
-	 * Gets the internal type of this card. For example, Parker Place (first blue property card) would have an internal type of "props.blue.1"
+	 * Gets the internal type of this card, often making a descriptive, programmer-friendly name.
 	 * <p>
 	 *
 	 * @return the internal type of this card.

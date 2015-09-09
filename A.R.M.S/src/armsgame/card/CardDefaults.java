@@ -7,6 +7,8 @@ package armsgame.card;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import armsgame.ResourceDefaults;
 
@@ -47,9 +49,26 @@ import armsgame.ResourceDefaults;
  *
  * @author HW
  */
-public abstract class CardDefaults extends ResourceDefaults {
+public class CardDefaults extends ResourceDefaults {
 
 	private static final long serialVersionUID = -7651695787655927167L;
+
+	private static final CardDefaults defs;
+
+	static {
+		try {
+			defs = new CardDefaults("carddefs.PROPERTIES");
+		} catch (IOException ex) {
+			Logger.getLogger(CardDefaults.class.getName())
+					.log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
+			System.exit(1);
+			throw new InternalError(); // this should not be called.
+		}
+	}
+
+	public static CardDefaults getCardDefaults() {
+		return defs;
+	}
 
 	private static String colorString(WeaponSpec propertyType) {
 		String propName = propertyType.name();
@@ -58,7 +77,7 @@ public abstract class CardDefaults extends ResourceDefaults {
 	}
 
 	protected CardDefaults(String propFile) throws IOException {
-		load(ClassLoader.getSystemResourceAsStream(propFile));
+		load(CardDefaults.class.getResourceAsStream(propFile));
 	}
 
 	public Deck generateDeck() throws DeckInitializationFailureException {
