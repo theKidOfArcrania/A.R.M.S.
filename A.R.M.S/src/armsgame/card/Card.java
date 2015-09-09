@@ -6,12 +6,11 @@ import java.io.IOException;
 import armsgame.impl.Board;
 import armsgame.impl.CardActionType;
 import armsgame.impl.CardActionType.Likeness;
-
-import static armsgame.card.StandardCardDefaults.getCardDefaults;
-
 import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
 import armsgame.impl.SupportedActions;
+
+import static armsgame.card.StandardCardDefaults.getCardDefaults;
 
 public abstract class Card {
 
