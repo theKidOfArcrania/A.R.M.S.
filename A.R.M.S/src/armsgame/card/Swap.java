@@ -27,7 +27,7 @@ public class Swap extends Action {
 			return false;
 		}
 
-		WeaponPart take = (WeaponPart) self.selectProperty("Please select a property to take.", (card) -> {
+		PartCard take = (PartCard) self.selectProperty("Please select a property to take.", (card) -> {
 			// Has to not be part of the full set.
 			WeaponSet column = target.getPropertyColumn(card);
 			column.sort();
@@ -38,7 +38,7 @@ public class Swap extends Action {
 			return false;
 		}
 
-		WeaponPart give = (WeaponPart) self.selectProperty("Please select a property to give", (card) -> true);
+		PartCard give = (PartCard) self.selectProperty("Please select a property to give", (card) -> true);
 
 		DamageReport forceDeal = new DamageReport(self, target);
 		forceDeal.requestProperty(take);

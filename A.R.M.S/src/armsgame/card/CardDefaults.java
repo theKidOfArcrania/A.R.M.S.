@@ -38,7 +38,7 @@ import armsgame.ResourceDefaults;
 //[card].name --> name of card
 //[card].actionName --> action tooltip text (optional)
 //
-//WeaponPart Card Prop-set (extends from Card):
+//PartCard Card Prop-set (extends from Card):
 //[card].name --> this defines the property names.
 //[card].value --> this defines the value of the property.
 //[card].damage --> this defines the damage the weapon can deal with that particular part.

@@ -23,11 +23,11 @@ import static java.util.Objects.requireNonNull;
  *
  * @author HW
  */
-public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable {
+public class WeaponSet implements Iterable<PartCard>, Serializable, Observable {
 
 	private static final long serialVersionUID = 5264125689357215996L;
 
-	private final ObservableList<WeaponPart> parts = FXCollections.observableArrayList();
+	private final ObservableList<PartCard> parts = FXCollections.observableArrayList();
 
 	private EnergyCrystal crystalBoost = new EnergyCrystal();
 	private final CardDefaults defs;
@@ -46,14 +46,14 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		return true;
 	}
 
-	public boolean add(WeaponPart prop) {
+	public boolean add(PartCard prop) {
 		requireNonNull(prop);
 		checkCard(prop);
 		// TO DO: check ref.
 		return parts.add(prop);
 	}
 
-	public void addAll(Collection<WeaponPart> prop) {
+	public void addAll(Collection<PartCard> prop) {
 		prop.stream()
 			.forEach(this::add);
 	}
@@ -63,7 +63,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 			.forEach(this::add);
 	}
 
-	public void addAllAndSort(Collection<WeaponPart> prop) {
+	public void addAllAndSort(Collection<PartCard> prop) {
 		prop.stream()
 			.forEach(this::add);
 		sort();
@@ -84,7 +84,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		return true;
 	}
 
-	public void addAndSort(WeaponPart prop) {
+	public void addAndSort(PartCard prop) {
 		requireNonNull(prop);
 		checkCard(prop);
 		parts.add(prop);
@@ -96,7 +96,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		parts.addListener(listener);
 	}
 
-	public void addListener(ListChangeListener<? super WeaponPart> listener) {
+	public void addListener(ListChangeListener<? super PartCard> listener) {
 		parts.addListener(listener);
 	}
 
@@ -104,7 +104,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		parts.clear();
 	}
 
-	public boolean contains(WeaponPart o) {
+	public boolean contains(PartCard o) {
 		return parts.contains(o);
 	}
 
@@ -114,7 +114,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 
 	public int getAttackPoints() {
 		int damage = CardDefaults.getCardDefaults();
-		for (WeaponPart part : parts) {
+		for (PartCard part : parts) {
 			damage = part.modifyDamage(damage);
 		}
 		return damage;
@@ -180,11 +180,11 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	@Override
-	public Iterator<WeaponPart> iterator() {
+	public Iterator<PartCard> iterator() {
 		return parts.iterator();
 	}
 
-	public Stream<WeaponPart> parallelStream() {
+	public Stream<PartCard> parallelStream() {
 		return parts.parallelStream();
 	}
 
@@ -196,11 +196,11 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		return true;
 	}
 
-	public WeaponPart remove(int index) {
+	public PartCard remove(int index) {
 		return parts.remove(index);
 	}
 
-	public boolean remove(WeaponPart o) {
+	public boolean remove(PartCard o) {
 		return parts.remove(o);
 	}
 
@@ -239,7 +239,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		parts.sort(comparing(Card::getCardName)); // sort by weapon name.
 	}
 
-	public Stream<WeaponPart> stream() {
+	public Stream<PartCard> stream() {
 		return parts.stream();
 	}
 
@@ -248,9 +248,9 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		return weaponSpec.getCodeName() + " set";
 	}
 
-	private void checkCard(WeaponPart card) {
+	private void checkCard(PartCard card) {
 		if (parts.contains(card)) {
-			throw new IllegalArgumentException("WeaponPart already exists: " + card);
+			throw new IllegalArgumentException("PartCard already exists: " + card);
 		}
 		if (card.getSpec() != weaponSpec) {
 			throw new IllegalArgumentException("Must be a property card that has the color " + weaponSpec);
@@ -261,9 +261,9 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	private WeaponSet extractFullSet() {
 		WeaponSet set = new WeaponSet(defs, weaponSpec);
 		for (int i = 0; i < this.size(); i++) {
-			WeaponPart part = parts.get(i);
+			PartCard part = parts.get(i);
 			if (!set.stream()
-				.map(WeaponPart::getInternalType)
+				.map(PartCard::getInternalType)
 				.equals(part.getInternalType())) {
 				set.add(part);
 			}

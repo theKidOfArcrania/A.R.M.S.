@@ -27,7 +27,7 @@ public class PartPicker extends Action {
 			return false;
 		}
 
-		WeaponPart take = (WeaponPart) self.selectProperty("Please select a property to take.", (card) -> {
+		PartCard take = (PartCard) self.selectProperty("Please select a property to take.", (card) -> {
 			// Has to not be part of the full weapon
 			WeaponSet column = target.getPropertyColumn(card);
 			column.sort();

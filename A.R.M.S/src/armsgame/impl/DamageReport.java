@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import armsgame.card.Card;
 import armsgame.card.Response;
 import armsgame.card.BurstCharge;
-import armsgame.card.WeaponPart;
+import armsgame.card.PartCard;
 import armsgame.card.Valuable;
 import armsgame.card.WeaponSet;
 import armsgame.card.WeaponSpec;
@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 public class DamageReport {
 
 	private static int getValue(Card c) {
-		if (!(c instanceof BurstCharge) && !(c instanceof WeaponPart)) {
+		if (!(c instanceof BurstCharge) && !(c instanceof PartCard)) {
 			throw new IllegalArgumentException("Must be a money card or a property card.");
 		}
 
@@ -54,7 +54,7 @@ public class DamageReport {
 				.collect(Collectors.joining(", ")) + ", and " + last;
 	}
 
-	private static void transferProp(Player giver, Player reciever, WeaponPart prop) {
+	private static void transferProp(Player giver, Player reciever, PartCard prop) {
 		WeaponSet columnGiver = giver.getPropertyColumn(prop);
 		WeaponSet columnReciever = reciever.getPropertyColumn(columnGiver.getPropertyColor());
 
@@ -83,9 +83,9 @@ public class DamageReport {
 	private int hp;
 	private final Player victim;
 	private int paidAmount = 0;
-	private final ArrayList<WeaponPart> partsRequested = new ArrayList<>(3);
+	private final ArrayList<PartCard> partsRequested = new ArrayList<>(3);
 	private final ArrayList<WeaponSpec> weaponsRequested = new ArrayList<>(3);
-	private final ArrayList<WeaponPart> partsGiven = new ArrayList<>(3);
+	private final ArrayList<PartCard> partsGiven = new ArrayList<>(3);
 	private final ArrayList<WeaponSpec> weaponsGiven = new ArrayList<>(3);
 	private boolean energyZapMode = false;
 	private boolean canceled = false;
@@ -141,7 +141,7 @@ public class DamageReport {
 	 * @param partsRequested
 	 *            the requested property
 	 */
-	public DamageReport(Player creditor, Player debtor, WeaponPart propRequested) {
+	public DamageReport(Player creditor, Player debtor, PartCard propRequested) {
 		requireNonNull(creditor);
 		requireNonNull(debtor);
 		requireNonNull(propRequested);
@@ -200,7 +200,7 @@ public class DamageReport {
 					damager.increaseBurst(nrg.getEnergyValue());
 				}
 			} else {
-				takePart0((WeaponPart) card);
+				takePart0((PartCard) card);
 			}
 		});
 	}
@@ -227,16 +227,16 @@ public class DamageReport {
 	 * Adds a property to the give list
 	 * <p>
 	 *
-	 * @param weaponPart
+	 * @param partCard
 	 *            the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean giveProperty(WeaponPart weaponPart) {
+	public boolean giveProperty(PartCard partCard) {
 		// TO DO: check prop ref.
-		if (partsGiven.contains(weaponPart)) {
+		if (partsGiven.contains(partCard)) {
 			return false;
 		}
-		partsGiven.add(weaponPart);
+		partsGiven.add(partCard);
 		return true;
 	}
 
@@ -290,16 +290,16 @@ public class DamageReport {
 	 * Adds a property to the request list
 	 * <p>
 	 *
-	 * @param weaponPart
+	 * @param partCard
 	 *            the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean requestProperty(WeaponPart weaponPart) {
+	public boolean requestProperty(PartCard partCard) {
 		// TO DO: check prop ref.
-		if (partsRequested.contains(weaponPart)) {
+		if (partsRequested.contains(partCard)) {
 			return false;
 		}
-		partsRequested.add(weaponPart);
+		partsRequested.add(partCard);
 		return true;
 	}
 
@@ -330,7 +330,7 @@ public class DamageReport {
 
 		if (!partsRequested.isEmpty()) {
 			partsRequested.stream()
-					.map(WeaponPart::getPropertyName)
+					.map(PartCard::getPropertyName)
 					.forEach(requests::add);
 		}
 
@@ -351,7 +351,7 @@ public class DamageReport {
 
 		if (!partsGiven.isEmpty()) {
 			partsGiven.stream()
-					.map(WeaponPart::getPropertyName)
+					.map(PartCard::getPropertyName)
 					.forEach(gives::add);
 		}
 
@@ -377,7 +377,7 @@ public class DamageReport {
 				.toString();
 	}
 
-	private void givePart0(WeaponPart prop) {
+	private void givePart0(PartCard prop) {
 		transferProp(damager, victim, prop);
 	}
 
@@ -400,7 +400,7 @@ public class DamageReport {
 		}
 	}
 
-	private void takePart0(WeaponPart prop) {
+	private void takePart0(PartCard prop) {
 		transferProp(victim, damager, prop);
 	}
 

@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import armsgame.card.Card;
 import armsgame.card.CardDefaults;
 import armsgame.card.Response;
-import armsgame.card.WeaponPart;
+import armsgame.card.PartCard;
 import armsgame.card.WeaponSet;
 import armsgame.card.WeaponSpec;
 import javafx.beans.property.IntegerProperty;
@@ -27,7 +27,7 @@ import javafx.collections.ObservableList;
  */
 public abstract class Player {
 
-	private static boolean hasPropertyInColumn(WeaponPart card, WeaponSet column) {
+	private static boolean hasPropertyInColumn(PartCard card, WeaponSet column) {
 		return column.stream()
 			.parallel()
 			.anyMatch((prop) -> prop == card);
@@ -185,7 +185,7 @@ public abstract class Player {
 		return weaponSets.get(index);
 	}
 
-	public WeaponSet getPropertyColumn(WeaponPart card) {
+	public WeaponSet getPropertyColumn(PartCard card) {
 		return weaponSets.parallelStream()
 			.filter(column -> hasPropertyInColumn(card, column))
 			.findAny()
@@ -380,7 +380,7 @@ public abstract class Player {
 	 *
 	 * @return the property the player selected.
 	 */
-	public WeaponPart selectProperty() {
+	public PartCard selectProperty() {
 		return selectProperty("Please select a property column to use.");
 	}
 
@@ -392,7 +392,7 @@ public abstract class Player {
 	 *            the selectRequest that the player will see.
 	 * @return the property the player selected.
 	 */
-	public WeaponPart selectProperty(String prompt) {
+	public PartCard selectProperty(String prompt) {
 		return selectProperty(prompt, card -> true);
 	}
 
@@ -406,7 +406,7 @@ public abstract class Player {
 	 *            filter for properties
 	 * @return the property the player selected.
 	 */
-	public WeaponPart selectProperty(String prompt, Predicate<WeaponPart> filter) {
+	public PartCard selectProperty(String prompt, Predicate<PartCard> filter) {
 		return selectProperty(prompt, filter, this);
 	}
 
@@ -422,7 +422,7 @@ public abstract class Player {
 	 *            the property columns that the player will select from.
 	 * @return the property the player selected.
 	 */
-	public abstract WeaponPart selectProperty(String prompt, Predicate<WeaponPart> filter, Player context);
+	public abstract PartCard selectProperty(String prompt, Predicate<PartCard> filter, Player context);
 
 	/**
 	 * This prompts the player to select a property column to use (convenience method)
