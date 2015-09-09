@@ -205,10 +205,6 @@ public class WeaponSet implements Iterable<PartCard>, Serializable, Observable {
 		return parts.remove(o);
 	}
 
-	public boolean remove(WeaponPart o) {
-		return parts.remove(o);
-	}
-
 	public WeaponSet removeFullSet() {
 		if (!isFullSet()) {
 			throw new IllegalStateException("Not a full set.");
