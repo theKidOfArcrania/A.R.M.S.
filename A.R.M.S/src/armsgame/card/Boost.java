@@ -8,9 +8,9 @@ package armsgame.card;
 import java.util.ArrayList;
 
 import armsgame.impl.CardAction;
+import armsgame.impl.CardActionType.Likeness;
 import armsgame.impl.CenterPlay;
 import armsgame.impl.Player;
-import armsgame.impl.CardActionType.Likeness;
 
 /**
  *
@@ -24,16 +24,13 @@ public class Boost extends Action {
 		ArrayList<Boost> extraDoubles = new ArrayList<>(10);
 		CardAction played;
 		CenterPlay centerPlay = self.getGame()
-				.getCenterPlay();
+			.getCenterPlay();
 		int multiplier = 2;
 
 		do {
-			played = self
-					.selectHand("Select an ammunition card to attack with.",
-							card -> ((!self.isLastTurn() && card instanceof Boost)
-									|| (card instanceof Ammunition && card.isEnabled(self, Likeness.Action))),
-							cardAction -> cardAction.getInternalType()
-									.equals("move.action"));
+			played = self.selectHand("Select an ammunition card to attack with.", card -> ((!self.isLastTurn() && card instanceof Boost)
+					|| (card instanceof Ammunition && card.isEnabled(self, Likeness.Action))), cardAction -> cardAction.getInternalType()
+						.equals("move.action"));
 
 			if (played == null) {
 				return false;
@@ -71,9 +68,9 @@ public class Boost extends Action {
 			}
 
 			return self.handStream()
-					.parallel()
-					.filter(card -> card instanceof Ammunition)
-					.anyMatch(rent -> rent.isEnabled(self, Likeness.Action));
+				.parallel()
+				.filter(card -> card instanceof Ammunition)
+				.anyMatch(rent -> rent.isEnabled(self, Likeness.Action));
 		}
 		return true;
 	}

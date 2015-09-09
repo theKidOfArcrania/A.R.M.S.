@@ -50,8 +50,8 @@ public class Ammunition extends Action {
 	public boolean isEnabled(Player self, Likeness action) {
 		if (action == Likeness.Action) {
 			return self.columnStream()
-					.parallel()
-					.anyMatch(this::isValidRent);
+				.parallel()
+				.anyMatch(this::isValidRent);
 		}
 		return true;
 	}
