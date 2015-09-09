@@ -2,11 +2,7 @@
 package armsgame.card;
 
 /**
- * <<<<<<< Upstream, based on branch 'homemaster' of https://github.com/theKidOfArcrania/A.R.M.S. This class is a placeholder for specific part implements for the Weapon, somewhat bottle-necking the ability to assemble parts. ======= This class encapsulates a property card, used for winning, and
- * also for renting from. This also has implementation for wild cards, based on the two properties that determine the color type of a property: <code>weaponSpec</code> and <code>propertyColor2</code>. In a regular property card, you would have just <code>weaponSpec</code> filled as the color of this
- * property.
- * <p>
- * >>>>>>> 01819f1 General Implementations!
+ * This class is a placeholder for specific part implements for the Weapon, somewhat bottle-necking the ability to assemble parts.
  *
  * @author Henry
  *
