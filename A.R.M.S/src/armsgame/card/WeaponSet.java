@@ -113,7 +113,10 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 	}
 
 	public int getAttackPoints() {
-		extractFullSet().stream();
+		int damage;
+		for (WeaponPart part: parts) {
+			part
+		}
 	}
 
 	public int getFullSet() {
@@ -248,9 +251,7 @@ public class WeaponSet implements Iterable<WeaponPart>, Serializable, Observable
 		if (parts.contains(card)) {
 			throw new IllegalArgumentException("WeaponPart already exists: " + card);
 		}
-
-		if (!card.getDualColors()
-			.compatibleWith(weaponSpec)) {
+		if (card.getSpec() != weaponSpec) {
 			throw new IllegalArgumentException("Must be a property card that has the color " + weaponSpec);
 		}
 

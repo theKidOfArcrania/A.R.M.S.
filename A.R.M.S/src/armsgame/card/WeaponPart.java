@@ -14,23 +14,20 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * This class encapsulates a property card, used for winning, and also for renting from. This also has implementation for wild cards, based on the two properties that determine the color type of a property: <code>weaponSpec</code> and <code>propertyColor2</code>. In a regular property card, you
- * would have just <code>weaponSpec</code> filled as the color of this property. In a bi-color wild card, both of these properties will be filled as to which colors it can rotate to. In an all-color wild card, both of these properties are left to be NULL. Note: when determining rents, don't use
- * these two properties directly, rather, use the helper functions {@link #compatibleWith(armsgame.card.WeaponPart)} and {@link #canStandAlone()} to determine whether if this can
+ * would have just <code>weaponSpec</code> filled as the color of this property.
  * <p>
  *
  * @author HW
  */
 @SuppressWarnings("FinalClass")
-public final class WeaponPart extends Card implements Valuable {
+public final class WeaponPart extends Card {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -4847169645075457537L;
 
-	private int propNumber = 0;
-
-	private final WeaponSpec weaponSpec;
+	private final MultiSpec weaponSpec;
 
 	/**
 	 * Constructs a regular property card.
@@ -77,6 +74,10 @@ public final class WeaponPart extends Card implements Valuable {
 		return getPropertyName();
 	}
 
+	public int getDamageBase() {
+		return getInternalIntProperty("boostBase");
+	}
+
 	@Override
 	public String getInternalType() {
 		return "props." + weaponSpec.getCodeName() + "." + propNumber;
@@ -89,7 +90,7 @@ public final class WeaponPart extends Card implements Valuable {
 	 * @return the value of propertyName
 	 */
 	public String getPropertyName() {
-		return getInternalProperty("name") + "#" + propNumber;
+		return getInternalProperty("name");
 	}
 
 	public WeaponSpec getSpec() {
@@ -105,17 +106,12 @@ public final class WeaponPart extends Card implements Valuable {
 	}
 
 	@Override
-	public int getValue() {
-		return getInternalIntProperty("value");
-	}
-
-	@Override
 	public boolean isEnabled(Player self, Likeness action) {
 		return true;
 	}
 
 	public int modifyDamage(int base) {
-		return base + getInternalIntProperty("damage");
+		return base + getDamageBase();
 	}
 
 }

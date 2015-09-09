@@ -36,7 +36,18 @@ public enum WeaponSpec {
 		return codeName;
 	}
 
+	public String getEnergyFormName() {
+		return CardDefaults.getCardDefaults()
+				.getProperty("specs." + getCodeName() + ".energyForm");
+	}
+
+	public String getLongName() {
+		return CardDefaults.getCardDefaults()
+				.getProperty("specs." + getCodeName() + ".longName");
+	}
+
 	public int getRGBColor() {
+		// TO DO: export to carddefs.
 		return rgb;
 	}
 
