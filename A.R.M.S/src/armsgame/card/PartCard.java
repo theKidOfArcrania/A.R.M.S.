@@ -20,30 +20,38 @@ import static java.util.Objects.requireNonNull;
  * @author HW
  */
 @SuppressWarnings("FinalClass")
-public final class PartCard extends Card {
-
+public final class PartCard extends Action
+{
 	/**
 	 *
 	 */
+	private static final String prefixes = "$*";
 	private static final long serialVersionUID = -4847169645075457537L;
-
-	private final MultiSpecs weaponSpec;
+	private final int type;
+	private final WeaponPart partBuild;
 
 	/**
-	 * Constructs a regular property card.
+	 * Constructs an all-part weapon part, with no restrictions.
+	 */
+	public PartCard()
+	{
+		this.type = 1;
+		this.partBuild = null;
+	}
+
+	/**
+	 * Constructs a single-part card.
 	 * <p>
 	 *
-	 * @param partNum
-	 *            The index of the weapon part being referred to.
-	 * @param weaponSpec
-	 *            What weapon-spec this part belongs to.
+	 * @param weaponPart
+	 *            This is the weapon part that this part will build
 	 */
-	public PartCard(int partNum, WeaponSpec weaponSpec) {
+	public PartCard(WeaponPart weaponPart)
+	{
 		// all parameters MUST be non-null.
-		requireNonNull(partNum);
-		requireNonNull(weaponSpec);
-		this.propNumber = partNum;
-		this.weaponSpec = weaponSpec;
+		requireNonNull(weaponPart);
+		this.type = 0;
+		this.partBuild = weaponPart;
 	}
 
 	/**
@@ -52,35 +60,44 @@ public final class PartCard extends Card {
 	 * @param internalType
 	 *            the internal type of the property-card color
 	 */
-	public PartCard(String internalType) {
-		if (internalType.contains("$")) {
-			int propNumIndex = internalType.indexOf("$");
-			weaponSpec = WeaponSpec.locateSpec(internalType.substring(0, propNumIndex));
-			propNumber = Integer.parseInt(internalType.substring(propNumIndex + 1));
-		} else {
-			throw new IllegalArgumentException("Single property card must have '$' and prop number as a suffix.");
+	PartCard(String internalType)
+	{
+		char prefix = internalType.charAt(0);
+		switch (prefix) {
+		case '$':
+			type = 0;
+			partBuild = new WeaponPart(internalType.substring(1));
+			break;
+		case '*':
+			type = 1;
+			partBuild = null;
+			break;
+		default:
+			throw new IllegalArgumentException("Invalid prefix header '" + prefix + "'");
 		}
 	}
 
 	@Override
-	public boolean actionPlayed(Player self) {
-		WeaponSet column = self.getPropertyColumn(getSpec());
-		column.addAndSort(this);
-		return true;
+	public boolean actionPlayed(Player self)
+	{
+		// TO DO: the action.
 	}
 
 	@Override
-	public String getCardName() {
+	public String getCardName()
+	{
 		return getPropertyName();
 	}
 
-	public int getDamageBase() {
+	public int getDamageBase()
+	{
 		return getInternalIntProperty("boostBase");
 	}
 
 	@Override
-	public String getInternalType() {
-		return "props." + weaponSpec.getCodeName() + "." + propNumber;
+	public String getInternalType()
+	{
+		return "action.part." + prefixes.charAt(type);
 	}
 
 	/**
@@ -89,16 +106,14 @@ public final class PartCard extends Card {
 	 *
 	 * @return the value of propertyName
 	 */
-	public String getPropertyName() {
+	public String getPropertyName()
+	{
 		return getInternalProperty("name");
 	}
 
-	public WeaponSpec getSpec() {
-		return weaponSpec;
-	}
-
 	@Override
-	public SupportedActions getSupportedTypes() {
+	public SupportedActions getSupportedTypes()
+	{
 		SupportedActions actions = new SupportedActions();
 		actions.addAction(new CardActionType("Add property", "move.property"));
 		actions.addAction(new CardActionType("Discard", "move.discard"));
@@ -106,11 +121,13 @@ public final class PartCard extends Card {
 	}
 
 	@Override
-	public boolean isEnabled(Player self, Likeness action) {
+	public boolean isEnabled(Player self, Likeness action)
+	{
 		return true;
 	}
 
-	public int modifyDamage(int base) {
+	public int modifyDamage(int base)
+	{
 		return base + getDamageBase();
 	}
 

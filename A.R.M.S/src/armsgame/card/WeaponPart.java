@@ -6,7 +6,7 @@ package armsgame.card;
  * @author Henry
  *
  */
-public class WeaponPart {
+public abstract class WeaponPart {
 
 	private final String internalType;
 
@@ -28,5 +28,7 @@ public class WeaponPart {
 	public String getInternalType() {
 		return internalType;
 	}
+
+	public abstract void
 
 }
