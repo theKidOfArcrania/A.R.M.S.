@@ -4,6 +4,7 @@ import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;
+import java.util.ArrayList;
 
 import armsgame.res.Tools;
 import javafx.animation.KeyFrame;
@@ -69,7 +70,9 @@ public class MoveHistory extends Application{
 		Stage s = initMain("dirtymetal3.png", 290*wRatio);
 		s.initOwner(primaryStage);
 		s.show();
+		ArrayList<Stage> moves = new ArrayList<Stage>();
 		
+		//test
 		Stage part1 = moveInit("Turn "+moveCount, "blank-profile.jpg","blank-profile.jpg", 0);
 		part1.initOwner(primaryStage);
 		part1.show();
