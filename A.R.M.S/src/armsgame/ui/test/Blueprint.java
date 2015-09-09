@@ -13,18 +13,14 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class Blueprint extends Scene{
-	public Blueprint(Parent root,double width, double height)
-	{
+public class Blueprint extends Scene {
+	public Blueprint(Parent root, double width, double height) {
 		super(root, width, height);
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
-		((AnchorPane) root).setBackground(new Background(
-				new BackgroundImage(Tools.createImage("blueprint.png"), BackgroundRepeat.REPEAT, 
-						BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, 
-						new BackgroundSize(this.getWidth(), this.getHeight(), false, false, false, false))));
+		((AnchorPane) root).setBackground(new Background(new BackgroundImage(Tools.createImage("blueprint.png"), BackgroundRepeat.REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(this.getWidth(), this.getHeight(), false, false, false, false))));
 		root.setEffect(largeShade);
-		this.setOnMouseClicked(e->((Stage)this.getWindow()).close());
-		
-		
+		this.setOnMouseClicked(e -> ((Stage) this.getWindow()).close());
+
 	}
 }
