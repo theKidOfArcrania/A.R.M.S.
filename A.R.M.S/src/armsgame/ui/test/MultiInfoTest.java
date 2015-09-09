@@ -5,9 +5,8 @@ import java.awt.DisplayMode;
 
 import armsgame.res.Tools;
 import javafx.animation.Animation.Status;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -122,6 +121,33 @@ public class MultiInfoTest extends Application {
 		s3.initOwner(primaryStage);
 		s3.show();
 
+		// This is an animation test run... in the real code we will remove this.
+		Transition energyAni = new Transition() {
+			{
+				this.setCycleDuration(Duration.seconds(3));
+			}
+
+			@Override
+			protected void interpolate(double frac) {
+				energyLevel.set((int) (100 - frac * 100));
+			}
+		};
+		Transition shieldAni = new Transition() {
+			{
+				this.setCycleDuration(Duration.seconds(3));
+			}
+
+			@Override
+			protected void interpolate(double frac) {
+				shieldLevel.set((int) (200 - frac * 200));
+			}
+		};
+		energyLevel.setValue(100);
+		shieldLevel.setValue(200);
+
+		energyAni.setDelay(shieldAni.getCycleDuration());
+		shieldAni.play();
+		energyAni.play();
 	}
 
 	public void trans(boolean status) {
@@ -230,16 +256,6 @@ public class MultiInfoTest extends Application {
 		primaryStage.setScene(scene);
 
 		// Timeline
-		solid.getKeyFrames()
-			.add(new KeyFrame(Duration.ZERO, new KeyValue(alph, .4), new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85, .4))));
-
-		solid.getKeyFrames()
-			.add(new KeyFrame(Duration.seconds(.05), new KeyValue(alph, .6), new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85, .6))));
-
-		solid.getKeyFrames()
-			.add(new KeyFrame(Duration.seconds(.1), new KeyValue(alph, .8), new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85, .8))));
-		solid.getKeyFrames()
-			.add(new KeyFrame(Duration.seconds(.15), new KeyValue(alph, 1.0), new KeyValue(scene.fillProperty(), Color.color(.85, .85, .85, 1.0))));
 
 		// This is an animation test run... in the real code we will remove this.
 		/*
