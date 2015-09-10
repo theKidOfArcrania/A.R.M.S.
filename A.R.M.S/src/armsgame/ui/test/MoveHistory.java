@@ -160,12 +160,13 @@ public class MoveHistory extends Application{
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
 		InnerShadow greenShade = new InnerShadow(2.0, Color.DARKGREEN.darker());
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
-		
-		
-		
-		
+
 		Text name = Tools.createText(13,15,  wRatio, hRatio," Move\nHistory", Color.GRAY.darker(), smallShade, Tools.createBoldFont(24,sRatio));
 		Rectangle panel = Tools.createRoundedRectangle(4,90,2,2,122,0,sRatio, wRatio, hRatio, Color.GRAY.darker(), mediumShade);
+		
+		//Test for the Settings button, to be implemented in the main UI class
+		Image 
+		
 		root.getChildren().addAll(name,panel);
 		
 
