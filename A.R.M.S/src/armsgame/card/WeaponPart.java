@@ -29,6 +29,4 @@ public abstract class WeaponPart {
 		return internalType;
 	}
 
-	public abstract void
-
 }
