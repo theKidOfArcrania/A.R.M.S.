@@ -1,5 +1,6 @@
-#A.R.M.S
-##Mode- Survival
+#A.R.M.S Game Specifications
+##Mode
+###Survival
 In this game mode, players play as robots and they must gain as many weapons as possible using them to attack and destroy all the opponents. Last survivor wins, death -> elimination
 
 ##Specs:
