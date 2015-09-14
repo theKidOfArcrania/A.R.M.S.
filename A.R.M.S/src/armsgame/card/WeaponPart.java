@@ -1,12 +1,17 @@
 package armsgame.card;
 
+import armsgame.impl.Player;
+
+import static armsgame.card.CardDefaults.getCardDefaults;
+
 /**
  * This class is a placeholder for specific part implements for the Weapon, somewhat bottle-necking the ability to assemble parts.
  *
  * @author Henry
  *
  */
-public abstract class WeaponPart {
+public class WeaponPart
+{
 
 	private final String internalType;
 
@@ -16,8 +21,19 @@ public abstract class WeaponPart {
 	 * @param internalType
 	 *            the internal type of this weapon part.
 	 */
-	WeaponPart(String internalType) {
+	WeaponPart(String internalType)
+	{
 		this.internalType = internalType;
+	}
+
+	/**
+	 * This retrieves the accuracy rate increase of this weapon part The accuracy rate is implemented as a bar, and this accuracy rate guarantees 100% efficiency rate xx% of the time
+	 *
+	 * @return a value from 0 to 100
+	 */
+	public int getAccuracy()
+	{
+		return getInternalIntProperty("accuracy", 0);
 	}
 
 	/**
@@ -25,8 +41,93 @@ public abstract class WeaponPart {
 	 *
 	 * @return the internal type.
 	 */
-	public String getInternalType() {
+	public String getInternalType()
+	{
 		return internalType;
 	}
 
+	/**
+	 * Retrieves the damage dealt to multiple targets at 100% efficiency
+	 *
+	 * @return a positive damage amount.
+	 */
+	public int getMultiTargetDamage()
+	{
+		return getInternalIntProperty("damage.multi", 0);
+	}
+
+	/**
+	 * Retrieves the damage dealt to a single targets at 100% efficiency
+	 *
+	 * @return a positive damage amount.
+	 */
+	public int getSingleTargetDamage()
+	{
+		return getInternalIntProperty("damage.single", 0);
+	}
+
+	/**
+	 * Identifies whether if this weapon part is vampiric by default. This is defined by having the energy from the victim being transferred to the damager.
+	 *
+	 * @return true if it is vampiric, false otherwise.
+	 */
+	public boolean isVampiric()
+	{
+		return getInternalIntProperty("vampiric", 0) != 0;
+	}
+
+	private void damage(Player attacker, Player victim, boolean vampiric, double efficiency)
+	{
+		if (efficiency <= 0)
+		{
+			return;
+		}
+
+		double singleDamage = getSingleTargetDamage() * efficiency;
+		double multiDamage = getMultiTargetDamage() * efficiency;
+		boolean effectiveVampiric = vampiric && isVampiric();
+
+		if (singleDamage > 0)
+		{
+			damage0(attacker, victim, singleDamage, effectiveVampiric);
+		}
+
+		if (multiDamage > 0)
+		{
+			attacker.getGame().playerStream().forEach(player -> damage0(attacker, player, multiDamage, effectiveVampiric));
+		}
+	}
+
+	private void damage0(Player attacker, Player victim, double damage, boolean vampiric)
+	{
+		// TO DO: change health to double
+		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
+		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
+		victim.damageShield(fixedDamage);
+
+		if (vampiric)
+		{
+			// TO DO: healing.
+		}
+	}
+
+	protected int getInternalIntProperty(String subKey)
+	{
+		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, 0);
+	}
+
+	protected int getInternalIntProperty(String subKey, int defValue)
+	{
+		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, defValue);
+	}
+
+	protected String getInternalProperty(String subKey)
+	{
+		return getCardDefaults().getProperty(getInternalType() + "." + subKey);
+	}
+
+	protected String getInternalProperty(String subKey, String defValue)
+	{
+		return getCardDefaults().getProperty(getInternalType() + "." + subKey, defValue);
+	}
 }

@@ -59,7 +59,15 @@ public abstract class Weapon implements Observable
 		}
 	}
 
-	public abstract int damage(Player attacker, Player defender);
+	public int damage(Player attacker, Player defender)
+	{
+		int accuracyRate = Arrays.stream(parts).mapToInt(WeaponPart::getAccuracy).sum();
+		double efficiency = attacker.selectAccuracy(accuracyRate) / 100.0; // double check that this would be floating
+
+		double groupDamage = Arrays.stream(parts).mapToInt(WeaponPart::getMultiTargetDamage).sum() * efficiency;
+		double singleDamage = Arrays.stream(parts).mapToInt(WeaponPart::getSingleTargetDamage).sum() * efficiency;
+
+	}
 
 	public Color getColorClass()
 	{
@@ -94,7 +102,7 @@ public abstract class Weapon implements Observable
 
 	/**
 	 * Specifies if the weapon has all max upgrades (other than the energy upgrade);
-	 * 
+	 *
 	 * @return true if it is completed, false otherwise.
 	 */
 	public boolean isComplete()

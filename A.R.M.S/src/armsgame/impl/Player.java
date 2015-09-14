@@ -10,12 +10,12 @@ import armsgame.card.CardDefaults;
 import armsgame.card.PartCard;
 import armsgame.card.Response;
 import armsgame.card.WeaponSet;
-import armsgame.card.WeaponSpec;
-import javafx.beans.binding.IntegerExpression;
+import javafx.beans.binding.DoubleExpression;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerPropertyBase;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -36,8 +36,8 @@ public abstract class Player
 
 	private final CardDefaults defs;
 	private final Account playerAccount;
-	private final IntegerProperty shieldLevel = new SimpleIntegerProperty(0);
-	private final IntegerProperty energyLevel = new SimpleIntegerProperty(0);
+	private final DoubleProperty shieldLevel = new SimpleDoubleProperty(0);
+	private final DoubleProperty energyLevel = new SimpleDoubleProperty(0);
 	private final int cashCache = -1;
 	private int setCache = -1;
 	private Board game = null;
@@ -119,14 +119,14 @@ public abstract class Player
 		return weaponSets.stream();
 	}
 
-	public void damageEnergy(int damage)
+	public void damageEnergy(double damage)
 	{
 		energyLevel.set(Math.max(0, energyLevel.get() - damage));
 	}
 
-	public void damageShield(int damage)
+	public void damageShield(double damage)
 	{
-		int shieldLeft = shieldLevel.get();
+		double shieldLeft = shieldLevel.get();
 		if (shieldLeft >= damage)
 		{
 			shieldLevel.set(shieldLeft - damage);
@@ -145,7 +145,7 @@ public abstract class Player
 		hand.addAll(Arrays.asList(cards));
 	}
 
-	public IntegerExpression energyLevelProperty()
+	public DoubleExpression energyLevelProperty()
 	{
 		return energyLevel;
 	}
@@ -155,7 +155,7 @@ public abstract class Player
 		return defs;
 	}
 
-	public int getEnergyLevel()
+	public double getEnergyLevel()
 	{
 		return energyLevel.get();
 	}
@@ -234,7 +234,7 @@ public abstract class Player
 		return propertySets.get();
 	}
 
-	public int getShieldLevel()
+	public double getShieldLevel()
 	{
 		return shieldLevel.get();
 	}
@@ -314,6 +314,17 @@ public abstract class Player
 	{
 		moves = 0;
 	}
+
+	/**
+	 * This method allows the user to select a particular accuracy for a weapon fire. Note that this can only be used when a player is playing a card.
+	 *
+	 * @param guarantee
+	 *            the percentage from 0 to 100 that is guaranteed to be 100% efficiency
+	 * @return a value from 0 to 100 determining weapon efficiency.
+	 * @throws IllegalStateException
+	 *             when this is called outside of playing a card
+	 */
+	public abstract int selectAccuracy(int guarantee);
 
 	/**
 	 * This prompts the player to select a card to play (convenience method)
