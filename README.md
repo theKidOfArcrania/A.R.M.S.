@@ -30,11 +30,11 @@ Games are matched based on ranking
 ###Weapon Concepts:
 ######Accuracy: 
 (Increased by range, sights, etc.)
-Weapons start out with a base "accuracy", and the chance that the weapon will hit is based on this accuracy.
+Weapons start out with a base "accuracy", and the actual damage is a percentage of what the base "accuracy" is. For example, if a weapon has an accuaracy of 67%, 67% of the time the weapon will reach 100% efficency. To determine efficentcy, the player has to stop the a moving tick on a bar that is skewed so to represent xx% efficency.
 
 ######Damage: 
 (Increased by rate of fire, power upgrades, etc.)
-Weapons start out with a base damage, and energy/shield this takes away is based on this damage.
+Weapons start out with a base damage, and energy/shield this takes away is based on this damage. This is seperated with two categories: group damage (damage done to multiple targets) and single damage (damage done to single target).
 
 ######Vampiric:
 (Some upgrades make things vampiric, energy crystals always do)
