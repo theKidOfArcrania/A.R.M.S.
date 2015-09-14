@@ -16,17 +16,22 @@ import javafx.scene.paint.Color;
  */
 public abstract class Weapon implements Observable
 {
-
+	private final WeaponSpec spec;
+	private boolean vampiric = false;
 	private final WeaponPart[] parts;
 	private final boolean[] partsBuilt;
 	private final ArrayList<InvalidationListener> listeners = new ArrayList<>();
 
 	/**
 	 * Constructs a Weapon class
+	 * 
+	 * @param spec
+	 *            the specifications of this weapon.
 	 */
-	public Weapon()
+	public Weapon(WeaponSpec spec)
 	{
 		// Initialize the parts needed for this weapon.
+		this.spec = spec;
 		String[] partsType = CardDefaults.getCardDefaults().getProperty(getInternalType() + ".parts").split(" *, *");
 		parts = Arrays.stream(partsType).map(WeaponPart::new).toArray(WeaponPart[]::new);
 		partsBuilt = new boolean[parts.length];
@@ -59,14 +64,17 @@ public abstract class Weapon implements Observable
 		}
 	}
 
-	public int damage(Player attacker, Player defender)
+	public void damage(Player attacker, Player victim)
 	{
-		int accuracyRate = Arrays.stream(parts).mapToInt(WeaponPart::getAccuracy).sum();
-		double efficiency = attacker.selectAccuracy(accuracyRate) / 100.0; // double check that this would be floating
-
-		double groupDamage = Arrays.stream(parts).mapToInt(WeaponPart::getMultiTargetDamage).sum() * efficiency;
-		double singleDamage = Arrays.stream(parts).mapToInt(WeaponPart::getSingleTargetDamage).sum() * efficiency;
-
+		double guarantee = Math.min(Arrays.stream(parts).mapToDouble(WeaponPart::getAccuracy).sum(), 100);
+		double efficiency = attacker.selectAccuracy(guarantee);
+		for (int i = 0; i < parts.length; i++)
+		{
+			if (partsBuilt[i])
+			{
+				parts[i].damage(attacker, victim, this.isVampiric(), efficiency);
+			}
+		}
 	}
 
 	public Color getColorClass()
@@ -117,9 +125,19 @@ public abstract class Weapon implements Observable
 		return true;
 	}
 
+	public boolean isVampiric()
+	{
+		return vampiric;
+	}
+
 	@Override
 	public synchronized void removeListener(InvalidationListener listener)
 	{
 		listeners.remove(listener);
+	}
+
+	void setVampiric(boolean vampiric)
+	{
+		this.vampiric = vampiric;
 	}
 }

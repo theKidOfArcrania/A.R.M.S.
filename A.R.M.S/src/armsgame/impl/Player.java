@@ -319,12 +319,12 @@ public abstract class Player
 	 * This method allows the user to select a particular accuracy for a weapon fire. Note that this can only be used when a player is playing a card.
 	 *
 	 * @param guarantee
-	 *            the percentage from 0 to 100 that is guaranteed to be 100% efficiency
-	 * @return a value from 0 to 100 determining weapon efficiency.
+	 *            a value from 0 to 1 that is guaranteed to be 100% efficiency
+	 * @return a value from 0 to 1 determining weapon efficiency.
 	 * @throws IllegalStateException
 	 *             when this is called outside of playing a card
 	 */
-	public abstract int selectAccuracy(int guarantee);
+	public abstract double selectAccuracy(double guarantee);
 
 	/**
 	 * This prompts the player to select a card to play (convenience method)
