@@ -28,7 +28,7 @@ public final class PartCard extends Action
 	private static final String prefixes = "$*";
 	private static final long serialVersionUID = -4847169645075457537L;
 	private final int type;
-	private final WeaponPart partBuild;
+	private final WeaponPartSpec partBuild;
 
 	/**
 	 * Constructs an all-part weapon part, with no restrictions.
@@ -43,15 +43,15 @@ public final class PartCard extends Action
 	 * Constructs a single-part card.
 	 * <p>
 	 *
-	 * @param weaponPart
+	 * @param weaponPartSpec
 	 *            This is the weapon part that this part will build
 	 */
-	public PartCard(WeaponPart weaponPart)
+	public PartCard(WeaponPartSpec weaponPartSpec)
 	{
 		// all parameters MUST be non-null.
-		requireNonNull(weaponPart);
+		requireNonNull(weaponPartSpec);
 		this.type = 0;
-		this.partBuild = weaponPart;
+		this.partBuild = weaponPartSpec;
 	}
 
 	/**
@@ -66,7 +66,7 @@ public final class PartCard extends Action
 		switch (prefix) {
 		case '$':
 			type = 0;
-			partBuild = new WeaponPart(internalType.substring(1));
+			partBuild = new WeaponPartSpec(internalType.substring(1));
 			break;
 		case '*':
 			type = 1;

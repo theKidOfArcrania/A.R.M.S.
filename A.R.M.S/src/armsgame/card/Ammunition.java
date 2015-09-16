@@ -32,7 +32,7 @@ public class Ammunition extends Action {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		WeaponSet weapon = self.selectPropertyColumn("Choose your weapon to attack with.", this::isValidRent);
+		Weapon weapon = self.selectPropertyColumn("Choose your weapon to attack with.", this::isValidRent);
 		return processDamage(self, isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints());
 	}
 
@@ -60,7 +60,7 @@ public class Ammunition extends Action {
 		return this.getInternalIntProperty("global", 0) != 0;
 	}
 
-	public boolean isValidRent(WeaponSet column) {
+	public boolean isValidRent(Weapon column) {
 		return weaponSpecs.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
 	}
 

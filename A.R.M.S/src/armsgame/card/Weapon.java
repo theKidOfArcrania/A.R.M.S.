@@ -18,7 +18,7 @@ public abstract class Weapon implements Observable
 {
 	private final WeaponSpec spec;
 	private boolean vampiric = false;
-	private final WeaponPart[] parts;
+	private final WeaponPartSpec[] parts;
 	private final boolean[] partsBuilt;
 	private final ArrayList<InvalidationListener> listeners = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public abstract class Weapon implements Observable
 		// Initialize the parts needed for this weapon.
 		this.spec = spec;
 		String[] partsType = CardDefaults.getCardDefaults().getProperty(getInternalType() + ".parts").split(" *, *");
-		parts = Arrays.stream(partsType).map(WeaponPart::new).toArray(WeaponPart[]::new);
+		parts = Arrays.stream(partsType).map(WeaponPartSpec::new).toArray(WeaponPartSpec[]::new);
 		partsBuilt = new boolean[parts.length];
 		Arrays.sort(parts);
 	}
@@ -51,7 +51,7 @@ public abstract class Weapon implements Observable
 	 *            the part to implement on this weapon.
 	 * @return whether if this is actually built or not.
 	 */
-	public boolean buildPart(WeaponPart part)
+	public boolean buildPart(WeaponPartSpec part)
 	{
 		int partIndex = Arrays.binarySearch(parts, part);
 		if (partIndex < 0 || partsBuilt[partIndex])
@@ -66,7 +66,7 @@ public abstract class Weapon implements Observable
 
 	public void damage(Player attacker, Player victim)
 	{
-		double guarantee = Math.min(Arrays.stream(parts).mapToDouble(WeaponPart::getAccuracy).sum(), 100);
+		double guarantee = Math.min(Arrays.stream(parts).mapToDouble(WeaponPartSpec::getAccuracy).sum(), 100);
 		double efficiency = attacker.selectAccuracy(guarantee);
 		for (int i = 0; i < parts.length; i++)
 		{
@@ -102,7 +102,7 @@ public abstract class Weapon implements Observable
 	 *            the weapon part to test with
 	 * @return true if it can be built on here, false otherwise.
 	 */
-	public boolean isBuildable(WeaponPart part)
+	public boolean isBuildable(WeaponPartSpec part)
 	{
 		int partIndex = Arrays.binarySearch(parts, part);
 		return partIndex >= 0 && !partsBuilt[partIndex];

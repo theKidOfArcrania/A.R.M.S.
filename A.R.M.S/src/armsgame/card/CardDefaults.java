@@ -49,95 +49,57 @@ import armsgame.ResourceDefaults;
  *
  * @author HW
  */
-public class CardDefaults extends ResourceDefaults
-{
+public class CardDefaults extends ResourceDefaults {
 
 	private static final long serialVersionUID = -7651695787655927167L;
 
 	private static final CardDefaults defs;
 
-	static
-	{
-		try
-		{
+	static {
+		try {
 			defs = new CardDefaults("carddefs.PROPERTIES");
-		} catch (IOException ex)
-		{
-			Logger.getLogger(CardDefaults.class.getName()).log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
+		} catch (IOException ex) {
+			Logger.getLogger(CardDefaults.class.getName())
+				.log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
 			System.exit(1);
 			throw new InternalError(); // this should not be called.
 		}
 	}
 
-	public static CardDefaults getCardDefaults()
-	{
+	public static CardDefaults getCardDefaults() {
 		return defs;
 	}
 
-	private static String colorString(WeaponSpec propertyType)
-	{
-		String propName = propertyType.name();
-		return propName.substring(0, 1).toLowerCase() + propName.substring(1);
-	}
-
-	protected CardDefaults(String propFile) throws IOException
-	{
+	protected CardDefaults(String propFile) throws IOException {
 		load(CardDefaults.class.getResourceAsStream(propFile));
 	}
 
-	public Deck generateDeck() throws DeckInitializationFailureException
-	{
+	public Deck generateDeck() throws DeckInitializationFailureException {
 		int length = getIntProperty("deck.length", 0);
 		Deck generated = new Deck();
-		try
-		{
-			for (int i = 0; i < length; i++)
-			{
+		try {
+			for (int i = 0; i < length; i++) {
 				String className = getProperty("deck." + i + ".class");
 				String subType = getProperty("deck." + i + ".subType");
 
-				if (className == null)
-				{
+				if (className == null) {
 					throw new DeckInitializationFailureException("Class name is omitted.");
 				}
 
-				if (subType == null)
-				{
-					Class.forName(className).newInstance();
-				} else
-				{
-					Class.forName(className).getConstructor(String.class).newInstance(subType);
+				if (subType == null) {
+					Class.forName(className)
+						.newInstance();
+				} else {
+					Class.forName(className)
+						.getConstructor(String.class)
+						.newInstance(subType);
 				}
 			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e)
-		{
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 			throw new DeckInitializationFailureException(e);
 		}
 		generated.finalizeDeck();
 		return generated;
-	}
-
-	public int getPropertyFullSet(WeaponSpec propertyType)
-	{
-		String propName = colorString(propertyType);
-		return getIntProperty("props." + propName + ".fullset", 0);
-	}
-
-	public int getRent(WeaponSpec propertyType, int propertyCount)
-	{
-		if (propertyCount < 0)
-		{
-			throw new IllegalArgumentException("property count must not be negative.");
-		}
-		int maxConciousCount = Math.max(propertyCount, getPropertyFullSet(propertyType));
-
-		if (maxConciousCount == 0)
-		{
-			return 0;
-		}
-
-		String propName = colorString(propertyType);
-		return getIntProperty("props." + propName + ".rent." + maxConciousCount, 0);
 	}
 
 }

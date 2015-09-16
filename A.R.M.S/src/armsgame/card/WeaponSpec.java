@@ -39,10 +39,16 @@ public class WeaponSpec {
 		return null;
 	}
 
+	private final WeaponPartSpec[] parts;
 	private final String codeType;
 
 	private WeaponSpec(String codeType) {
 		this.codeType = codeType;
+		String[] partSpecsList = getInternalProperty("parts");
+		parts = Arrays.stream(partSpecsList)
+			.parallel()
+			.map(WeaponPartSpec::new)
+			.toArray(WeaponPartSpec[]::new);
 	}
 
 	public String getCodeName() {
