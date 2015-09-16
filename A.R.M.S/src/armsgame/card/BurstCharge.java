@@ -55,7 +55,7 @@ public final class BurstCharge extends Card {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		self.increaseBurst(value);
+		self.healShield(value);
 		return true;
 	}
 

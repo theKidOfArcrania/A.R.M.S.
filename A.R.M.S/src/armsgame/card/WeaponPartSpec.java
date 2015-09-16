@@ -10,7 +10,26 @@ import static armsgame.card.CardDefaults.getCardDefaults;
  * @author Henry
  *
  */
-public class WeaponPartSpec {
+public class WeaponPartSpec
+{
+
+	public static void getPartSpec(String codeType)
+	{
+
+	}
+
+	private static void damage0(Player attacker, Player victim, double damage, boolean vampiric)
+	{
+		// TO DO: change health to double
+		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
+		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
+		victim.damageShield(fixedDamage);
+
+		if (vampiric)
+		{
+			attacker.heal(fixedDamage);
+		}
+	}
 
 	private final String codeType;
 
@@ -20,12 +39,15 @@ public class WeaponPartSpec {
 	 * @param codeType
 	 *            the internal coded type of this weapon part.
 	 */
-	WeaponPartSpec(String codeType) {
+	private WeaponPartSpec(String codeType)
+	{
 		this.codeType = codeType;
 	}
 
-	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency) {
-		if (efficiency <= 0) {
+	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency)
+	{
+		if (efficiency <= 0)
+		{
 			return;
 		}
 
@@ -33,14 +55,14 @@ public class WeaponPartSpec {
 		double multiDamage = getMultiTargetDamage() * efficiency;
 		boolean effectiveVampiric = vampiric && isVampiric();
 
-		if (singleDamage > 0) {
+		if (singleDamage > 0)
+		{
 			damage0(attacker, victim, singleDamage, effectiveVampiric);
 		}
 
-		if (multiDamage > 0) {
-			attacker.getGame()
-				.playerStream()
-				.forEach(player -> damage0(attacker, player, multiDamage, effectiveVampiric));
+		if (multiDamage > 0)
+		{
+			attacker.getGame().playerStream().forEach(player -> damage0(attacker, player, multiDamage, effectiveVampiric));
 		}
 	}
 
@@ -49,7 +71,8 @@ public class WeaponPartSpec {
 	 *
 	 * @return a value from 0 to 1
 	 */
-	public double getAccuracy() {
+	public double getAccuracy()
+	{
 		return getInternalDoubleProperty("accuracy");
 	}
 
@@ -58,7 +81,8 @@ public class WeaponPartSpec {
 	 *
 	 * @return the internal type.
 	 */
-	public String getCodeName() {
+	public String getCodeName()
+	{
 		return codeType;
 	}
 
@@ -67,7 +91,8 @@ public class WeaponPartSpec {
 	 *
 	 * @return a positive damage amount.
 	 */
-	public double getMultiTargetDamage() {
+	public double getMultiTargetDamage()
+	{
 		return getInternalDoubleProperty("damage.multi");
 	}
 
@@ -76,7 +101,8 @@ public class WeaponPartSpec {
 	 *
 	 * @return a positive damage amount.
 	 */
-	public double getSingleTargetDamage() {
+	public double getSingleTargetDamage()
+	{
 		return getInternalDoubleProperty("damage.single");
 	}
 
@@ -85,42 +111,38 @@ public class WeaponPartSpec {
 	 *
 	 * @return true if it is vampiric, false otherwise.
 	 */
-	public boolean isVampiric() {
+	public boolean isVampiric()
+	{
 		return getInternalIntProperty("vampiric", 0) != 0;
 	}
 
-	private void damage0(Player attacker, Player victim, double damage, boolean vampiric) {
-		// TO DO: change health to double
-		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
-		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
-		victim.damageShield(fixedDamage);
-
-		if (vampiric) {
-			// TO DO: healing.
-		}
-	}
-
-	protected double getInternalDoubleProperty(String subKey) {
+	protected double getInternalDoubleProperty(String subKey)
+	{
 		return getCardDefaults().getDoubleProperty(getCodeName() + "." + subKey, 0.0);
 	}
 
-	protected double getInternalDoubleProperty(String subKey, double defValue) {
+	protected double getInternalDoubleProperty(String subKey, double defValue)
+	{
 		return getCardDefaults().getDoubleProperty(getCodeName() + "." + subKey, defValue);
 	}
 
-	protected int getInternalIntProperty(String subKey) {
+	protected int getInternalIntProperty(String subKey)
+	{
 		return getCardDefaults().getIntProperty(getCodeName() + "." + subKey, 0);
 	}
 
-	protected int getInternalIntProperty(String subKey, int defValue) {
+	protected int getInternalIntProperty(String subKey, int defValue)
+	{
 		return getCardDefaults().getIntProperty(getCodeName() + "." + subKey, defValue);
 	}
 
-	protected String getInternalProperty(String subKey) {
+	protected String getInternalProperty(String subKey)
+	{
 		return getCardDefaults().getProperty(getCodeName() + "." + subKey);
 	}
 
-	protected String getInternalProperty(String subKey, String defValue) {
+	protected String getInternalProperty(String subKey, String defValue)
+	{
 		return getCardDefaults().getProperty(getCodeName() + "." + subKey, defValue);
 	}
 }

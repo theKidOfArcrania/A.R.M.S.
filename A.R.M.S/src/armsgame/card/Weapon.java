@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
  * @author Henry
  *
  */
-public abstract class Weapon implements Observable
+public class Weapon implements Observable
 {
 	private final WeaponSpec spec;
 	private boolean vampiric = false;
@@ -24,7 +24,7 @@ public abstract class Weapon implements Observable
 
 	/**
 	 * Constructs a Weapon class
-	 * 
+	 *
 	 * @param spec
 	 *            the specifications of this weapon.
 	 */
@@ -32,8 +32,7 @@ public abstract class Weapon implements Observable
 	{
 		// Initialize the parts needed for this weapon.
 		this.spec = spec;
-		String[] partsType = CardDefaults.getCardDefaults().getProperty(getInternalType() + ".parts").split(" *, *");
-		parts = Arrays.stream(partsType).map(WeaponPartSpec::new).toArray(WeaponPartSpec[]::new);
+		parts = spec.getPartSpecs();
 		partsBuilt = new boolean[parts.length];
 		Arrays.sort(parts);
 	}
@@ -79,7 +78,7 @@ public abstract class Weapon implements Observable
 
 	public Color getColorClass()
 	{
-		int colorRGB = CardDefaults.getCardDefaults().getIntProperty(getInternalType() + ".color", 0xFFFFFF);
+		int colorRGB = spec.getRGBColor();
 		return Color.rgb((colorRGB >> 16) & 0xFF, (colorRGB >> 8) & 0xFF, colorRGB & 0xFF);
 	}
 
@@ -88,11 +87,31 @@ public abstract class Weapon implements Observable
 	 *
 	 * @return the internal type.
 	 */
-	public abstract String getInternalType();
-
-	public String getName()
+	public String getInternalType()
 	{
-		return CardDefaults.getCardDefaults().getProperty(getInternalType() + ".name");
+		return spec.getInternalType();
+	}
+
+	public WeaponSpec getSpec()
+	{
+		return spec;
+	}
+
+	/**
+	 * Describes whether if this weapon hasn't max upgrades.
+	 *
+	 * @return true if column has loose properties, false otherwise.
+	 */
+	public boolean isIncomplete()
+	{
+		for (boolean partBuilt : partsBuilt)
+		{
+			if (!partBuilt)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

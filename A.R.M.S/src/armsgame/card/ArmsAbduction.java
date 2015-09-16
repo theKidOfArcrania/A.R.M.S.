@@ -13,23 +13,27 @@ import armsgame.impl.Player;
  *
  * @author Henry
  */
-public class ArmsAbduction extends Action {
+public class ArmsAbduction extends Action
+{
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 4190593954097839138L;
 
 	@Override
-	public boolean actionPlayed(Player self) {
-		Player target = self.selectPlayer("Please select another player to take a property set from.", Player::hasIncompleteSet);
+	public boolean actionPlayed(Player self)
+	{
+		Player target = self.selectPlayer("Please select another player to take a property set from.", Player::hasFreeWeaponParts);
 
-		if (target == null) {
+		if (target == null)
+		{
 			return false;
 		}
 
-		WeaponSet takeSet = self.selectPropertyColumn("Please select a property set to take.", WeaponSet::isFullSet, target);
+		Weapon takeSet = self.selectPropertyColumn("Please select a property set to take.", WeaponSet::isFullSet, target);
 
-		if (takeSet == null) {
+		if (takeSet == null)
+		{
 			return false;
 		}
 
@@ -40,17 +44,17 @@ public class ArmsAbduction extends Action {
 	}
 
 	@Override
-	public String getInternalType() {
+	public String getInternalType()
+	{
 		return "action.breaker";
 	}
 
 	@Override
-	public boolean isEnabled(Player self, Likeness action) {
-		if (action == Likeness.Action) {
-			return self.getGame()
-				.playerStream()
-				.parallel()
-				.anyMatch(Player::hasCompleteSet);
+	public boolean isEnabled(Player self, Likeness action)
+	{
+		if (action == Likeness.Action)
+		{
+			return self.getGame().playerStream().parallel().anyMatch(Player::hasMaxWeapon);
 		}
 		return true;
 	}

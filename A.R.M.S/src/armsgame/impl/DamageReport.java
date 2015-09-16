@@ -14,7 +14,7 @@ import armsgame.card.Card;
 import armsgame.card.PartCard;
 import armsgame.card.Response;
 import armsgame.card.Valuable;
-import armsgame.card.WeaponSet;
+import armsgame.card.Weapon;
 import armsgame.card.WeaponSpec;
 
 import static java.util.Objects.requireNonNull;
@@ -25,40 +25,49 @@ import static java.util.Objects.requireNonNull;
  *
  * @author HW
  */
-public class DamageReport {
+public class DamageReport
+{
 
-	private static int getValue(Card c) {
-		if (!(c instanceof BurstCharge) && !(c instanceof PartCard)) {
+	private static int getValue(Card c)
+	{
+		if (!(c instanceof BurstCharge) && !(c instanceof PartCard))
+		{
 			throw new IllegalArgumentException("Must be a money card or a property card.");
 		}
 
-		if (c instanceof Valuable) {
+		if (c instanceof Valuable)
+		{
 			return ((Valuable) c).getValue();
 		}
 		return 0;
 	}
 
-	private static String joinList(ArrayList<String> list) {
-		if (list.size() == 0) {
+	private static String joinList(ArrayList<String> list)
+	{
+		if (list.size() == 0)
+		{
 			return "";
 		}
-		if (list.size() == 1) {
+		if (list.size() == 1)
+		{
 			return list.get(0);
 		}
-		if (list.size() == 2) {
+		if (list.size() == 2)
+		{
 			return list.get(0) + " and " + list.get(1);
 		}
 
 		String last = list.remove(list.size() - 1);
-		return list.stream()
-			.collect(Collectors.joining(", ")) + ", and " + last;
+		return list.stream().collect(Collectors.joining(", ")) + ", and " + last;
 	}
 
-	private static void transferProp(Player giver, Player reciever, PartCard prop) {
-		WeaponSet columnGiver = giver.getPropertyColumn(prop);
-		WeaponSet columnReciever = reciever.getPropertyColumn(columnGiver.getPropertyColor());
+	private static void transferProp(Player giver, Player reciever, PartCard prop)
+	{
+		Weapon columnGiver = giver.getWeapon(prop);
+		Weapon columnReciever = reciever.getWeapon(columnGiver.getPropertyColor());
 
-		if (!columnGiver.isMoveable()) {
+		if (!columnGiver.isMoveable())
+		{
 			throw new AssertionError();
 		}
 
@@ -66,11 +75,13 @@ public class DamageReport {
 		columnReciever.addAndSort(prop);
 	}
 
-	private static void transferProp(Player giver, Player reciever, WeaponSpec propSet) {
-		WeaponSet columnGiver = giver.getPropertyColumn(propSet);
-		WeaponSet columnReciever = reciever.getPropertyColumn(propSet);
+	private static void transferProp(Player giver, Player reciever, WeaponSpec propSet)
+	{
+		Weapon columnGiver = giver.getWeapon(propSet);
+		Weapon columnReciever = reciever.getWeapon(propSet);
 
-		if (!columnGiver.isFullSet()) {
+		if (!columnGiver.isFullSet())
+		{
 			throw new AssertionError();
 		}
 
@@ -99,7 +110,8 @@ public class DamageReport {
 	 * @param victim
 	 *            the player who is recieving this damage.
 	 */
-	public DamageReport(Player damager, Player victim) {
+	public DamageReport(Player damager, Player victim)
+	{
 		requireNonNull(damager);
 		requireNonNull(victim);
 		this.damager = damager;
@@ -118,10 +130,12 @@ public class DamageReport {
 	 * @param hp
 	 *            the amount of debt to pay
 	 */
-	public DamageReport(Player damager, Player victim, int hp, boolean energyZapMode) {
+	public DamageReport(Player damager, Player victim, int hp, boolean energyZapMode)
+	{
 		requireNonNull(damager);
 		requireNonNull(victim);
-		if (hp <= 0) {
+		if (hp <= 0)
+		{
 			throw new IllegalArgumentException("Debt must be positive");
 		}
 		this.damager = damager;
@@ -141,7 +155,8 @@ public class DamageReport {
 	 * @param partsRequested
 	 *            the requested property
 	 */
-	public DamageReport(Player creditor, Player debtor, PartCard propRequested) {
+	public DamageReport(Player creditor, Player debtor, PartCard propRequested)
+	{
 		requireNonNull(creditor);
 		requireNonNull(debtor);
 		requireNonNull(propRequested);
@@ -162,7 +177,8 @@ public class DamageReport {
 	 * @param propSetRequested
 	 *            the requested property set
 	 */
-	public DamageReport(Player creditor, Player debtor, WeaponSpec propSetRequested) {
+	public DamageReport(Player creditor, Player debtor, WeaponSpec propSetRequested)
+	{
 		requireNonNull(creditor);
 		requireNonNull(debtor);
 		requireNonNull(partsRequested);
@@ -172,7 +188,8 @@ public class DamageReport {
 		this.weaponsRequested.add(propSetRequested);
 	}
 
-	public void finishPay() {
+	public void finishPay()
+	{
 		// if (!metPayment()) {
 		// throw new IllegalStateException("Debt has not been fully met");
 		// }
@@ -184,14 +201,17 @@ public class DamageReport {
 
 		bills.forEach(card -> {
 			// TO DO: check ref. and also shift ref.
-			if (card instanceof BurstCharge) {
+			if (card instanceof BurstCharge)
+			{
 				BurstCharge nrg = (BurstCharge) card;
 
 				victim.damageShield(nrg.getEnergyValue());
-				if (energyZapMode) {
-					damager.increaseBurst(nrg.getEnergyValue());
+				if (energyZapMode)
+				{
+					damager.healShield(nrg.getEnergyValue());
 				}
-			} else {
+			} else
+			{
 				takePart0((PartCard) card);
 			}
 		});
@@ -200,17 +220,20 @@ public class DamageReport {
 	/**
 	 * This method finishes the payment request and hands it over to the victim/ ower.
 	 */
-	public void finishRequest() {
+	public void finishRequest()
+	{
 
-		if (victim == damager) {
+		if (victim == damager)
+		{
 			return;
 		}
 
 		// currently, we only support one type of response: Just say no.
 		handleResponse(this.toString(), damager, victim);
 
-		if (!canceled) {
-			victim.selectPayment(this);
+		if (!canceled)
+		{
+			victim.selectResponse(this);
 			this.finishPay();
 		}
 	}
@@ -223,9 +246,11 @@ public class DamageReport {
 	 *            the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean giveProperty(PartCard partCard) {
+	public boolean giveProperty(PartCard partCard)
+	{
 		// TO DO: check prop ref.
-		if (partsGiven.contains(partCard)) {
+		if (partsGiven.contains(partCard))
+		{
 			return false;
 		}
 		partsGiven.add(partCard);
@@ -240,24 +265,30 @@ public class DamageReport {
 	 *            the property set to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean givePropertySet(WeaponSpec set) {
-		if (weaponsGiven.contains(set)) {
+	public boolean givePropertySet(WeaponSpec set)
+	{
+		if (weaponsGiven.contains(set))
+		{
 			return false;
 		}
 		weaponsGiven.add(set);
 		return true;
 	}
 
-	public boolean isEnergyZapMode() {
+	public boolean isEnergyZapMode()
+	{
 		return energyZapMode;
 	}
 
-	public boolean metPayment() {
+	public boolean metPayment()
+	{
 		return hp <= paidAmount;
 	}
 
-	public boolean payBill(Card bill) {
-		if (getValue(bill) <= 0 || hp <= paidAmount) {
+	public boolean payBill(Card bill)
+	{
+		if (getValue(bill) <= 0 || hp <= paidAmount)
+		{
 			return false;
 		}
 		bills.add(bill);
@@ -265,19 +296,22 @@ public class DamageReport {
 		return true;
 	}
 
-	public void payBills(Collection<? extends Card> c) {
+	public void payBills(Collection<? extends Card> c)
+	{
 		bills.ensureCapacity(bills.size() + c.size());
 		c.forEach(card -> {
 			// omit any repeated cards or cards that have no value or if the
 			// debt is already met.
-			if (hp > paidAmount && getValue(card) > 0 && !bills.contains(card) && !c.contains(card)) {
+			if (hp > paidAmount && getValue(card) > 0 && !bills.contains(card) && !c.contains(card))
+			{
 				paidAmount += getValue(card);
 				bills.add(card);
 			}
 		});
 	}
 
-	public boolean removePaidBill(Card bill) {
+	public boolean removePaidBill(Card bill)
+	{
 		bills.remove(bill);
 		return true;
 	}
@@ -290,9 +324,11 @@ public class DamageReport {
 	 *            the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean requestProperty(PartCard partCard) {
+	public boolean requestProperty(PartCard partCard)
+	{
 		// TO DO: check prop ref.
-		if (partsRequested.contains(partCard)) {
+		if (partsRequested.contains(partCard))
+		{
 			return false;
 		}
 		partsRequested.add(partCard);
@@ -307,87 +343,90 @@ public class DamageReport {
 	 *            the property set to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean requestPropertySet(WeaponSpec set) {
-		if (weaponsRequested.contains(set)) {
+	public boolean requestPropertySet(WeaponSpec set)
+	{
+		if (weaponsRequested.contains(set))
+		{
 			return false;
 		}
 		weaponsRequested.add(set);
 		return true;
 	}
 
-	public void setEnergyZapMode(boolean energyZapMode) {
+	public void setEnergyZapMode(boolean energyZapMode)
+	{
 		this.energyZapMode = energyZapMode;
 	}
 
-	public void setHpDamage(int debt) {
+	public void setHpDamage(int debt)
+	{
 		this.hp = debt;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		ArrayList<String> requests = new ArrayList<>(10);
 		ArrayList<String> gives = new ArrayList<>(10);
 
-		if (!partsRequested.isEmpty()) {
-			partsRequested.stream()
-				.map(PartCard::getPropertyName)
-				.forEach(requests::add);
+		if (!partsRequested.isEmpty())
+		{
+			partsRequested.stream().map(PartCard::getPropertyName).forEach(requests::add);
 		}
 
-		if (!weaponsRequested.isEmpty()) {
-			weaponsRequested.stream()
-				.map(WeaponSpec::toString)
-				.map(color -> color + " set")
-				.forEach(requests::add);
+		if (!weaponsRequested.isEmpty())
+		{
+			weaponsRequested.stream().map(WeaponSpec::toString).map(color -> color + " set").forEach(requests::add);
 		}
 
-		if (hp > 0) {
+		if (hp > 0)
+		{
 			requests.add(BurstCharge.moneyString(hp, true));
 		}
 
-		if (requests.isEmpty()) {
+		if (requests.isEmpty())
+		{
 			requests.add("nothing");
 		}
 
-		if (!partsGiven.isEmpty()) {
-			partsGiven.stream()
-				.map(PartCard::getPropertyName)
-				.forEach(gives::add);
+		if (!partsGiven.isEmpty())
+		{
+			partsGiven.stream().map(PartCard::getPropertyName).forEach(gives::add);
 		}
 
-		if (!weaponsGiven.isEmpty()) {
-			weaponsGiven.stream()
-				.map(WeaponSpec::toString)
-				.map(color -> color + " set")
-				.forEach(gives::add);
+		if (!weaponsGiven.isEmpty())
+		{
+			weaponsGiven.stream().map(WeaponSpec::toString).map(color -> color + " set").forEach(gives::add);
 		}
 
 		String requestsString = joinList(requests);
 		String givesString = joinList(gives);
-		StringBuilder description = new StringBuilder(25 + requestsString.length() + givesString.length()).append("Player ")
-			.append(damager.getName())
-			.append(" wants ");
+		StringBuilder description = new StringBuilder(
+				25 + requestsString.length() + givesString.length()).append("Player ").append(damager.getName()).append(" wants ");
 		description.append(requestsString);
 
-		if (!givesString.isEmpty()) {
-			description.append(" for ")
-				.append(givesString);
+		if (!givesString.isEmpty())
+		{
+			description.append(" for ").append(givesString);
 		}
-		return description.append(".")
-			.toString();
+		return description.append(".").toString();
 	}
 
-	private void givePart0(PartCard prop) {
+	private void givePart0(PartCard prop)
+	{
 		transferProp(damager, victim, prop);
 	}
 
-	private void givePart0(WeaponSpec propset) {
+	private void givePart0(WeaponSpec propset)
+	{
 		transferProp(damager, victim, propset);
 	}
 
-	private void handleResponse(String responseString, Player requester, Player responder) {
+	private void handleResponse(String responseString, Player requester, Player responder)
+	{
 		Response response = responder.selectResponse(responseString);
-		if (response != null && response.getResponseType() != null) {
+		if (response != null && response.getResponseType() != null)
+		{
 			switch (response.getResponseType()) {
 			case SHIELD:
 				canceled = !canceled;
@@ -400,11 +439,13 @@ public class DamageReport {
 		}
 	}
 
-	private void takePart0(PartCard prop) {
+	private void takePart0(PartCard prop)
+	{
 		transferProp(victim, damager, prop);
 	}
 
-	private void takePart0(WeaponSpec propset) {
+	private void takePart0(WeaponSpec propset)
+	{
 		transferProp(victim, damager, propset);
 	}
 
