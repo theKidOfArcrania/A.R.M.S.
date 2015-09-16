@@ -53,70 +53,78 @@ Weapons can be upgraded with parts.
 1. Brown - Basic Throwing Knife (Especially effective for "Nightv0") 
 	- Base Accuracy: 30%  
 	- Base Damage: X  
-	- A: Blade Upgrade: Longer length and serrated edges (+Damage)  
-	- B: Handle Upgrade: Increased precision and allows shooting of blade. (+Accuracy)  
-	- Crystal Form: Energy Sword: Breaks through shield, dealing direct damage to health.   
+	- Upgrades:
+		- Blade Upgrade: Longer length and serrated edges (+Damage)  
+		- Handle Upgrade: Increased precision and allows shooting of blade. (+Accuracy)  
+		- **Energy Sword: (Crystal Form)** Breaks through shield, dealing direct damage to health.   
 
 2. Dark Blue - Pistol - (Especially effective for "DualDestiny")  
 	- Base Accuracy: 30%  
 	- Base Damage: X  
-	- A: Barrel Upgrade: Longer barrel allows for increased precision (+Accuracy)  
-	- B: Grip Upgrade: Increased ease of use and reduced recoil (+Accuracy)  
-	- C: Magazine Upgrade: A larger magazine increases the number of bullets fired per load (+Damage)  
-	- Crystal Form: Energy Pulser: Threeburst pulser which fires large bursts of splattering plasma with large range.   
+	- Upgrades:
+		- Barrel Upgrade: Longer barrel allows for increased precision (+Accuracy)  
+		- Grip Upgrade: Increased ease of use and reduced recoil (+Accuracy)  
+		- Magazine Upgrade: A larger magazine increases the number of bullets fired per load (+Damage)  
+		- **Energy Pulser (Crystal Form):**  Threeburst pulser which fires large bursts of splattering plasma with large range.   
 
 3. Purple- Shotgun - (Especially Effective for "Bulk XR")  
 	- Base Accuracy: 40%  
 	- Base Damage: X  
 	- Takes one turns to charge when ammo is put in, but inflicts heavy damage  
-	- A: Cone of Fire: The gun's cone width is reduced, allowing for higher precision.(+Accuracy)  
-	- B: Magazine Upgrade: Increased magazine allows more more shots every load. (+Damage)  
-	- Crystal Form: Charging Blaster: Weapon that fires pure energy, inflicting tons of damage at short range. Takes one turn to charge.  
+	- Upgrades:
+		- Cone of Fire: The gun's cone width is reduced, allowing for higher precision.(+Accuracy)  
+		- Magazine Upgrade: Increased magazine allows more more shots every load. (+Damage)  
+		- **Charging Blaster (Crystal Form):**  Weapon that fires pure energy, inflicting tons of damage at short range. Takes one turn to charge.  
 	
 4. Orange - Machine Gun - (Especially effective for "R24 Lockload")  
 	- Base Accuracy: 40%  
 	- Base Damage: X  
-	- A: Holographic Sight: Sight added, increasing accuracy greatly. (+Accuracy)  
-	- B: Heat Dissipation Upgrade: Diamond heatsink located in the barrel, allows for much longer periods of fire (+Damage)  
-	- C: Fire Rate Upgrade: Six Barrels  greatly increases the amount of bullets fired (+Damage)  
-	- D: Kickstand Upgrade: A folding kickstand reduces kick of the bullets fired and spread of bullets fired, increasing accuracy (+Accuracy)  
-	- Crystal Form: Hexid Barrel Energy Pulser- Accurate weapon which fires many pulses of energy per second, burning through any defenses.  
+	- Upgrades:
+		- Holographic Sight: Sight added, increasing accuracy greatly. (+Accuracy)  
+		- Heat Dissipation Upgrade: Diamond heatsink located in the barrel, allows for much longer periods of fire (+Damage)  
+		- Fire Rate Upgrade: Six Barrels  greatly increases the amount of bullets fired (+Damage)  
+		- Kickstand Upgrade: A folding kickstand reduces kick of the bullets fired and spread of bullets fired, increasing accuracy (+Accuracy)  
+		- **Hexid Barrel Energy Pulser (Crystal Form):** Accurate weapon which fires many pulses of energy per second, burning through any defenses.  
 
 5. LightBlue - Sniper - (Especially effective for "PP3 Skyjack")  
 	- Base Accuracy: 50%  
 	- Base Damage: X  
 	- High single target damage, but low multitarget damage  
-	- A: Bullet Upgrade - Penetrating bullets rip through most materials, inflicting heavy damage (+Damage)  
-	- B: Scope Upgrade - Scope added with enhanced zoom capabilities, and night vision, for increased ease of use and accuracy(+Accuracy)  
-	- C: Clip Upgrade - Increases size of the magazine (+Damage)  
-	- Crystal Form: Beam Raygun- Gun with insane range, fires an lightquick beam of energy that can pierce any material. Any. This gives it high single target damage, but its low rate of fire gives it low multitarget damage.  
+	- Upgrades: 
+		- Bullet Upgrade - Penetrating bullets rip through most materials, inflicting heavy damage (+Damage)  
+		- Scope Upgrade - Scope added with enhanced zoom capabilities, and night vision, for increased ease of use and accuracy(+Accuracy)  
+		- Clip Upgrade - Increases size of the magazine (+Damage)  
+		- **Beam Raygun (Crystal Form):** Gun with insane range, fires an lightquick beam of energy that can pierce any material. Any. This gives it high single target damage, but its low rate of fire gives it low multitarget damage.  
 	
 6. Green - Grenade - (Especially effective for "Scrap rm7")  
 	- Base Accuracy: 50%  
 	- Base Damage: X  
 	- Each upgrade adds a new grenade to the package, High multitarget damage, low single target damage  
-	- A: Fragmentation Upgrade: Shell of grenade is made of a different material that splits into fragments upon explosion, inflicts some multitarget damage if single target attack (+Damage)  
-	- B: Filler Upgrade: Heavier filler creates a more powerful explosion. (+Damage)  
-	- C: Aerodynamic Upgrade: Streamlined shape makes the grenades fly further (+Accuracy)  
-	- Crystal Form: Plasma Grenade: Grenades stick onto opponents, then explodes at extreme temperatures. Leaves behind a burning field of plasma.  
+	- Upgrades:	
+		- Fragmentation Upgrade: Shell of grenade is made of a different material that splits into fragments upon explosion, inflicts some multitarget damage if single target attack (+Damage)  
+		- Filler Upgrade: Heavier filler creates a more powerful explosion. (+Damage)  
+		- Aerodynamic Upgrade: Streamlined shape makes the grenades fly further (+Accuracy)  
+		- **Plasma Grenade (Crystal Form):** Grenades stick onto opponents, then explodes at extreme temperatures. Leaves behind a burning field of plasma.  
 	
 7. Red - Rocket Launcher- (Especially effective for "Tech-o-maniac Tr1")
 	- Base Accuracy: 60%  
 	- Base Damage: X  
-	- A: Warhead Upgrade: Shaped charge warhead is highly explosive and breaks through most armor (+Damage) 
-	- B: Launcher Upgrade: Turbocharged Launcher fires the rocket at huge ranges. (+Accuracy)  
-	- C: Energy Tracker Upgrade: New technology allows rockets to lock onto heat sources or energy sources. (+Accuracy)  
-	- Crystal Form: Splashing Plasma Rockets- On explosion, quick lockon rockets scatter high pressure plasma in all directions.  
+	- Upgrades:
+		- Warhead Upgrade: Shaped charge warhead is highly explosive and breaks through most armor (+Damage) 
+		- Launcher Upgrade: Turbocharged Launcher fires the rocket at huge ranges. (+Accuracy)  
+		- Energy Tracker Upgrade: New technology allows rockets to lock onto heat sources or energy sources. (+Accuracy)  
+		- **Splashing Plasma Rockets (Crystal Form):** On explosion, quick lockon rockets scatter high pressure plasma in all directions.  
 	
 8. Yellow- Nuclear Bomb (Maybe take this out)  
 	- Nuclear explosion occurs when two sources of plutonium are rammed together by an Explosive  
 	- Base Accuracy: 80%  
 	- Base Damage: X (LOTS)  
-	- A: Uranium-235 Supply- Must be played and enriched, takes X amount of turns to reach 100%  
-	- B: Nuclear Shell - Shell to hold Material  
-	- C: Explosives: Trinitrotoluene (TNT) is used to compress stores of plutonium  
-	- D: Remote Detonator- Uses radio technology to ignite the TNT  
-	- No Crystal Form  
+	- Upgrades:
+		- Uranium-235 Supply- Must be played and enriched, takes X amount of turns to reach 100%  
+		- Nuclear Shell - Shell to hold Material  
+		- Explosives: Trinitrotoluene (TNT) is used to compress stores of plutonium  
+		- Remote Detonator: Uses radio technology to ignite the TNT  
+		- No Crystal Form  
 
 ##Robots: 
 
