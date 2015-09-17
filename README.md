@@ -23,8 +23,8 @@ Discarding cards at this point does not take a turn.
 
 ##Win Conditions:
 
-When all other players are dead, winner will gain X amount of points, others will gain points based on performance
-Games are matched based on ranking
+When all other players are dead, winner will gain X amount of points, others will gain points based on performance.  
+People in the games are matched based on their ranking.
 
 ##Weapons:
 
