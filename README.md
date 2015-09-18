@@ -14,9 +14,9 @@ You can gain shield by selling cards (energy worth is shown on the card)
 ##Gameplay
 A.R.M.S. is a turn-based strategic game. One player goes at a time, based on their ordering. In one turn a player gets 3 moves. At the beginning of their turn, players draw two cards, and then can play up to three actions. For each action, a player can  
 
-A. Play a card  
-B. Discard a card  
-C. End turn
+	A. Play a card  
+	B. Discard a card  
+	C. End turn
 
 At the end of each turn, players can have up to 7 cards in their hand. Or else, player is forced to discard so that the player is left with exactly 7 cards. Discarding cards at this point does not take a turn.
 
@@ -131,55 +131,63 @@ Weapons can be upgraded with parts.
 
 There are 7 robots, each specializing in one weapon (shown in paraenthesis). Each robot also has unique traits, passives, and event cards.  
 ###Nightv0 (Dagger)
-	- Unique passive: *Unseen:* Takes reduced single target damage.
-	- If dagger is complete, becomes *Untouchable:* cannot be attacked by single target damage  
-	- Event Cards
-		1. **Backstab:** Instantly deal X damage to the player of choice  
-		2. **Invisibility Cloak:** Become unattackable for the next turn  
-	<br />
+
+- Unique passive: *Unseen:* Takes reduced single target damage.
+- If dagger is complete, becomes *Untouchable:* cannot be attacked by single target damage  
+- Event Cards
+	1. **Backstab:** Instantly deal X damage to the player of choice  
+	2. **Invisibility Cloak:** Become unattackable for the next turn  
+
 ###DualDestiny (Pistol)
-	- Unique Passive: *Agility:* Takes reduced multitarget damage
-	- If pistol is complete, becomes *Lightspeed:* Cannot be attacked by multitarget damage   
-	- Event Cards
-		1. **Prepare:** Next action does not require a turn  
-		2. **Dance of Death:** Deal X damage to everyone  
-	<br />
+
+- Unique Passive: *Agility:* Takes reduced multitarget damage
+- If pistol is complete, becomes *Lightspeed:* Cannot be attacked by multitarget damage   
+- Event Cards
+	1. **Prepare:** Next action does not require a turn  
+	2. **Dance of Death:** Deal X damage to everyone  
+
 ###Bulk XR (Shotgun)
-	- Unique Passive: *Tanky:* Takes reduced damage from all attacks
-	- If shotgun is complete, becomes *Thorny:* Attackers damage themselves a little if they directly damage Bulk.  
-	- Event Cards
-		1. Riot Shield: When played, blocks the next source of damage from anything  
-		2. Armor Suit: Grants X Shield for the next X turns that recharges.  
-	<br />
+
+- Unique Passive: *Tanky:* Takes reduced damage from all attacks
+- If shotgun is complete, becomes *Thorny:* Attackers damage themselves a little if they directly damage Bulk.  
+- Event Cards
+	1. **Riot Shield:** When played, blocks the next source of damage from anything  
+	2. **Armor Suit:** Grants X Shield for the next X turns that recharges.  
+
 ###R24 Lock n'load (Machinegun)
-	- Unique Passive: *Spray and Pray:* attacks that damage everyone do extra damage
-	- If machine gun is complete, becomes *Just Spray:* multitarget attacks do extra damage, single target attacks do collateral damage. 
-	- Event Cards
-		1. It Was an Accident!: Fires a random weapon at a target  
-		2. Happy Feet: Robot buzzes around and steals X shields from each player  
-	<br />
+
+- Unique Passive: *Spray and Pray:* attacks that damage everyone do extra damage
+- If machine gun is complete, becomes *Just Spray:* multitarget attacks do extra damage, single target attacks do collateral damage. 
+- Event Cards
+	1. **It Was an Accident!:** Fires a random weapon at a target  
+	2. **Happy Feet:** Robot buzzes around and steals X shields from each player  
+
 ###PP3 Skyjack (Sniper)
-	- Unique Passive: *Camper:* If not attacked for X turns, heals X hp (no shield gain)
-	- If sniper is complete, becomes *Survivor:* heals X hp per turn  
-	Event Card 1: Care Package: Grants X amount of shield and health  
-	Event Card 2: Headshot!: X Increased damage on next single target attack  
-	<br />
+
+- Unique Passive: *Camper:* If not attacked for X turns, heals X hp (no shield gain)
+- If sniper is complete, becomes *Survivor:* heals X hp per turn  
+- Event Cards
+	1. **Care Package:** Grants X amount of shield and health  
+	2. **Headshot!:** X Increased damage on next single target attack  
+
 ###Scrap rm7 (Grenade)
-	- Unique Passive: *Large Inventory:* Can hold 8 cards
-	- If grenades is complete, becomes *Draw:* Draw 3 cards at the start of turn 
-	- Event Cards:
-	Event Card 1: Harvest: Adds a random action card to your hand  
-	Event Card 2: Collection: Adds a random upgrade card to your hand  
-	<br />
+
+- Unique Passive: *Large Inventory:* Can hold 8 cards
+- If grenades is complete, becomes *Draw:* Draw 3 cards at the start of turn 
+- Event Cards
+	1. **Harvest:** Adds a random action card to your hand  
+	2. **Collection:** Adds a random upgrade card to your hand  
+
 ###Tech-o-maniac T1 (Rocket Launcher)
-	- Unique Passive: *Reuser Bot:* Event cards have a small chance to be bots (LOL you can't get these cool event cards...)
-	- If rocket launcher is complete, gains *Construction Bot:* Event cards are guaranteed to be bots  
-	Event Card 1: Time Bot: Reset the players turn. Allows player to play 3 more moves.  
-	Event Card 2: Hijack Bot: Disable one weapon for one opponents for their next turn.  
-	Event Card 3: Heal Bot: Restores Energy by X amount.  
-	Event Card 4: Shield Bot: Grants X Shield.  
-	Event Card 5: Ammo Bot: Gain ammo for a chosen weapon.  
-	Event Card 6: Hack Bot: Look at 1 card from each persons hand  
+- Unique Passive: *Reuser Bot:* Event cards have a small chance to be bots (LOL you can't get these cool event cards...)
+- If rocket launcher is complete, gains *Construction Bot:* Event cards are guaranteed to be bots  
+- Event Cards
+	1. **Time Bot:** Reset the players turn. Allows player to play 3 more moves.  
+	2. **Hijack Bot:** Disable one weapon for one opponents for their next turn.  
+	3. **Heal Bot:** Restores Energy by X amount.  
+	4. **Shield Bot:** Grants X Shield.  
+	5. **Ammo Bot:** Gain ammo for a chosen weapon.  
+	6. **Hack Bot:** Look at 1 card from each persons hand  
 
 ##Action Card Types
 
@@ -198,8 +206,9 @@ There are 7 robots, each specializing in one weapon (shown in paraenthesis). Eac
 - **SCAVENGE THE JUNKYARD**: Draw two cards from the scavenge pile.
 - **TIME WARP**: Another turn
 
-##Event Cards: 
+##Event Cards
 This category of cards is also known as the mystery card: it remains a mystery until it is played. This may be a good card or bad, depending on your luck. There are four default event cards, and some robots have additional event cards that may be purchased.
+	
 1. **Lucky Battery**: Heals Energy or Shield by 10
 2. **Weapon Malfunction**: If ___ is owned, the weapon upgrade is destroyed and put into the discard pile, unless it is part of a full set
 3. **Robot Malfunction**: Glitches and turn ends
@@ -211,14 +220,14 @@ Based on the results of the game (win/lose), each player will recieve some "Scra
 
 ###Shop Inventory
 #####Permanent Upgrades
-1. Unlocking characters(robots) costs scraps, (X, 2X, 3X, etc for more and more robots)
-2. Unlocking more action cards and also some more robot-specific event cards.
-3. Special Skins for each robot character (X, 2X, 3X for increasingly better ones)
-4. Special Skins for player's information panel 
-5. New Game Skins and music
+- Unlocking characters(robots) costs scraps, (X, 2X, 3X, etc for more and more robots)
+- Unlocking more action cards and also some more robot-specific event cards.
+- Special Skins for each robot character (X, 2X, 3X for increasingly better ones)
+- Special Skins for player's information panel 
+- New Game Skins and music
 
 #####Temporary Boosts
- - Boost to damage for one game
- - Boost to starting shield for one game
- - Boost to max shield and max energy for one game
- - These can be purchased in bulk (five Boosts bundled) or just single purchases.
+- Boost to damage for one game
+- Boost to starting shield for one game
+- Boost to max shield and max energy for one game
+- These can be purchased in bulk (five Boosts bundled) or just single purchases.
