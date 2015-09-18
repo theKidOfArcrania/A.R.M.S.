@@ -1,5 +1,7 @@
 #A.R.M.S Basics
-Short for "A Race for Munitions and Survival", this is a fast-paced battle to the end, using the traditional cardplay, but with a little jazz added to it! You and your opponent(s) are all different robots with different skills. With all the weapons that you can muster, you must defeat your opponent(s) before they defeat you! But that's not it! There is a junkyard that you could salvage various weapon upgrades and also some useful tools to help you in your battle, but your opponent also can access that junkyard against you! Time for the race for ammunitions: kill your opponent before they turn their weapons on you! Ready... Set... **FIRE!**
+A.R.M.S, short for "A Race for Munitions and Survival", is an intense, turn based card game. You face your opponents as unique robots with special traits, using various weapons to destroy the competitors before they can destroy you. But that's not all! In the "Junkyard", you salvage various weapon upgrades and many useful tools, ranging from cards that repair your shields to those that bombard your opponents with a hellstorm of bullets. At times, scavenging the junkyard can trigger an unexpected event, and only luck will tell whether these will help or hurt you. If the odds end in your favor, and you stand as the last bot, you gain Scraps,the game's currency to buy robots, permanent skins, or temporary boosts. In addition, your prestige will rise, pulling you higher on the leaderboard.  
+Now, grab your A.R.M.S and pulverize your opponents before they turn their weapons on you!  
+Ready... Aim... **FIRE!**
 
 #A.R.M.S Game Rules
 ##Game Modes
