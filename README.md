@@ -21,7 +21,7 @@ A.R.M.S. is a turn-based strategic game. One player goes at a time, based on the
 
 At the end of each turn, players can have up to 7 cards in their hand. Or else, player is forced to discard so that the player is left with exactly 7 cards. Discarding cards at this point does not take a turn.
 
-##Win Conditions:
+##Win Conditions
 
 When all other players are dead, winner will gain X amount of points, others will gain points based on performance.  
 People in the games are matched based on their ranking.
