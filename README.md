@@ -3,6 +3,7 @@ Short for "A Race for Munitions and Survival", this is a fast-paced battle to th
 
 #A.R.M.S Game Rules (Nitty-gritty rules)
 ##Game Modes
+Currently, there is only one game mode: survival. Further down the road, we might implement other game modes.
 ###Survival
 In this game mode, players play as robots and they must gain as many weapons as possible using them to attack and destroy all the opponents. Last survivor wins, death -> elimination
 
