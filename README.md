@@ -1,7 +1,7 @@
 #A.R.M.S Basics
 Short for "A Race for Munitions and Survival", this is a fast-paced battle to the end, using the traditional cardplay, but with a little jazz added to it! You and your opponent(s) are all different robots with different skills. With all the weapons that you can muster, you must defeat your opponent(s) before they defeat you! But that's not it! There is a junkyard that you could salvage various weapon upgrades and also some useful tools to help you in your battle, but your opponent also can access that junkyard against you! Time for the race for ammunitions: kill your opponent before they turn their weapons on you! Ready... Set... **FIRE!**
 
-#A.R.M.S Game Rules (Nitty-gritty rules)
+#A.R.M.S Game Rules
 ##Game Modes
 Currently, there is only one game mode: survival. Further down the road, we might implement other game modes.
 ###Survival
