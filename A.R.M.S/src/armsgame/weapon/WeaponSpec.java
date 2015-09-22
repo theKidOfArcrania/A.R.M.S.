@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card.impl;
+package armsgame.weapon;
 
 import java.util.Arrays;
 
-import static armsgame.card.impl.CardDefaults.getCardDefaults;
+import armsgame.card.util.CardDefaults;
+
+import static armsgame.card.util.CardDefaults.getCardDefaults;
 
 /**
  *

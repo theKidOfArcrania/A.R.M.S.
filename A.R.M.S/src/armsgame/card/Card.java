@@ -5,16 +5,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-import armsgame.card.impl.CardActionType;
-import armsgame.card.impl.CardDefaults;
-import armsgame.card.impl.SupportedActions;
-import armsgame.card.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType;
+import armsgame.card.util.CardDefaults;
+import armsgame.card.util.SupportedActions;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Board;
 import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
 
 import static armsgame.card.StandardCardDefaults.getCardDefaults;
-import static armsgame.card.impl.CardDefaults.getCardDefaults;
+import static armsgame.card.util.CardDefaults.getCardDefaults;
 
 public abstract class Card {
 

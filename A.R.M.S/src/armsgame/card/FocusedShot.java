@@ -5,7 +5,7 @@
  */
 package armsgame.card;
 
-import armsgame.card.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
 
 /**

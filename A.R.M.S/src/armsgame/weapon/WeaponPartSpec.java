@@ -1,8 +1,8 @@
-package armsgame.card.impl;
+package armsgame.weapon;
 
 import armsgame.impl.Player;
 
-import static armsgame.card.impl.CardDefaults.getCardDefaults;
+import static armsgame.card.util.CardDefaults.getCardDefaults;
 
 /**
  * This class is a placeholder for specific part implements for the Weapon, somewhat bottle-necking the ability to assemble parts.

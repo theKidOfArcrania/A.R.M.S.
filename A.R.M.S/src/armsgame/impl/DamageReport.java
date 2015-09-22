@@ -14,8 +14,8 @@ import armsgame.card.Card;
 import armsgame.card.PartCard;
 import armsgame.card.Response;
 import armsgame.card.Valuable;
-import armsgame.card.impl.Weapon;
-import armsgame.card.impl.WeaponSpec;
+import armsgame.weapon.Weapon;
+import armsgame.weapon.WeaponSpec;
 
 import static java.util.Objects.requireNonNull;
 

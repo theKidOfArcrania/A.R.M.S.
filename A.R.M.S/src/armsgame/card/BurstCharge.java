@@ -1,9 +1,9 @@
 package armsgame.card;
 
-import armsgame.card.impl.CardActionType;
-import armsgame.card.impl.StandardCardDefaults;
-import armsgame.card.impl.SupportedActions;
-import armsgame.card.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType;
+import armsgame.card.util.StandardCardDefaults;
+import armsgame.card.util.SupportedActions;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
 
 public final class BurstCharge extends Card {

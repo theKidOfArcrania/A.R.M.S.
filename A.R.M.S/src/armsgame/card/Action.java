@@ -5,8 +5,8 @@
  */
 package armsgame.card;
 
-import armsgame.card.impl.CardActionType;
-import armsgame.card.impl.SupportedActions;
+import armsgame.card.util.CardActionType;
+import armsgame.card.util.SupportedActions;
 import armsgame.impl.Player;
 
 /**

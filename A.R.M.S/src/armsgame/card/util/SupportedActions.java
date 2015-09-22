@@ -1,4 +1,4 @@
-package armsgame.card.impl;
+package armsgame.card.util;
 
 import java.util.HashMap;
 import java.util.Iterator;

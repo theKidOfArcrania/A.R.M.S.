@@ -5,11 +5,11 @@
  */
 package armsgame.card;
 
-import armsgame.card.impl.Weapon;
-import armsgame.card.impl.WeaponSet;
-import armsgame.card.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
+import armsgame.weapon.Weapon;
+import armsgame.weapon.WeaponSet;
 
 /**
  *

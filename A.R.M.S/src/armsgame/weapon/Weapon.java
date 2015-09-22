@@ -1,4 +1,4 @@
-package armsgame.card.impl;
+package armsgame.weapon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
