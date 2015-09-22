@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card;
+package armsgame.card.impl;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import armsgame.card.Card;
+import armsgame.card.EnergyCrystal;
+import armsgame.card.PartCard;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;

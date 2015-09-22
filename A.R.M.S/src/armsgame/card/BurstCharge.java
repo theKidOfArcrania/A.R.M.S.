@@ -1,9 +1,10 @@
 package armsgame.card;
 
-import armsgame.impl.CardActionType;
-import armsgame.impl.CardActionType.Likeness;
+import armsgame.card.impl.CardActionType;
+import armsgame.card.impl.StandardCardDefaults;
+import armsgame.card.impl.SupportedActions;
+import armsgame.card.impl.CardActionType.Likeness;
 import armsgame.impl.Player;
-import armsgame.impl.SupportedActions;
 
 public final class BurstCharge extends Card {
 	private static final long serialVersionUID = 4350231484759060230L;

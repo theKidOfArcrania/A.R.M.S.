@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import armsgame.card.Card;
-import armsgame.card.Deck;
+import armsgame.card.impl.Deck;
 
 /**
  * This class consists of a collection of all the face down cards in the center, often unknown, and the face-up played deck, which is known. The access methods for the face down cards will all be opaque and only allow you to draw cards.

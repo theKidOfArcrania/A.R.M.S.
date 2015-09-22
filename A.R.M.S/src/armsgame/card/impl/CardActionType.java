@@ -1,4 +1,4 @@
-package armsgame.impl;
+package armsgame.card.impl;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 
 import armsgame.ResourceDefaults;
 import armsgame.card.Card;
+import armsgame.impl.Player;
 import armsgame.card.Action;
 import armsgame.card.BurstCharge;
 import common.util.Lambdas;

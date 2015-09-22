@@ -7,8 +7,9 @@ package armsgame.card;
 
 import java.util.ArrayList;
 
-import armsgame.impl.CardAction;
-import armsgame.impl.CardActionType.Likeness;
+import armsgame.card.impl.CardAction;
+import armsgame.card.impl.Weapon;
+import armsgame.card.impl.CardActionType.Likeness;
 import armsgame.impl.CenterPlay;
 import armsgame.impl.Player;
 
