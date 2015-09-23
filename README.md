@@ -43,6 +43,9 @@ Each weapon upgrade that can be added on to a base weapon fall in the following 
 ######Vampiric
 *(Some upgrades make things vampiric, energy crystals always do)* Weapons can be vampiric, which means that they absorb shields or energy to the player who attacks.
 
+#####Excess Parts   
+*(When you draw or gain a part of a weapon that is already complete, you can either discard it, or salvage it/break it down for shields)
+
 ###Energy Crystal
 You can add an energy crystal to a completed weapon, changing the weapon to its crystal form  
 You can use the crystal to destroy all upgrades on an opponents weapon, but it will consume the crystal  
@@ -150,7 +153,7 @@ There are 7 robots, each specializing in one weapon (shown in paraenthesis). Eac
 ###Bulk XR (Shotgun)
 
 - Unique Passive: *Tanky:* Takes reduced damage from all attacks
-- If shotgun is complete, becomes *Thorny:* Attackers damage themselves a little if they directly damage Bulk.  
+- If shotgun is complete, becomes *Thorny:* Attackers damage themselves a little if they damage Bulk.  
 - Event Cards
 	1. **Riot Shield:** When played, blocks the next source of damage from anything  
 	2. **Armor Suit:** Grants X Shield for the next X turns that recharges.  
