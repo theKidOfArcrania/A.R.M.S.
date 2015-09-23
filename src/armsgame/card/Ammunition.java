@@ -5,9 +5,13 @@
  */
 package armsgame.card;
 
+import java.util.ArrayList;
+
 import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
 import armsgame.weapon.Weapon;
+import armsgame.weapon.WeaponPartSpec;
+import armsgame.weapon.WeaponSpec;
 
 /**
  *
@@ -20,17 +24,27 @@ public class Ammunition extends Action
 	 *
 	 */
 	private static final long serialVersionUID = 9126449081012411183L;
-	private final MultiSpecs weaponSpecs;
+	private final WeaponSpec[] specTargets;
 
 	/**
 	 * Constructs an ammunition with the internal typing. This is the constructor called by card creator.
 	 *
-	 * @param codeType
-	 *            the internal code sub-type of the ammnunition
+	 * @param codeType the internal code sub-type of the ammnunition
 	 */
 	public Ammunition(String codeType)
 	{
-		weaponSpecs = new MultiSpecs(codeType);
+		String[] partSpecsList = getInternalProperty("parts").split("\\s*,\\s*");
+		String[] partsType = getInternalProperty("parts").split("\\s*,\\s*");
+		ArrayList<WeaponPartSpec> parts = new ArrayList<>(partsType.length);
+		for (String element : partsType)
+		{
+			WeaponPartSpec part = WeaponPartSpec.getPartSpec(element);
+			if (part != null)
+			{
+				parts.add(part);
+			}
+		}
+		this.parts = new WeaponPartSpec[parts.size()];
 	}
 
 	@Override
@@ -43,13 +57,13 @@ public class Ammunition extends Action
 	@Override
 	public String getCardName()
 	{
-		return weaponSpecs.getColorName() + " Ammunition";
+		return specTargets.getColorName() + " Ammunition";
 	}
 
 	@Override
 	public String getInternalType()
 	{
-		return "action.ammunition." + weaponSpecs.getInternalType();
+		return "action.ammunition." + specTargets.getInternalType();
 	}
 
 	@Override
@@ -69,7 +83,7 @@ public class Ammunition extends Action
 
 	public boolean isValidRent(Weapon column)
 	{
-		return weaponSpecs.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
+		return specTargets.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
 	}
 
 }

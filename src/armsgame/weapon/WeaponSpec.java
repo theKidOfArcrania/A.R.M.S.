@@ -5,6 +5,7 @@
  */
 package armsgame.weapon;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import armsgame.card.util.CardDefaults;
@@ -47,7 +48,18 @@ public class WeaponSpec
 	{
 		this.codeType = codeType;
 		String[] partSpecsList = getInternalProperty("parts").split("\\s*,\\s*");
-		parts = Arrays.stream(partSpecsList).parallel().map(WeaponPartSpec::new).toArray(WeaponPartSpec[]::new);
+		String[] partsType = getInternalProperty("parts").split("\\s*,\\s*");
+		ArrayList<WeaponPartSpec> parts = new ArrayList<>(partsType.length);
+		for (String element : partsType)
+		{
+			WeaponPartSpec part = WeaponPartSpec.getPartSpec(element);
+			if (part != null)
+			{
+				parts.add(part);
+			}
+		}
+		this.parts = new WeaponPartSpec[parts.size()];
+		parts.toArray(this.parts);
 	}
 
 	public String getCodeName()
@@ -72,8 +84,7 @@ public class WeaponSpec
 
 	public WeaponPartSpec[] getPartSpecs()
 	{
-		String[] partsType = getInternalProperty("parts").split("\\s*,\\s*");
-		return Arrays.stream(partsType).map(WeaponPartSpec::new).toArray(WeaponPartSpec[]::new);
+		return parts.clone();
 	}
 
 	public int getRGBColor()
