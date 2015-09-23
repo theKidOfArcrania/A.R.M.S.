@@ -38,7 +38,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
+//
 public class MoveHistory extends Application{
 	
 	private final DisplayMode defaultMode = getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
@@ -63,8 +63,15 @@ public class MoveHistory extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.initStyle(StageStyle.TRANSPARENT);
-		Scene trans = new Scene(new AnchorPane(), dispHeight, dispHeight);
+		AnchorPane pane = new AnchorPane();
+		//Test for the Settings button, to be implemented in the main UI class
+		Image setting = Tools.createImage("settings.png");
+		ImageView settingView = Tools.createImageView(setting, 95, 95, dispWidth-95, 15, sRatio, wRatio, hRatio, new InnerShadow(5.0, Color.BLACK));
+		pane.getChildren().add(settingView);
+		Scene trans = new Scene(pane, dispWidth, dispHeight);
 				trans.setFill(Color.TRANSPARENT);
+				
+				
 		primaryStage.setScene(trans);
 		primaryStage.show();
 		Stage s = initMain("dirtymetal3.png", 290*wRatio);
@@ -137,10 +144,10 @@ public class MoveHistory extends Application{
 		
 		root.setOnMouseEntered(e -> root.setEffect(whiteShade));
 		root.setOnMouseExited(e -> root.setEffect(largeShade));
-		root.setOnMouseClicked(e -> createTransparentStage(primaryStage,positions[position]));
+		root.setOnMouseClicked(e -> createTransparentStage(primaryStage,positions[position]*wRatio));
 		primaryStage.setAlwaysOnTop(true);
 		primaryStage.setY(5);
-		primaryStage.setX(positions[position]);
+		primaryStage.setX(positions[position]*wRatio);
 		primaryStage.setScene(scene);
 		
 		return primaryStage;
@@ -160,12 +167,10 @@ public class MoveHistory extends Application{
 		InnerShadow largeShade = new InnerShadow(5.0, Color.BLACK);
 		InnerShadow greenShade = new InnerShadow(2.0, Color.DARKGREEN.darker());
 		DropShadow out = new DropShadow(2.0, Color.BLACK);
-		
-		
-		
-		
+
 		Text name = Tools.createText(13,15,  wRatio, hRatio," Move\nHistory", Color.GRAY.darker(), smallShade, Tools.createBoldFont(24,sRatio));
 		Rectangle panel = Tools.createRoundedRectangle(4,90,2,2,122,0,sRatio, wRatio, hRatio, Color.GRAY.darker(), mediumShade);
+		
 		root.getChildren().addAll(name,panel);
 		
 
