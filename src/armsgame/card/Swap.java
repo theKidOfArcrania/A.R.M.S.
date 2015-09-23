@@ -6,9 +6,10 @@
 package armsgame.card;
 
 import armsgame.card.util.CardActionType.Likeness;
-import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
+import armsgame.impl.WeaponTransfer;
 import armsgame.weapon.Weapon;
+import armsgame.weapon.WeaponPartSpec;
 
 /**
  *
@@ -31,11 +32,10 @@ public class Swap extends Action
 			return false;
 		}
 
-		PartCard take = self.selectProperty("Please select a property to take.", (card) -> {
-			// Has to not be part of the full set.
-			Weapon column = target.getWeapon(card);
-			column.sort();
-			return !column.isFullSet() || column.indexOf(card) >= column.getFullSet();
+		WeaponPartSpec take = self.selectPartUpgrade("Please select a property to take.", (card) -> {
+			// TO DO: ask the player to select where to put the part.
+			// TO DO: make sure that this weapon is usable.
+			return !column.isComplete() || column.indexOf(card) >= column.getFullSet();
 		} , target);
 
 		if (take == null)
@@ -43,9 +43,9 @@ public class Swap extends Action
 			return false;
 		}
 
-		PartCard give = self.selectPartUpgrade("Please select a property to give", (card) -> true);
+		WeaponPartSpec give = self.selectPartUpgrade("Please select a property to give", (card) -> true);
 
-		DamageReport forceDeal = new DamageReport(self, target);
+		WeaponTransfer forceDeal = new WeaponTransfer(self, target);
 		forceDeal.requestProperty(take);
 		forceDeal.giveProperty(give);
 		forceDeal.finishRequest();
@@ -63,8 +63,9 @@ public class Swap extends Action
 	{
 		if (action == Likeness.Action)
 		{
+			// TO DO: make sure that this weapon is usable.
 			self.getGame().playerStream().parallel().anyMatch(Player::hasFreeWeaponParts);
-			return !self.columnStream().allMatch(Weapon::isEmpty);
+			return !self.columnStream().allMatch(Weapon::is);
 		}
 		return true;
 	}

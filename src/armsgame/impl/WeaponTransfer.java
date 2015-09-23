@@ -15,6 +15,7 @@ import armsgame.card.PartCard;
 import armsgame.card.Response;
 import armsgame.card.Valuable;
 import armsgame.weapon.Weapon;
+import armsgame.weapon.WeaponPartSpec;
 import armsgame.weapon.WeaponSpec;
 
 import static java.util.Objects.requireNonNull;
@@ -25,7 +26,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author HW
  */
-public class DamageReport
+public class WeaponTransfer
 {
 
 	private static int getValue(Card c)
@@ -61,31 +62,30 @@ public class DamageReport
 		return list.stream().collect(Collectors.joining(", ")) + ", and " + last;
 	}
 
-	private static void transferProp(Player giver, Player reciever, PartCard prop)
+	private static void transferPart(Player giver, Player reciever, WeaponPartSpec partSpec)
 	{
-		Weapon columnGiver = giver.getWeapon(prop);
-		Weapon columnReciever = reciever.getWeapon(columnGiver.getPropertyColor());
+		Weapon specTake = giver.getWeapon(partSpec);
+		specTake.unbuildPart(partSpec);
 
-		if (!columnGiver.isMoveable())
+		if (reciever != null)
 		{
-			throw new AssertionError();
+			Weapon specRecieve = reciever.getWeapon(specTake.getSpec());
+			specRecieve.buildPart(partSpec);
 		}
-
-		columnGiver.remove(prop);
-		columnReciever.addAndSort(prop);
 	}
 
-	private static void transferProp(Player giver, Player reciever, WeaponSpec propSet)
+	private static void transferPart(Player giver, Player reciever, WeaponSpec propSet)
 	{
-		Weapon columnGiver = giver.getWeapon(propSet);
-		Weapon columnReciever = reciever.getWeapon(propSet);
+		Weapon specTake = giver.getWeapon(propSet);
 
-		if (!columnGiver.isFullSet())
-		{
-			throw new AssertionError();
+		if (reciever == null) {
+
+		}else {
+			Weapon specRecieve = reciever.getWeapon(propSet);
+			for (int i = 0; i < specTake.buildPart(part))
 		}
 
-		columnReciever.addAllAndSort(columnGiver.removeFullSet());
+
 	}
 
 	private final ArrayList<Card> bills = new ArrayList<>(10);
@@ -105,12 +105,10 @@ public class DamageReport
 	 * Constructs a payment object without any payment parameters.
 	 * <p>
 	 *
-	 * @param damager
-	 *            the player who dealed the damage.
-	 * @param victim
-	 *            the player who is recieving this damage.
+	 * @param damager the player who dealed the damage.
+	 * @param victim the player who is recieving this damage.
 	 */
-	public DamageReport(Player damager, Player victim)
+	public WeaponTransfer(Player damager, Player victim)
 	{
 		requireNonNull(damager);
 		requireNonNull(victim);
@@ -120,42 +118,14 @@ public class DamageReport
 	}
 
 	/**
-	 * Constructs a payment object with a pre-initialized debt.
-	 * <p>
-	 *
-	 * @param damager
-	 *            the player who dealed the damage.
-	 * @param victim
-	 *            the player who is recieving this damage.
-	 * @param hp
-	 *            the amount of debt to pay
-	 */
-	public DamageReport(Player damager, Player victim, int hp, boolean energyZapMode)
-	{
-		requireNonNull(damager);
-		requireNonNull(victim);
-		if (hp <= 0)
-		{
-			throw new IllegalArgumentException("Debt must be positive");
-		}
-		this.damager = damager;
-		this.victim = victim;
-		this.hp = hp;
-		this.energyZapMode = energyZapMode;
-	}
-
-	/**
 	 * Constructs a payment object with a pre-initialized property to request.
 	 * <p>
 	 *
-	 * @param damager
-	 *            the reciever of this payment.
-	 * @param victim
-	 *            the victim of this payment.
-	 * @param partsRequested
-	 *            the requested property
+	 * @param damager the reciever of this payment.
+	 * @param victim the victim of this payment.
+	 * @param partsRequested the requested property
 	 */
-	public DamageReport(Player creditor, Player debtor, PartCard propRequested)
+	public WeaponTransfer(Player creditor, Player debtor, PartCard propRequested)
 	{
 		requireNonNull(creditor);
 		requireNonNull(debtor);
@@ -170,14 +140,11 @@ public class DamageReport
 	 * Constructs a payment object with a pre-initialized property set to request.
 	 * <p>
 	 *
-	 * @param damager
-	 *            the reciever of this payment.
-	 * @param victim
-	 *            the victim of this payment.
-	 * @param propSetRequested
-	 *            the requested property set
+	 * @param damager the reciever of this payment.
+	 * @param victim the victim of this payment.
+	 * @param propSetRequested the requested property set
 	 */
-	public DamageReport(Player creditor, Player debtor, WeaponSpec propSetRequested)
+	public WeaponTransfer(Player creditor, Player debtor, WeaponSpec propSetRequested)
 	{
 		requireNonNull(creditor);
 		requireNonNull(debtor);
@@ -242,8 +209,7 @@ public class DamageReport
 	 * Adds a property to the give list
 	 * <p>
 	 *
-	 * @param partCard
-	 *            the property to add.
+	 * @param partCard the property to add.
 	 * @return whether if this property was added to request list.
 	 */
 	public boolean giveProperty(PartCard partCard)
@@ -261,8 +227,7 @@ public class DamageReport
 	 * Adds a property set to the give list
 	 * <p>
 	 *
-	 * @param set
-	 *            the property set to add.
+	 * @param set the property set to add.
 	 * @return whether if this property was added to request list.
 	 */
 	public boolean givePropertySet(WeaponSpec set)
@@ -320,8 +285,7 @@ public class DamageReport
 	 * Adds a property to the request list
 	 * <p>
 	 *
-	 * @param partCard
-	 *            the property to add.
+	 * @param partCard the property to add.
 	 * @return whether if this property was added to request list.
 	 */
 	public boolean requestProperty(PartCard partCard)
@@ -339,8 +303,7 @@ public class DamageReport
 	 * Adds a property set to the request list
 	 * <p>
 	 *
-	 * @param set
-	 *            the property set to add.
+	 * @param set the property set to add.
 	 * @return whether if this property was added to request list.
 	 */
 	public boolean requestPropertySet(WeaponSpec set)
@@ -414,12 +377,12 @@ public class DamageReport
 
 	private void givePart0(PartCard prop)
 	{
-		transferProp(damager, victim, prop);
+		transferPart(damager, victim, prop);
 	}
 
 	private void givePart0(WeaponSpec propset)
 	{
-		transferProp(damager, victim, propset);
+		transferPart(damager, victim, propset);
 	}
 
 	private void handleResponse(String responseString, Player requester, Player responder)
@@ -441,12 +404,12 @@ public class DamageReport
 
 	private void takePart0(PartCard prop)
 	{
-		transferProp(victim, damager, prop);
+		transferPart(victim, damager, prop);
 	}
 
 	private void takePart0(WeaponSpec propset)
 	{
-		transferProp(victim, damager, propset);
+		transferPart(victim, damager, propset);
 	}
 
 }

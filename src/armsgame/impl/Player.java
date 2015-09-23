@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import armsgame.card.Card;
-import armsgame.card.PartCard;
 import armsgame.card.Response;
 import armsgame.card.util.CardAction;
 import armsgame.card.util.CardActionType;
@@ -109,8 +108,7 @@ public abstract class Player
 	 * This alerts the player of a message.
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest to tell the player.
+	 * @param prompt the selectRequest to tell the player.
 	 */
 	public abstract void alert(String prompt);
 
@@ -229,11 +227,6 @@ public abstract class Player
 	public Weapon getWeapon(int index)
 	{
 		return weaponSets.get(index);
-	}
-
-	public Weapon getWeapon(WeaponPartSpec card)
-	{
-		return weaponSets.parallelStream().filter(column -> containsWeaponPart(card, column)).findAny().orElse(null);
 	}
 
 	public Weapon getWeapon(WeaponSpec spec)
@@ -359,11 +352,9 @@ public abstract class Player
 	/**
 	 * This method allows the user to select a particular accuracy for a weapon fire. Note that this can only be used when a player is playing a card.
 	 *
-	 * @param guarantee
-	 *            a value from 0 to 1 that is guaranteed to be 100% efficiency
+	 * @param guarantee a value from 0 to 1 that is guaranteed to be 100% efficiency
 	 * @return a value from 0 to 1 determining weapon efficiency.
-	 * @throws IllegalStateException
-	 *             when this is called outside of playing a card
+	 * @throws IllegalStateException when this is called outside of playing a card
 	 */
 	public abstract double selectAccuracy(double guarantee);
 
@@ -382,8 +373,7 @@ public abstract class Player
 	 * This prompts the player to select a card to play (convenience method)
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
+	 * @param prompt the selectRequest that the player will see.
 	 * @return the card the player selected.
 	 */
 	public CardAction selectHand(String prompt)
@@ -395,10 +385,8 @@ public abstract class Player
 	 * This prompts the player to select a card to play
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            filter for cards to play.
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for cards to play.
 	 * @return the card the player selected.
 	 */
 	public CardAction selectHand(String prompt, Predicate<Card> filter)
@@ -410,12 +398,9 @@ public abstract class Player
 	 * This prompts the player to select a card to play
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            filter for cards to play.
-	 * @param actionFilter
-	 *            filter for the actions for the card.
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for cards to play.
+	 * @param actionFilter filter for the actions for the card.
 	 * @return the card the player selected.
 	 */
 	public abstract CardAction selectHand(String prompt, Predicate<Card> filter, Function<CardActionType, Boolean> actionFilter);
@@ -435,8 +420,7 @@ public abstract class Player
 	 * This prompts the player to select a property to use (convenience method)
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
+	 * @param prompt the selectRequest that the player will see.
 	 * @return the weapon part upgrade the player selected.
 	 */
 	public WeaponPartSpec selectPartUpgrade(String prompt)
@@ -448,16 +432,25 @@ public abstract class Player
 	 * This prompts the player to select a property to use (convenience method)
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            filter for properties
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for properties
 	 * @return the property the player selected.
 	 */
-	public WeaponPartSpec selectPartUpgrade(String prompt, Predicate<PartCard> filter)
+	public WeaponPartSpec selectPartUpgrade(String prompt, Predicate<WeaponPartSpec> filter)
 	{
-		return selectProperty(prompt, filter, this);
+		return selectPartUpgrade(prompt, filter, this);
 	}
+
+	/**
+	 * This prompts the player to select a property to use from a particular player
+	 * <p>
+	 *
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for properties
+	 * @param context the property columns that the player will select from.
+	 * @return the property the player selected.
+	 */
+	public abstract WeaponPartSpec selectPartUpgrade(String prompt, Predicate<WeaponPartSpec> filter, Player context);
 
 	/**
 	 * This prompts the player to select another player
@@ -474,8 +467,7 @@ public abstract class Player
 	 * This prompts the player to select another player
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
+	 * @param prompt the selectRequest that the player will see.
 	 * @return another player that this player selected
 	 */
 	public Player selectPlayer(String prompt)
@@ -487,27 +479,11 @@ public abstract class Player
 	 * This prompts the player to select another player
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            the filter for the other players
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter the filter for the other players
 	 * @return another player that this player selected
 	 */
 	public abstract Player selectPlayer(String prompt, Predicate<Player> filter);
-
-	/**
-	 * This prompts the player to select a property to use from a particular player
-	 * <p>
-	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            filter for properties
-	 * @param context
-	 *            the property columns that the player will select from.
-	 * @return the property the player selected.
-	 */
-	public abstract PartCard selectProperty(String prompt, Predicate<PartCard> filter, Player context);
 
 	/**
 	 * This prompts the player to select a property column to use (convenience method)
@@ -524,8 +500,7 @@ public abstract class Player
 	 * This prompts the player to select a property column to use (convenience method)
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
+	 * @param prompt the selectRequest that the player will see.
 	 * @return the property column the player selected.
 	 */
 	public WeaponSet selectPropertyColumn(String prompt)
@@ -537,10 +512,8 @@ public abstract class Player
 	 * This prompts the player to select a property column to use (convenience method)
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            filter for property columns
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for property columns
 	 * @return the property column the player selected.
 	 */
 	public WeaponSet selectPropertyColumn(String prompt, Predicate<WeaponSet> filter)
@@ -552,12 +525,9 @@ public abstract class Player
 	 * This prompts the player to select a property column to use from a particular player
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            filter for property columns
-	 * @param context
-	 *            the property columns that the player will select from.
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for property columns
+	 * @param context the property columns that the player will select from.
 	 * @return the property column the player selected.
 	 */
 	public abstract WeaponSet selectPropertyColumn(String prompt, Predicate<WeaponSet> filter, Player context);
@@ -566,30 +536,27 @@ public abstract class Player
 	 * This prompts the player a yes or no question.
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the select request to ask the player
+	 * @param prompt the select request to ask the player
 	 * @return true if player responds with a "yes" or false otherwise.
 	 */
 	public abstract boolean selectRequest(String prompt);
 
 	/**
-	 * This prompts the player of a payment that must be made.
-	 * <p>
-	 *
-	 * @param amount
-	 *            the debt amount.
-	 */
-	public abstract void selectResponse(DamageReport amount);
-
-	/**
 	 * This prompts the player whether to agree
 	 * <p>
 	 *
-	 * @param prompt
-	 *            the prompt that the player will see.
+	 * @param prompt the prompt that the player will see.
 	 * @return null if player accepts, the response card (currently only a just say no) if player rejects.
 	 */
 	public abstract Response selectResponse(String prompt);
+
+	/**
+	 * This prompts the player of a payment that must be made.
+	 * <p>
+	 *
+	 * @param amount the debt amount.
+	 */
+	public abstract void selectResponse(WeaponTransfer amount);
 
 	/**
 	 * This method allows for a pause before player starts a turn... ie if player needs to be prompted to start turn and draw cards.

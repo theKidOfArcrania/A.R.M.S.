@@ -13,7 +13,7 @@ import static armsgame.card.util.CardDefaults.getCardDefaults;
 public class WeaponPartSpec
 {
 
-	public static void getPartSpec(String codeType)
+	public static WeaponPartSpec getPartSpec(String codeType)
 	{
 
 	}
@@ -36,8 +36,7 @@ public class WeaponPartSpec
 	/**
 	 * This constructs a weapon part. Note that this is package-private, because the only class that is intended on using this is the PartCard class and Weapon class
 	 *
-	 * @param codeType
-	 *            the internal coded type of this weapon part.
+	 * @param codeType the internal coded type of this weapon part.
 	 */
 	private WeaponPartSpec(String codeType)
 	{

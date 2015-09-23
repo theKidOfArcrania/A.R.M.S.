@@ -6,8 +6,8 @@
 package armsgame.card;
 
 import armsgame.card.util.CardActionType;
-import armsgame.card.util.SupportedActions;
 import armsgame.card.util.CardActionType.Likeness;
+import armsgame.card.util.SupportedActions;
 import armsgame.impl.Player;
 import armsgame.weapon.WeaponPartSpec;
 
@@ -44,8 +44,7 @@ public final class PartCard extends Action
 	 * Constructs a single-part card.
 	 * <p>
 	 *
-	 * @param weaponPartSpec
-	 *            This is the weapon part that this part will build
+	 * @param weaponPartSpec This is the weapon part that this part will build
 	 */
 	public PartCard(WeaponPartSpec weaponPartSpec)
 	{
@@ -58,8 +57,7 @@ public final class PartCard extends Action
 	/**
 	 * Constructs a PartCard Card with the internal typing. This is the constructor called by card creator.
 	 *
-	 * @param internalType
-	 *            the internal type of the property-card color
+	 * @param internalType the internal type of the property-card color
 	 */
 	PartCard(String internalType)
 	{
@@ -67,7 +65,7 @@ public final class PartCard extends Action
 		switch (prefix) {
 		case '$':
 			type = 0;
-			partBuild = new WeaponPartSpec(internalType.substring(1));
+			partBuild = WeaponPartSpec.getPartSpec(internalType.substring(1));
 			break;
 		case '*':
 			type = 1;

@@ -25,8 +25,7 @@ public class Weapon implements Observable
 	/**
 	 * Constructs a Weapon class
 	 *
-	 * @param spec
-	 *            the specifications of this weapon.
+	 * @param spec the specifications of this weapon.
 	 */
 	public Weapon(WeaponSpec spec)
 	{
@@ -46,8 +45,7 @@ public class Weapon implements Observable
 	/**
 	 * This builds the the current part onto the weapon.
 	 *
-	 * @param part
-	 *            the part to implement on this weapon.
+	 * @param part the part to implement on this weapon.
 	 * @return whether if this is actually built or not.
 	 */
 	public boolean buildPart(WeaponPartSpec part)
@@ -58,8 +56,9 @@ public class Weapon implements Observable
 			return false;
 		} else
 		{
+			partsBuilt[partIndex] = true;
 			listeners.forEach(list -> list.invalidated(this));
-			return partsBuilt[partIndex] = true;
+			return true;
 		}
 	}
 
@@ -98,27 +97,9 @@ public class Weapon implements Observable
 	}
 
 	/**
-	 * Describes whether if this weapon hasn't max upgrades.
-	 *
-	 * @return true if column has loose properties, false otherwise.
-	 */
-	public boolean isIncomplete()
-	{
-		for (boolean partBuilt : partsBuilt)
-		{
-			if (!partBuilt)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Specifies whether if this part is needed on this weapon to attain max upgrades.
 	 *
-	 * @param part
-	 *            the weapon part to test with
+	 * @param part the weapon part to test with
 	 * @return true if it can be built on here, false otherwise.
 	 */
 	public boolean isBuildable(WeaponPartSpec part)
@@ -144,6 +125,23 @@ public class Weapon implements Observable
 		return true;
 	}
 
+	/**
+	 * Describes whether if this weapon hasn't max upgrades.
+	 *
+	 * @return true if column has loose properties, false otherwise.
+	 */
+	public boolean isIncomplete()
+	{
+		for (boolean partBuilt : partsBuilt)
+		{
+			if (!partBuilt)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean isVampiric()
 	{
 		return vampiric;
@@ -153,6 +151,20 @@ public class Weapon implements Observable
 	public synchronized void removeListener(InvalidationListener listener)
 	{
 		listeners.remove(listener);
+	}
+
+	public boolean unbuildPart(WeaponPartSpec part)
+	{
+		int partIndex = Arrays.binarySearch(parts, part);
+		if (partIndex < 0 || !partsBuilt[partIndex])
+		{ // Not found in parts list, or this is not already built on.
+			return false;
+		} else
+		{
+			partsBuilt[partIndex] = false;
+			listeners.forEach(list -> list.invalidated(this));
+			return true;
+		}
 	}
 
 	void setVampiric(boolean vampiric)

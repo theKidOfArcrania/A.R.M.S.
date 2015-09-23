@@ -6,7 +6,7 @@
 package armsgame.card;
 
 import armsgame.card.util.CardActionType.Likeness;
-import armsgame.impl.DamageReport;
+import armsgame.impl.WeaponTransfer;
 import armsgame.impl.Player;
 import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponSet;
@@ -39,7 +39,7 @@ public class ArmsAbduction extends Action
 			return false;
 		}
 
-		DamageReport dealBreaker = new DamageReport(self, target);
+		WeaponTransfer dealBreaker = new WeaponTransfer(self, target);
 		dealBreaker.requestPropertySet(takeSet.getPropertyColor());
 		dealBreaker.finishRequest();
 		return true;

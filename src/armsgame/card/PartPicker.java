@@ -6,7 +6,7 @@
 package armsgame.card;
 
 import armsgame.card.util.CardActionType.Likeness;
-import armsgame.impl.DamageReport;
+import armsgame.impl.WeaponTransfer;
 import armsgame.impl.Player;
 import armsgame.weapon.Weapon;
 
@@ -31,7 +31,7 @@ public class PartPicker extends Action
 			return false;
 		}
 
-		PartCard take = self.selectProperty("Please select a property to take.", (card) -> {
+		PartCard take = self.selectPartUpgrade("Please select a property to take.", (card) -> {
 			// Has to not be part of the full weapon
 			Weapon column = target.getWeapon(card);
 			column.sort();
@@ -43,7 +43,7 @@ public class PartPicker extends Action
 			return false;
 		}
 
-		DamageReport slyDeal = new DamageReport(self, target, take);
+		WeaponTransfer slyDeal = new WeaponTransfer(self, target, take);
 		slyDeal.finishRequest();
 		return true;
 	}

@@ -1,7 +1,7 @@
 package armsgame.card;
 
-import armsgame.impl.DamageReport;
+import armsgame.impl.WeaponTransfer;
 
 public interface AttackModifiers {
-	public void modifyAttack(DamageReport attack);
+	public void modifyAttack(WeaponTransfer attack);
 }
