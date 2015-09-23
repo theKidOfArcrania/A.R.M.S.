@@ -1,9 +1,10 @@
 package armsgame.card;
 
-import armsgame.impl.CardActionType;
-import armsgame.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType;
+import armsgame.card.util.StandardCardDefaults;
+import armsgame.card.util.SupportedActions;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
-import armsgame.impl.SupportedActions;
 
 public final class BurstCharge extends Card {
 	private static final long serialVersionUID = 4350231484759060230L;
@@ -55,7 +56,7 @@ public final class BurstCharge extends Card {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		self.increaseBurst(value);
+		self.healShield(value);
 		return true;
 	}
 

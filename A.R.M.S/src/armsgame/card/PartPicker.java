@@ -5,36 +5,41 @@
  */
 package armsgame.card;
 
-import armsgame.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.DamageReport;
 import armsgame.impl.Player;
+import armsgame.weapon.Weapon;
 
 /**
  *
  * @author Henry
  */
-public class PartPicker extends Action {
+public class PartPicker extends Action
+{
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -8036992382008611576L;
 
 	@Override
-	public boolean actionPlayed(Player self) {
-		Player target = self.selectPlayer("Please select another player to take a property from.", Player::hasIncompleteSet);
+	public boolean actionPlayed(Player self)
+	{
+		Player target = self.selectPlayer("Please select another player to take a property from.", Player::hasFreeWeaponParts);
 
-		if (target == null) {
+		if (target == null)
+		{
 			return false;
 		}
 
-		PartCard take = (PartCard) self.selectProperty("Please select a property to take.", (card) -> {
+		PartCard take = self.selectProperty("Please select a property to take.", (card) -> {
 			// Has to not be part of the full weapon
-			WeaponSet column = target.getPropertyColumn(card);
+			Weapon column = target.getWeapon(card);
 			column.sort();
 			return !column.isFullSet() || column.indexOf(card) >= column.getFullSet();
 		} , target);
 
-		if (take == null) {
+		if (take == null)
+		{
 			return false;
 		}
 
@@ -44,17 +49,17 @@ public class PartPicker extends Action {
 	}
 
 	@Override
-	public String getInternalType() {
+	public String getInternalType()
+	{
 		return "action.sly";
 	}
 
 	@Override
-	public boolean isEnabled(Player self, Likeness action) {
-		if (action == Likeness.Action) {
-			self.getGame()
-					.playerStream()
-					.parallel()
-					.anyMatch(Player::hasIncompleteSet);
+	public boolean isEnabled(Player self, Likeness action)
+	{
+		if (action == Likeness.Action)
+		{
+			self.getGame().playerStream().parallel().anyMatch(Player::hasFreeWeaponParts);
 		}
 		return true;
 	}

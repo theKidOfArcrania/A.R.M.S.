@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card;
+package armsgame.card.util;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -70,12 +70,6 @@ public class CardDefaults extends ResourceDefaults {
 		return defs;
 	}
 
-	private static String colorString(WeaponSpec propertyType) {
-		String propName = propertyType.name();
-		return propName.substring(0, 1)
-			.toLowerCase() + propName.substring(1);
-	}
-
 	protected CardDefaults(String propFile) throws IOException {
 		load(CardDefaults.class.getResourceAsStream(propFile));
 	}
@@ -106,25 +100,6 @@ public class CardDefaults extends ResourceDefaults {
 		}
 		generated.finalizeDeck();
 		return generated;
-	}
-
-	public int getPropertyFullSet(WeaponSpec propertyType) {
-		String propName = colorString(propertyType);
-		return getIntProperty("props." + propName + ".fullset", 0);
-	}
-
-	public int getRent(WeaponSpec propertyType, int propertyCount) {
-		if (propertyCount < 0) {
-			throw new IllegalArgumentException("property count must not be negative.");
-		}
-		int maxConciousCount = Math.max(propertyCount, getPropertyFullSet(propertyType));
-
-		if (maxConciousCount == 0) {
-			return 0;
-		}
-
-		String propName = colorString(propertyType);
-		return getIntProperty("props." + propName + ".rent." + maxConciousCount, 0);
 	}
 
 }

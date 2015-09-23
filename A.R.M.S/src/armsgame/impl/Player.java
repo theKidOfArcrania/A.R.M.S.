@@ -6,16 +6,21 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import armsgame.card.Card;
-import armsgame.card.CardDefaults;
 import armsgame.card.PartCard;
 import armsgame.card.Response;
-import armsgame.card.WeaponSet;
-import armsgame.card.WeaponSpec;
-import javafx.beans.binding.IntegerExpression;
-import javafx.beans.property.IntegerProperty;
+import armsgame.card.util.CardAction;
+import armsgame.card.util.CardActionType;
+import armsgame.card.util.CardDefaults;
+import armsgame.weapon.Weapon;
+import armsgame.weapon.WeaponPartSpec;
+import armsgame.weapon.WeaponSet;
+import armsgame.weapon.WeaponSpec;
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.DoubleExpression;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerPropertyBase;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -24,27 +29,28 @@ import javafx.collections.ObservableList;
  * This class describes the cards that a player has at any point.
  * <p>
  *
- * @author HW, Alex
+ * @author HW
  */
 public abstract class Player
 {
 
-	private static boolean hasPropertyInColumn(PartCard card, WeaponSet column)
+	private static boolean containsWeaponPart(WeaponPartSpec spec, Weapon column)
 	{
-		return column.stream().parallel().anyMatch((prop) -> prop == card);
+		// TO DO: implment
+		return false;
 	}
 
 	private final CardDefaults defs;
 	private final Account playerAccount;
-	private final IntegerProperty shieldLevel = new SimpleIntegerProperty(0);
-	private final IntegerProperty energyLevel = new SimpleIntegerProperty(0);
+	private final DoubleProperty shieldLevel = new SimpleDoubleProperty(0);
+	private final DoubleProperty energyLevel = new SimpleDoubleProperty(0);
 	private final int cashCache = -1;
 	private int setCache = -1;
 	private Board game = null;
 	// this is all the cards a player has in his/her hand.
 	private final ObservableList<Card> hand;
 	private int moves = 0;
-	private final ObservableList<WeaponSet> weaponSets;
+	private final ObservableList<Weapon> weaponSets;
 	private final ObservableList<CardAction> playerHistory;
 	private final ReadOnlyIntegerProperty propertySets;
 
@@ -59,14 +65,14 @@ public abstract class Player
 		propertySets = new ReadOnlyIntegerPropertyBase()
 		{
 			{
-				ListChangeListener<Card> columnList = event -> {
+				InvalidationListener buildList = event -> {
 					setCache = -1;
 					this.fireValueChangedEvent();
 				};
-				weaponSets.addListener((ListChangeListener<WeaponSet>) event -> {
+				weaponSets.addListener((ListChangeListener<Weapon>) event -> {
 					if (event.wasAdded())
 					{
-						event.getAddedSubList().parallelStream().forEach(column -> column.addListener(columnList));
+						event.getAddedSubList().parallelStream().forEach(weapon -> weapon.addListener(buildList));
 					}
 
 					setCache = -1;
@@ -79,7 +85,7 @@ public abstract class Player
 			{
 				if (setCache == -1)
 				{ // invalidated
-					return setCache = (int) weaponSets.parallelStream().filter(WeaponSet::isFullSet).count();
+					return setCache = (int) weaponSets.parallelStream().filter(Weapon::isComplete).count();
 				}
 				return setCache;
 			}
@@ -110,23 +116,23 @@ public abstract class Player
 
 	public boolean checkWin()
 	{
-		int fullSets = weaponSets.stream().parallel().reduce(0, (count, column) -> count + (column.isFullSet() ? 1 : 0), (count1, count2) -> count1 + count2);
+		int fullSets = weaponSets.stream().parallel().reduce(0, (count, column) -> count + (column.isComplete() ? 1 : 0), (count1, count2) -> count1 + count2);
 		return fullSets >= 3;
 	}
 
-	public Stream<WeaponSet> columnStream()
+	public Stream<Weapon> columnStream()
 	{
 		return weaponSets.stream();
 	}
 
-	public void damageEnergy(int damage)
+	public void damageEnergy(double damage)
 	{
 		energyLevel.set(Math.max(0, energyLevel.get() - damage));
 	}
 
-	public void damageShield(int damage)
+	public void damageShield(double damage)
 	{
-		int shieldLeft = shieldLevel.get();
+		double shieldLeft = shieldLevel.get();
 		if (shieldLeft >= damage)
 		{
 			shieldLevel.set(shieldLeft - damage);
@@ -145,7 +151,7 @@ public abstract class Player
 		hand.addAll(Arrays.asList(cards));
 	}
 
-	public IntegerExpression energyLevelProperty()
+	public DoubleExpression energyLevelProperty()
 	{
 		return energyLevel;
 	}
@@ -155,7 +161,7 @@ public abstract class Player
 		return defs;
 	}
 
-	public int getEnergyLevel()
+	public double getEnergyLevel()
 	{
 		return energyLevel.get();
 	}
@@ -180,6 +186,16 @@ public abstract class Player
 		return hand.size();
 	}
 
+	/**
+	 * Retrieves the number of weapons that have max upgrades Note: the energy crystal upgrade doesn't determine whether if the weapon is max upgrades
+	 *
+	 * @return the number of weapon sets
+	 */
+	public int getMaxedWeapons()
+	{
+		return propertySets.get();
+	}
+
 	public int getMove()
 	{
 		return moves;
@@ -200,61 +216,87 @@ public abstract class Player
 		return FXCollections.unmodifiableObservableList(playerHistory);
 	}
 
-	public ObservableList<WeaponSet> getPropColumns()
+	/**
+	 * Retrieves the current shield level
+	 *
+	 * @return a value of the shielding level.
+	 */
+	public double getShieldLevel()
 	{
-		return FXCollections.unmodifiableObservableList(weaponSets);
+		return shieldLevel.get();
 	}
 
-	public WeaponSet getPropertyColumn(int index)
+	public Weapon getWeapon(int index)
 	{
 		return weaponSets.get(index);
 	}
 
-	public WeaponSet getPropertyColumn(PartCard card)
+	public Weapon getWeapon(WeaponPartSpec card)
 	{
-		return weaponSets.parallelStream().filter(column -> hasPropertyInColumn(card, column)).findAny().orElse(null);
+		return weaponSets.parallelStream().filter(column -> containsWeaponPart(card, column)).findAny().orElse(null);
 	}
 
-	public WeaponSet getPropertyColumn(WeaponSpec color)
+	public Weapon getWeapon(WeaponSpec spec)
 	{
-		return weaponSets.parallelStream().filter(column -> column.getPropertyColor() == color).findAny().orElseGet(() -> {
-			WeaponSet newColumn = new WeaponSet(defs, color);
+		return weaponSets.parallelStream().filter(weapon -> weapon.getSpec() == spec).findAny().orElseGet(() -> {
+			Weapon newColumn = new Weapon(spec);
 			weaponSets.add(newColumn);
 			return newColumn;
 		});
 	}
 
-	public int getPropertyColumnCount()
+	public ObservableList<Weapon> getWeaponSets()
 	{
-		return weaponSets.size();
+		return FXCollections.unmodifiableObservableList(weaponSets);
 	}
 
-	public int getPropertySets()
-	{
-		return propertySets.get();
-	}
-
-	public int getShieldLevel()
-	{
-		return shieldLevel.get();
-	}
-
+	/**
+	 * Gets the stream of the cards of a player's hand
+	 *
+	 * @return the stream of cards.
+	 */
 	public Stream<Card> handStream()
 	{
 		return hand.stream();
 	}
 
-	public boolean hasCompleteSet()
+	/**
+	 * Identifies if this player has at least one weapon set that isn't at max upgrades
+	 *
+	 * @return true if at least one set is incomplete, but has upgrades, false otherwise.
+	 */
+	public boolean hasFreeWeaponParts()
 	{
-		return weaponSets.parallelStream().anyMatch(WeaponSet::isFullSet);
+		return weaponSets.parallelStream().anyMatch(Weapon::isIncomplete);
 	}
 
-	public boolean hasIncompleteSet()
+	/**
+	 * Identifies if this player has max upgrades for any weapon.
+	 * <p>
+	 * Note: the energy crystal upgrade doesn't determine whether if the weapon is max upgrades
+	 *
+	 * @return true if at least one set is complete, false otherwise.
+	 */
+	public boolean hasMaxWeapon()
 	{
-		return weaponSets.parallelStream().anyMatch(WeaponSet::hasIncompleteSet);
+		return getMaxedWeapons() > 0;
 	}
 
-	public void increaseBurst(int value)
+	public void heal(double value)
+	{
+		double max = 200; // TO DO: get a max shielding.
+		double energyHealLeft = max - energyLevel.get();
+		if (energyHealLeft >= value)
+		{
+			shieldLevel.set(energyLevel.get() + value);
+		} else
+		{
+			shieldLevel.set(max);
+			healShield(value - energyHealLeft);
+		}
+	}
+
+	public void healShield(double value)
 	{
 		shieldLevel.set(Math.min(shieldLevel.get() + value, 200));
 	}
@@ -282,7 +324,6 @@ public abstract class Player
 
 		hand.remove(played);
 
-		// TO DO: checkReference(current, played);
 		if (move.getActionType().getAction().apply(played, this))
 		{
 			pushTurn(move);
@@ -314,6 +355,17 @@ public abstract class Player
 	{
 		moves = 0;
 	}
+
+	/**
+	 * This method allows the user to select a particular accuracy for a weapon fire. Note that this can only be used when a player is playing a card.
+	 *
+	 * @param guarantee
+	 *            a value from 0 to 1 that is guaranteed to be 100% efficiency
+	 * @return a value from 0 to 1 determining weapon efficiency.
+	 * @throws IllegalStateException
+	 *             when this is called outside of playing a card
+	 */
+	public abstract double selectAccuracy(double guarantee);
 
 	/**
 	 * This prompts the player to select a card to play (convenience method)
@@ -369,13 +421,43 @@ public abstract class Player
 	public abstract CardAction selectHand(String prompt, Predicate<Card> filter, Function<CardActionType, Boolean> actionFilter);
 
 	/**
-	 * This prompts the player of a payment that must be made.
+	 * This prompts the player to select a weapon upgrade to use (convenience method)
 	 * <p>
 	 *
-	 * @param amount
-	 *            the debt amount.
+	 * @return the weapon part upgrade the player selected.
 	 */
-	public abstract void selectPayment(DamageReport amount);
+	public WeaponPartSpec selectPartUpgrade()
+	{
+		return selectPartUpgrade("Please select a weapon upgrade to use.");
+	}
+
+	/**
+	 * This prompts the player to select a property to use (convenience method)
+	 * <p>
+	 *
+	 * @param prompt
+	 *            the selectRequest that the player will see.
+	 * @return the weapon part upgrade the player selected.
+	 */
+	public WeaponPartSpec selectPartUpgrade(String prompt)
+	{
+		return selectPartUpgrade(prompt, card -> true);
+	}
+
+	/**
+	 * This prompts the player to select a property to use (convenience method)
+	 * <p>
+	 *
+	 * @param prompt
+	 *            the selectRequest that the player will see.
+	 * @param filter
+	 *            filter for properties
+	 * @return the property the player selected.
+	 */
+	public WeaponPartSpec selectPartUpgrade(String prompt, Predicate<PartCard> filter)
+	{
+		return selectProperty(prompt, filter, this);
+	}
 
 	/**
 	 * This prompts the player to select another player
@@ -412,45 +494,6 @@ public abstract class Player
 	 * @return another player that this player selected
 	 */
 	public abstract Player selectPlayer(String prompt, Predicate<Player> filter);
-
-	/**
-	 * This prompts the player to select a property column to use (convenience method)
-	 * <p>
-	 *
-	 * @return the property the player selected.
-	 */
-	public PartCard selectProperty()
-	{
-		return selectProperty("Please select a property column to use.");
-	}
-
-	/**
-	 * This prompts the player to select a property to use (convenience method)
-	 * <p>
-	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @return the property the player selected.
-	 */
-	public PartCard selectProperty(String prompt)
-	{
-		return selectProperty(prompt, card -> true);
-	}
-
-	/**
-	 * This prompts the player to select a property to use (convenience method)
-	 * <p>
-	 *
-	 * @param prompt
-	 *            the selectRequest that the player will see.
-	 * @param filter
-	 *            filter for properties
-	 * @return the property the player selected.
-	 */
-	public PartCard selectProperty(String prompt, Predicate<PartCard> filter)
-	{
-		return selectProperty(prompt, filter, this);
-	}
 
 	/**
 	 * This prompts the player to select a property to use from a particular player
@@ -530,6 +573,15 @@ public abstract class Player
 	public abstract boolean selectRequest(String prompt);
 
 	/**
+	 * This prompts the player of a payment that must be made.
+	 * <p>
+	 *
+	 * @param amount
+	 *            the debt amount.
+	 */
+	public abstract void selectResponse(DamageReport amount);
+
+	/**
 	 * This prompts the player whether to agree
 	 * <p>
 	 *
@@ -544,7 +596,7 @@ public abstract class Player
 	 */
 	public abstract void selectTurn();
 
-	public IntegerProperty shieldLevelProperty()
+	public DoubleProperty shieldLevelProperty()
 	{
 		return shieldLevel;
 	}

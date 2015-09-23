@@ -8,7 +8,8 @@ package armsgame.impl;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import armsgame.card.CardDefaults;
+import armsgame.card.util.CardAction;
+import armsgame.card.util.CardDefaults;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 

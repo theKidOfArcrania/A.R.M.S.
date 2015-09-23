@@ -5,14 +5,16 @@
  */
 package armsgame.card;
 
-import armsgame.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
+import armsgame.weapon.Weapon;
 
 /**
  *
  * @author Henry
  */
-public class Ammunition extends Action {
+public class Ammunition extends Action
+{
 
 	/**
 	 *
@@ -23,44 +25,50 @@ public class Ammunition extends Action {
 	/**
 	 * Constructs an ammunition with the internal typing. This is the constructor called by card creator.
 	 *
-	 * @param internalType
-	 *            the internal type of the ammnunition usages
+	 * @param codeType
+	 *            the internal code sub-type of the ammnunition
 	 */
-	public Ammunition(String internalType) {
-		weaponSpecs = new MultiSpecs(internalType);
+	public Ammunition(String codeType)
+	{
+		weaponSpecs = new MultiSpecs(codeType);
 	}
 
 	@Override
-	public boolean actionPlayed(Player self) {
-		WeaponSet weapon = self.selectPropertyColumn("Choose your weapon to attack with.", this::isValidRent);
+	public boolean actionPlayed(Player self)
+	{
+		Weapon weapon = self.selectPropertyColumn("Choose your weapon to attack with.", this::isValidRent);
 		return processDamage(self, isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints());
 	}
 
 	@Override
-	public String getCardName() {
+	public String getCardName()
+	{
 		return weaponSpecs.getColorName() + " Ammunition";
 	}
 
 	@Override
-	public String getInternalType() {
-		return "action.rent." + weaponSpecs.getInternalType();
+	public String getInternalType()
+	{
+		return "action.ammunition." + weaponSpecs.getInternalType();
 	}
 
 	@Override
-	public boolean isEnabled(Player self, Likeness action) {
-		if (action == Likeness.Action) {
-			return self.columnStream()
-				.parallel()
-				.anyMatch(this::isValidRent);
+	public boolean isEnabled(Player self, Likeness action)
+	{
+		if (action == Likeness.Action)
+		{
+			return self.columnStream().parallel().anyMatch(this::isValidRent);
 		}
 		return true;
 	}
 
-	public boolean isGlobal() {
+	public boolean isGlobal()
+	{
 		return this.getInternalIntProperty("global", 0) != 0;
 	}
 
-	public boolean isValidRent(WeaponSet column) {
+	public boolean isValidRent(Weapon column)
+	{
 		return weaponSpecs.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
 	}
 

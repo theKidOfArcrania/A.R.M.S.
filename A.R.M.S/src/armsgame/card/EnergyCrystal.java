@@ -5,14 +5,16 @@
  */
 package armsgame.card;
 
-import armsgame.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
+import armsgame.weapon.Weapon;
 
 /**
  *
  * @author Henry
  */
-public class EnergyCrystal extends Action {
+public class EnergyCrystal extends Action
+{
 
 	/**
 	 *
@@ -20,10 +22,12 @@ public class EnergyCrystal extends Action {
 	private static final long serialVersionUID = -8732210588821915468L;
 
 	@Override
-	public boolean actionPlayed(Player self) {
+	public boolean actionPlayed(Player self)
+	{
 		// TO DO: implementing Hasbro rules??
-		WeaponSet column = self.selectPropertyColumn("Please select a full-set property column to build on.", WeaponSet::isFullSet);
-		if (column == null) {
+		Weapon column = self.selectPropertyColumn("Please select a full-set property column to build on.", Weapon::isComplete);
+		if (column == null)
+		{
 			return false;
 		}
 		column.addAndSort(this);
@@ -31,17 +35,19 @@ public class EnergyCrystal extends Action {
 	}
 
 	@Override
-	public String getInternalType() {
+	public String getInternalType()
+	{
 		return "action.house";
 	}
 
 	// TO DO: implement support type for building
 	@Override
-	public boolean isEnabled(Player self, Likeness action) {
-		if (action == Likeness.Action) {
+	public boolean isEnabled(Player self, Likeness action)
+	{
+		if (action == Likeness.Action)
+		{
 			// must have at least a full set in order to have build action type.
-			return self.columnStream()
-					.anyMatch(WeaponSet::isFullSet);
+			return self.columnStream().anyMatch(Weapon::isComplete);
 		}
 		return true;
 	}

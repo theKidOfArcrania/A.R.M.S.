@@ -1,4 +1,4 @@
-package armsgame.card;
+package armsgame.weapon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,21 +14,25 @@ import javafx.scene.paint.Color;
  * @author Henry
  *
  */
-public abstract class Weapon implements Observable
+public class Weapon implements Observable
 {
-
-	private final WeaponPart[] parts;
+	private final WeaponSpec spec;
+	private boolean vampiric = false;
+	private final WeaponPartSpec[] parts;
 	private final boolean[] partsBuilt;
 	private final ArrayList<InvalidationListener> listeners = new ArrayList<>();
 
 	/**
 	 * Constructs a Weapon class
+	 *
+	 * @param spec
+	 *            the specifications of this weapon.
 	 */
-	public Weapon()
+	public Weapon(WeaponSpec spec)
 	{
 		// Initialize the parts needed for this weapon.
-		String[] partsType = CardDefaults.getCardDefaults().getProperty(getInternalType() + ".parts").split(" *, *");
-		parts = Arrays.stream(partsType).map(WeaponPart::new).toArray(WeaponPart[]::new);
+		this.spec = spec;
+		parts = spec.getPartSpecs();
 		partsBuilt = new boolean[parts.length];
 		Arrays.sort(parts);
 	}
@@ -46,7 +50,7 @@ public abstract class Weapon implements Observable
 	 *            the part to implement on this weapon.
 	 * @return whether if this is actually built or not.
 	 */
-	public boolean buildPart(WeaponPart part)
+	public boolean buildPart(WeaponPartSpec part)
 	{
 		int partIndex = Arrays.binarySearch(parts, part);
 		if (partIndex < 0 || partsBuilt[partIndex])
@@ -59,11 +63,22 @@ public abstract class Weapon implements Observable
 		}
 	}
 
-	public abstract int damage(Player attacker, Player defender);
+	public void damage(Player attacker, Player victim)
+	{
+		double guarantee = Math.min(Arrays.stream(parts).mapToDouble(WeaponPartSpec::getAccuracy).sum(), 100);
+		double efficiency = attacker.selectAccuracy(guarantee);
+		for (int i = 0; i < parts.length; i++)
+		{
+			if (partsBuilt[i])
+			{
+				parts[i].damage(attacker, victim, this.isVampiric(), efficiency);
+			}
+		}
+	}
 
 	public Color getColorClass()
 	{
-		int colorRGB = CardDefaults.getCardDefaults().getIntProperty(getInternalType() + ".color", 0xFFFFFF);
+		int colorRGB = spec.getRGBColor();
 		return Color.rgb((colorRGB >> 16) & 0xFF, (colorRGB >> 8) & 0xFF, colorRGB & 0xFF);
 	}
 
@@ -72,11 +87,31 @@ public abstract class Weapon implements Observable
 	 *
 	 * @return the internal type.
 	 */
-	public abstract String getInternalType();
-
-	public String getName()
+	public String getInternalType()
 	{
-		return CardDefaults.getCardDefaults().getProperty(getInternalType() + ".name");
+		return spec.getInternalType();
+	}
+
+	public WeaponSpec getSpec()
+	{
+		return spec;
+	}
+
+	/**
+	 * Describes whether if this weapon hasn't max upgrades.
+	 *
+	 * @return true if column has loose properties, false otherwise.
+	 */
+	public boolean isIncomplete()
+	{
+		for (boolean partBuilt : partsBuilt)
+		{
+			if (!partBuilt)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -86,7 +121,7 @@ public abstract class Weapon implements Observable
 	 *            the weapon part to test with
 	 * @return true if it can be built on here, false otherwise.
 	 */
-	public boolean isBuildable(WeaponPart part)
+	public boolean isBuildable(WeaponPartSpec part)
 	{
 		int partIndex = Arrays.binarySearch(parts, part);
 		return partIndex >= 0 && !partsBuilt[partIndex];
@@ -94,7 +129,7 @@ public abstract class Weapon implements Observable
 
 	/**
 	 * Specifies if the weapon has all max upgrades (other than the energy upgrade);
-	 * 
+	 *
 	 * @return true if it is completed, false otherwise.
 	 */
 	public boolean isComplete()
@@ -109,9 +144,19 @@ public abstract class Weapon implements Observable
 		return true;
 	}
 
+	public boolean isVampiric()
+	{
+		return vampiric;
+	}
+
 	@Override
 	public synchronized void removeListener(InvalidationListener listener)
 	{
 		listeners.remove(listener);
+	}
+
+	void setVampiric(boolean vampiric)
+	{
+		this.vampiric = vampiric;
 	}
 }

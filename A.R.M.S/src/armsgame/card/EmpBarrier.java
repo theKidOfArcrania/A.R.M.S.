@@ -1,9 +1,9 @@
 package armsgame.card;
 
-import armsgame.impl.CardActionType;
-import armsgame.impl.CardActionType.Likeness;
+import armsgame.card.util.CardActionType;
+import armsgame.card.util.SupportedActions;
+import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
-import armsgame.impl.SupportedActions;
 
 public class EmpBarrier extends Response {
 	private static final long serialVersionUID = -1356787074424595137L;

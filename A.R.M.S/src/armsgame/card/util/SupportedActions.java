@@ -1,9 +1,7 @@
-package armsgame.impl;
+package armsgame.card.util;
 
 import java.util.HashMap;
 import java.util.Iterator;
-
-import armsgame.impl.CardActionType.Likeness;
 
 public class SupportedActions implements Iterable<CardActionType> {
 	private final HashMap<Likeness, CardActionType> supported = new HashMap<>();

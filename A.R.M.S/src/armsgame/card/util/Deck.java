@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package armsgame.card;
+package armsgame.card.util;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -16,6 +16,8 @@ import java.util.RandomAccess;
 import java.util.Spliterator;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+
+import armsgame.card.Card;
 
 /**
  * Contains the all the cards in the deck.

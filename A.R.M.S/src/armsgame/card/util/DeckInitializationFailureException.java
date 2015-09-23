@@ -1,4 +1,4 @@
-package armsgame.card;
+package armsgame.card.util;
 
 import java.io.IOException;
 

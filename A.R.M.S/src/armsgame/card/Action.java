@@ -5,9 +5,9 @@
  */
 package armsgame.card;
 
-import armsgame.impl.CardActionType;
+import armsgame.card.util.CardActionType;
+import armsgame.card.util.SupportedActions;
 import armsgame.impl.Player;
-import armsgame.impl.SupportedActions;
 
 /**
  * This card contains all the default impl. for any action card.
