@@ -55,7 +55,7 @@ You can use the crystal to destroy all upgrades on an opponents weapon, but it w
 Each robot by default is equipped with 8 basic weapons.
 Weapons can be upgraded with parts. 
 
-1. Brown - Basic Throwing Knife (Especially effective for "Nightv0") 
+1. Brown - Knife (Especially effective for "Nightv0") 
 	- Base Accuracy: 30%  
 	- Base Damage: X  
 	- Upgrades:
