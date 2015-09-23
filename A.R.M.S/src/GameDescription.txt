@@ -78,10 +78,10 @@ Each upgrade adds a new grenade to the package.
 	Event Card 2: Invisibility Cloak: Become unattackable for the next turn
 	
 2. DualDestiny - Specializes in Pistol
-	Unique Passive: Energetic - Random chance that shooting a weapon will not take up a turn
-	- If pistol is complete, becomes Trigger Happy: takes no turns to shoot all weapons
-	Event Card 1: It Was an Accident!: Fires a random weapon at a target
-	Event Card 2: Happy Feet: Robot buzzes around and steals X shields from each player
+	Unique Passive: Agility: Takes reduced multitarget damage
+	- If pistol is complete, becomes Lightspeed: Cannot be attacked by multitarget damage
+	Event Card 1: Prepare: Next action does not require a turn
+	Event Card 2: Dance of Death: Deal X damage to everyone
 	
 3. Bulk XR - Specializes in Shotgun
 	Unique Passive: Tanky: Takes reduced damage from all attacks
@@ -90,10 +90,10 @@ Each upgrade adds a new grenade to the package.
 	Event Card 2: Armor Suit: Grants X Shield for the next X turns that recharges.
 	
 4. R24 Lock n'load - Specializes in Machinegun
-	Unique Passive: Scattered Fire: Random chance that a single target attack will also inflict collateral damage on another opponent
-	- If machine gun is complete, becomes Spray and Pray: multitarget attacks do increased damage, and single target attacks will always do collateral damage.
-	Event Card 1: Barbed Tips: Next multitarget attack does X increased damage over a few turns
-	Event Card 2: Hands up!: Force one player to show you his entire hand
+	Unique Passive: Spray and Pray - attacks that damage everyone do extra damage
+	- If machine gun is complete, becomes Just Spray: multitarget attacks do extra damage, single target attacks do collateral damage.
+	Event Card 1: It Was an Accident!: Fires a random weapon at a target
+	Event Card 2: Happy Feet: Robot buzzes around and steals X shields from each player
 	
 5. PP3 Skyjack - Specializes in Sniper (All about assassinating single targets and outlasting the others)
 	Unique Passive: Camper: If not attacked for X turns, heals X hp (no shield gain)
@@ -102,19 +102,19 @@ Each upgrade adds a new grenade to the package.
 	Event Card 2: Headshot!: X Increased damage on next single target attack
 	
 6. Scrap rm7 - Specializes in Grenade (All about maintaining card advantage and using resources well)
-	Unique Passive:  Rummage: Small chance to draw more than 2 cards.
-	- If grenades is complete, becomes Leftovers: Each card played grants a bit of shield
+	Unique Passive:  Large Inventory: Can hold 8 cards
+	- If grenades is complete, becomes Draw: Draw 3 cards at the start of turn
 	Event Card 1: Harvest: Adds a random action card to your hand
 	Event Card 2: Collection: Adds a random upgrade card to your hand
 	
-7. Tech-o-maniac T1 - Specializes in Rocket Launcher
-	Unique Passive: Reuser Bot: Event cards can be activated two times.
+7. Tech-o-maniac T1 - Specializes in Rocket Launcher (BOTS ARE OP BUT TECH HAS NO PASSIVE)
+	Unique Passive: Reuser Bot: Event cards have a small chance to be bots
 	-  If rocket launcher is complete, gains Construction Bot: Event cards are guaranteed to be bots
 	Event Card 1: Time Bot: Reset the players turn. Allows player to play 3 more moves.
 	Event Card 2: Hijack Bot: Disable one weapon for one opponents for their next turn.
 	Event Card 3: Heal Bot: Restores Energy by X amount.
 	Event Card 4: Shield Bot: Grants X Shield.
-	Event Card 5: Ammo Bot: Gain ammo for a random weapon.
+	Event Card 5: Ammo Bot: Gain ammo for a chosen weapon.
 	Event Card 6: Hack Bot: Look at 1 card from each persons hand
 
 > Gameplay: Turn by turn players go, 3 moves per turn
