@@ -12,7 +12,6 @@ import armsgame.card.util.CardActionType;
 import armsgame.card.util.CardDefaults;
 import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponPartSpec;
-import armsgame.weapon.WeaponSet;
 import armsgame.weapon.WeaponSpec;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.DoubleExpression;
@@ -30,11 +29,9 @@ import javafx.collections.ObservableList;
  *
  * @author HW
  */
-public abstract class Player
-{
+public abstract class Player {
 
-	private static boolean containsWeaponPart(WeaponPartSpec spec, Weapon column)
-	{
+	private static boolean containsWeaponPart(WeaponPartSpec spec, Weapon column) {
 		// TO DO: implment
 		return false;
 	}
@@ -53,24 +50,21 @@ public abstract class Player
 	private final ObservableList<CardAction> playerHistory;
 	private final ReadOnlyIntegerProperty propertySets;
 
-	public Player(CardDefaults defs, Account playerAccount)
-	{
+	public Player(CardDefaults defs, Account playerAccount) {
 		this.playerAccount = playerAccount;
 		this.defs = defs;
 		weaponSets = FXCollections.observableArrayList();
 		hand = FXCollections.observableArrayList();
 		playerHistory = FXCollections.observableArrayList();
 
-		propertySets = new ReadOnlyIntegerPropertyBase()
-		{
+		propertySets = new ReadOnlyIntegerPropertyBase() {
 			{
 				InvalidationListener buildList = event -> {
 					setCache = -1;
 					this.fireValueChangedEvent();
 				};
 				weaponSets.addListener((ListChangeListener<Weapon>) event -> {
-					if (event.wasAdded())
-					{
+					if (event.wasAdded()) {
 						event.getAddedSubList().parallelStream().forEach(weapon -> weapon.addListener(buildList));
 					}
 
@@ -80,24 +74,20 @@ public abstract class Player
 			}
 
 			@Override
-			public int get()
-			{
-				if (setCache == -1)
-				{ // invalidated
+			public int get() {
+				if (setCache == -1) { // invalidated
 					return setCache = (int) weaponSets.parallelStream().filter(Weapon::isComplete).count();
 				}
 				return setCache;
 			}
 
 			@Override
-			public Object getBean()
-			{
+			public Object getBean() {
 				return this;
 			}
 
 			@Override
-			public String getName()
-			{
+			public String getName() {
 				return "propertySets";
 			}
 
@@ -112,30 +102,24 @@ public abstract class Player
 	 */
 	public abstract void alert(String prompt);
 
-	public boolean checkWin()
-	{
+	public boolean checkWin() {
 		int fullSets = weaponSets.stream().parallel().reduce(0, (count, column) -> count + (column.isComplete() ? 1 : 0), (count1, count2) -> count1 + count2);
 		return fullSets >= 3;
 	}
 
-	public Stream<Weapon> columnStream()
-	{
+	public Stream<Weapon> columnStream() {
 		return weaponSets.stream();
 	}
 
-	public void damageEnergy(double damage)
-	{
+	public void damageEnergy(double damage) {
 		energyLevel.set(Math.max(0, energyLevel.get() - damage));
 	}
 
-	public void damageShield(double damage)
-	{
+	public void damageShield(double damage) {
 		double shieldLeft = shieldLevel.get();
-		if (shieldLeft >= damage)
-		{
+		if (shieldLeft >= damage) {
 			shieldLevel.set(shieldLeft - damage);
-		} else
-		{
+		} else {
 			shieldLevel.set(0);
 			energyLevel.set(Math.max(0, energyLevel.get() - (damage - shieldLeft)));
 		}
@@ -143,44 +127,36 @@ public abstract class Player
 
 	// starts a player's turn with drawing cards.
 	@SuppressWarnings("FinalMethod")
-	public final void drawCards()
-	{
+	public final void drawCards() {
 		Card[] cards = game.getCenterPlay().drawCards(2);
 		hand.addAll(Arrays.asList(cards));
 	}
 
-	public DoubleExpression energyLevelProperty()
-	{
+	public DoubleExpression energyLevelProperty() {
 		return energyLevel;
 	}
 
-	public CardDefaults getDefaults()
-	{
+	public CardDefaults getDefaults() {
 		return defs;
 	}
 
-	public double getEnergyLevel()
-	{
+	public double getEnergyLevel() {
 		return energyLevel.get();
 	}
 
-	public ObservableList<Card> getFullHand()
-	{
+	public ObservableList<Card> getFullHand() {
 		return FXCollections.unmodifiableObservableList(hand);
 	}
 
-	public Board getGame()
-	{
+	public Board getGame() {
 		return game;
 	}
 
-	public Card getHand(int index)
-	{
+	public Card getHand(int index) {
 		return hand.get(index);
 	}
 
-	public int getHandCount()
-	{
+	public int getHandCount() {
 		return hand.size();
 	}
 
@@ -189,28 +165,23 @@ public abstract class Player
 	 *
 	 * @return the number of weapon sets
 	 */
-	public int getMaxedWeapons()
-	{
+	public int getMaxedWeapons() {
 		return propertySets.get();
 	}
 
-	public int getMove()
-	{
+	public int getMove() {
 		return moves;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return playerAccount.getName();
 	}
 
-	public Account getPlayerAccount()
-	{
+	public Account getPlayerAccount() {
 		return playerAccount;
 	}
 
-	public ObservableList<CardAction> getPlayerHistory()
-	{
+	public ObservableList<CardAction> getPlayerHistory() {
 		return FXCollections.unmodifiableObservableList(playerHistory);
 	}
 
@@ -219,18 +190,15 @@ public abstract class Player
 	 *
 	 * @return a value of the shielding level.
 	 */
-	public double getShieldLevel()
-	{
+	public double getShieldLevel() {
 		return shieldLevel.get();
 	}
 
-	public Weapon getWeapon(int index)
-	{
+	public Weapon getWeapon(int index) {
 		return weaponSets.get(index);
 	}
 
-	public Weapon getWeapon(WeaponSpec spec)
-	{
+	public Weapon getWeapon(WeaponSpec spec) {
 		return weaponSets.parallelStream().filter(weapon -> weapon.getSpec() == spec).findAny().orElseGet(() -> {
 			Weapon newColumn = new Weapon(spec);
 			weaponSets.add(newColumn);
@@ -238,8 +206,7 @@ public abstract class Player
 		});
 	}
 
-	public ObservableList<Weapon> getWeaponSets()
-	{
+	public ObservableList<Weapon> getWeaponSets() {
 		return FXCollections.unmodifiableObservableList(weaponSets);
 	}
 
@@ -248,8 +215,7 @@ public abstract class Player
 	 *
 	 * @return the stream of cards.
 	 */
-	public Stream<Card> handStream()
-	{
+	public Stream<Card> handStream() {
 		return hand.stream();
 	}
 
@@ -258,8 +224,7 @@ public abstract class Player
 	 *
 	 * @return true if at least one set is incomplete, but has upgrades, false otherwise.
 	 */
-	public boolean hasFreeWeaponParts()
-	{
+	public boolean hasFreeWeaponParts() {
 		return weaponSets.parallelStream().anyMatch(Weapon::isIncomplete);
 	}
 
@@ -270,82 +235,67 @@ public abstract class Player
 	 *
 	 * @return true if at least one set is complete, false otherwise.
 	 */
-	public boolean hasMaxWeapon()
-	{
+	public boolean hasMaxWeapon() {
 		return getMaxedWeapons() > 0;
 	}
 
-	public void heal(double value)
-	{
+	public void heal(double value) {
 		double max = 200; // TO DO: get a max shielding.
 		double energyHealLeft = max - energyLevel.get();
-		if (energyHealLeft >= value)
-		{
+		if (energyHealLeft >= value) {
 			shieldLevel.set(energyLevel.get() + value);
-		} else
-		{
+		} else {
 			shieldLevel.set(max);
 			healShield(value - energyHealLeft);
 		}
 	}
 
-	public void healShield(double value)
-	{
+	public void healShield(double value) {
 		shieldLevel.set(Math.min(shieldLevel.get() + value, 200));
 	}
 
-	public final boolean isLastTurn()
-	{
+	public final boolean isLastTurn() {
 		return moves == 2;
 	}
 
-	public final boolean isTurnDone()
-	{
+	public final boolean isTurnDone() {
 		return moves >= 3;
 	}
 
 	// player makes one move.
 	@SuppressWarnings("FinalMethod")
-	public final boolean playAction(CardAction move)
-	{
+	public final boolean playAction(CardAction move) {
 		Card played = move.getPlayed();
 
-		if (isTurnDone())
-		{
+		if (isTurnDone()) {
 			return false;
 		}
 
 		hand.remove(played);
 
-		if (move.getActionType().getAction().apply(played, this))
-		{
+		if (move.getActionType().getAction().apply(played, this)) {
 			pushTurn(move);
 		}
 		return true;
 	}
 
-	public ReadOnlyIntegerProperty propertySetsProperty()
-	{
+	public ReadOnlyIntegerProperty propertySetsProperty() {
 		return propertySets;
 	}
 
-	public void pushTurn(CardAction move)
-	{
+	public void pushTurn(CardAction move) {
 		moves++;
 		playerHistory.add(move);
 	}
 
-	public void registerGame(Board game)
-	{
-		if (this.game != null && this.game.isStarted())
-		{
+	public void registerGame(Board game) {
+		if (this.game != null && this.game.isStarted()) {
 			throw new IllegalStateException("This player is already registered to a started game.");
 		}
 		this.game = game;
 	}
 
-	public void resetTurn()
-	{
+	public void resetTurn() {
 		moves = 0;
 	}
 
@@ -364,8 +314,7 @@ public abstract class Player
 	 *
 	 * @return the card the player selected.
 	 */
-	public CardAction selectHand()
-	{
+	public CardAction selectHand() {
 		return selectHand("Please select a card to play.");
 	}
 
@@ -376,8 +325,7 @@ public abstract class Player
 	 * @param prompt the selectRequest that the player will see.
 	 * @return the card the player selected.
 	 */
-	public CardAction selectHand(String prompt)
-	{
+	public CardAction selectHand(String prompt) {
 		return selectHand(prompt, card -> true);
 	}
 
@@ -389,8 +337,7 @@ public abstract class Player
 	 * @param filter filter for cards to play.
 	 * @return the card the player selected.
 	 */
-	public CardAction selectHand(String prompt, Predicate<Card> filter)
-	{
+	public CardAction selectHand(String prompt, Predicate<Card> filter) {
 		return selectHand(prompt, filter, cardAction -> true);
 	}
 
@@ -411,8 +358,7 @@ public abstract class Player
 	 *
 	 * @return the weapon part upgrade the player selected.
 	 */
-	public WeaponPartSpec selectPartUpgrade()
-	{
+	public WeaponPartSpec selectPartUpgrade() {
 		return selectPartUpgrade("Please select a weapon upgrade to use.");
 	}
 
@@ -423,8 +369,7 @@ public abstract class Player
 	 * @param prompt the selectRequest that the player will see.
 	 * @return the weapon part upgrade the player selected.
 	 */
-	public WeaponPartSpec selectPartUpgrade(String prompt)
-	{
+	public WeaponPartSpec selectPartUpgrade(String prompt) {
 		return selectPartUpgrade(prompt, card -> true);
 	}
 
@@ -436,8 +381,7 @@ public abstract class Player
 	 * @param filter filter for properties
 	 * @return the property the player selected.
 	 */
-	public WeaponPartSpec selectPartUpgrade(String prompt, Predicate<WeaponPartSpec> filter)
-	{
+	public WeaponPartSpec selectPartUpgrade(String prompt, Predicate<WeaponPartSpec> filter) {
 		return selectPartUpgrade(prompt, filter, this);
 	}
 
@@ -458,8 +402,7 @@ public abstract class Player
 	 *
 	 * @return another player that this player selected
 	 */
-	public Player selectPlayer()
-	{
+	public Player selectPlayer() {
 		return selectPlayer("Please select your target player.");
 	}
 
@@ -470,8 +413,7 @@ public abstract class Player
 	 * @param prompt the selectRequest that the player will see.
 	 * @return another player that this player selected
 	 */
-	public Player selectPlayer(String prompt)
-	{
+	public Player selectPlayer(String prompt) {
 		return selectPlayer(prompt, player -> true);
 	}
 
@@ -484,53 +426,6 @@ public abstract class Player
 	 * @return another player that this player selected
 	 */
 	public abstract Player selectPlayer(String prompt, Predicate<Player> filter);
-
-	/**
-	 * This prompts the player to select a property column to use (convenience method)
-	 * <p>
-	 *
-	 * @return the property column the player selected.
-	 */
-	public WeaponSet selectPropertyColumn()
-	{
-		return selectPropertyColumn("Please select a property column to use.");
-	}
-
-	/**
-	 * This prompts the player to select a property column to use (convenience method)
-	 * <p>
-	 *
-	 * @param prompt the selectRequest that the player will see.
-	 * @return the property column the player selected.
-	 */
-	public WeaponSet selectPropertyColumn(String prompt)
-	{
-		return selectPropertyColumn(prompt, card -> true);
-	}
-
-	/**
-	 * This prompts the player to select a property column to use (convenience method)
-	 * <p>
-	 *
-	 * @param prompt the selectRequest that the player will see.
-	 * @param filter filter for property columns
-	 * @return the property column the player selected.
-	 */
-	public WeaponSet selectPropertyColumn(String prompt, Predicate<WeaponSet> filter)
-	{
-		return selectPropertyColumn(prompt, filter, this);
-	}
-
-	/**
-	 * This prompts the player to select a property column to use from a particular player
-	 * <p>
-	 *
-	 * @param prompt the selectRequest that the player will see.
-	 * @param filter filter for property columns
-	 * @param context the property columns that the player will select from.
-	 * @return the property column the player selected.
-	 */
-	public abstract WeaponSet selectPropertyColumn(String prompt, Predicate<WeaponSet> filter, Player context);
 
 	/**
 	 * This prompts the player a yes or no question.
@@ -563,8 +458,51 @@ public abstract class Player
 	 */
 	public abstract void selectTurn();
 
-	public DoubleProperty shieldLevelProperty()
-	{
+	/**
+	 * This prompts the player to select a property column to use (convenience method)
+	 * <p>
+	 *
+	 * @return the property column the player selected.
+	 */
+	public Weapon selectWeapon() {
+		return selectWeapon("Please select a property column to use.");
+	}
+
+	/**
+	 * This prompts the player to select a property column to use (convenience method)
+	 * <p>
+	 *
+	 * @param prompt the selectRequest that the player will see.
+	 * @return the property column the player selected.
+	 */
+	public Weapon selectWeapon(String prompt) {
+		return selectWeapon(prompt, card -> true);
+	}
+
+	/**
+	 * This prompts the player to select a property column to use (convenience method)
+	 * <p>
+	 *
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for property columns
+	 * @return the property column the player selected.
+	 */
+	public Weapon selectWeapon(String prompt, Predicate<Weapon> filter) {
+		return selectWeapon(prompt, filter, this);
+	}
+
+	/**
+	 * This prompts the player to select a property column to use from a particular player
+	 * <p>
+	 *
+	 * @param prompt the selectRequest that the player will see.
+	 * @param filter filter for property columns
+	 * @param context the property columns that the player will select from.
+	 * @return the property column the player selected.
+	 */
+	public abstract Weapon selectWeapon(String prompt, Predicate<Weapon> filter, Player context);
+
+	public DoubleProperty shieldLevelProperty() {
 		return shieldLevel;
 	}
 }

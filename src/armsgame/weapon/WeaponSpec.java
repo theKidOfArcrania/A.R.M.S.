@@ -16,10 +16,8 @@ import static armsgame.card.util.CardDefaults.getCardDefaults;
  *
  * @author HW
  */
-public class WeaponSpec
-{
-	static
-	{
+public class WeaponSpec {
+	static {
 		String[] specsList = CardDefaults.getCardDefaults().getProperty("specs.$list").split("\\s*,\\s*");
 		specs = Arrays.stream(specsList).parallel().map(WeaponSpec::new).toArray(WeaponSpec[]::new);
 	}
@@ -29,12 +27,9 @@ public class WeaponSpec
 
 	private static final WeaponSpec[] specs;
 
-	public static WeaponSpec identifySpec(String codeType)
-	{
-		for (WeaponSpec spec : specs)
-		{
-			if (spec.getCodeName().equals(codeType))
-			{
+	public static WeaponSpec identifySpec(String codeType) {
+		for (WeaponSpec spec : specs) {
+			if (spec.getCodeName().equals(codeType)) {
 				return spec;
 			}
 		}
@@ -44,17 +39,14 @@ public class WeaponSpec
 	private final WeaponPartSpec[] parts;
 	private final String codeType;
 
-	private WeaponSpec(String codeType)
-	{
+	private WeaponSpec(String codeType) {
 		this.codeType = codeType;
 		String[] partSpecsList = getInternalProperty("parts").split("\\s*,\\s*");
 		String[] partsType = getInternalProperty("parts").split("\\s*,\\s*");
 		ArrayList<WeaponPartSpec> parts = new ArrayList<>(partsType.length);
-		for (String element : partsType)
-		{
+		for (String element : partsType) {
 			WeaponPartSpec part = WeaponPartSpec.getPartSpec(element);
-			if (part != null)
-			{
+			if (part != null) {
 				parts.add(part);
 			}
 		}
@@ -62,74 +54,60 @@ public class WeaponSpec
 		parts.toArray(this.parts);
 	}
 
-	public String getCodeName()
-	{
+	public String getCodeName() {
 		return codeType;
 	}
 
-	public String getEnergyFormName()
-	{
+	public String getEnergyFormName() {
 		return getInternalProperty("energyForm");
 	}
 
-	public String getInternalType()
-	{
-		return "specs." + codeType;
+	public String getInternalType() {
+		return "specs.set." + codeType;
 	}
 
-	public String getLongName()
-	{
+	public String getLongName() {
 		return getInternalProperty("longName");
 	}
 
-	public WeaponPartSpec[] getPartSpecs()
-	{
+	public WeaponPartSpec[] getPartSpecs() {
 		return parts.clone();
 	}
 
-	public int getRGBColor()
-	{
+	public int getRGBColor() {
 		return getInternalIntProperty("rgbColor");
 	}
 
-	public String getShortName()
-	{
+	public String getShortName() {
 		return getInternalProperty("shortName");
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getShortName() + " weapon-spec";
 	}
 
-	protected double getInternalDoubleProperty(String subKey)
-	{
+	protected double getInternalDoubleProperty(String subKey) {
 		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, 0.0);
 	}
 
-	protected double getInternalDoubleProperty(String subKey, double defValue)
-	{
+	protected double getInternalDoubleProperty(String subKey, double defValue) {
 		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, defValue);
 	}
 
-	protected int getInternalIntProperty(String subKey)
-	{
+	protected int getInternalIntProperty(String subKey) {
 		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, 0);
 	}
 
-	protected int getInternalIntProperty(String subKey, int defValue)
-	{
+	protected int getInternalIntProperty(String subKey, int defValue) {
 		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, defValue);
 	}
 
-	protected String getInternalProperty(String subKey)
-	{
+	protected String getInternalProperty(String subKey) {
 		return getCardDefaults().getProperty(getInternalType() + "." + subKey);
 	}
 
-	protected String getInternalProperty(String subKey, String defValue)
-	{
+	protected String getInternalProperty(String subKey, String defValue) {
 		return getCardDefaults().getProperty(getInternalType() + "." + subKey, defValue);
 	}
 }

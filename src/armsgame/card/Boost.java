@@ -46,7 +46,7 @@ public class Boost extends Action
 			}
 		} while (played.getPlayed() instanceof Boost);
 		Ammunition ammunition = (Ammunition) played.getPlayed();
-		Weapon weapon = self.selectPropertyColumn("Choose your weapon to attack with.", ammunition::isValidRent);
+		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", ammunition::isValidRent);
 
 		if (processDamage(self, ammunition.isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints() * multiplier))
 		{

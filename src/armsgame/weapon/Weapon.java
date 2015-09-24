@@ -14,8 +14,7 @@ import javafx.scene.paint.Color;
  * @author Henry
  *
  */
-public class Weapon implements Observable
-{
+public class Weapon implements Observable {
 	private final WeaponSpec spec;
 	private boolean vampiric = false;
 	private final WeaponPartSpec[] parts;
@@ -27,8 +26,7 @@ public class Weapon implements Observable
 	 *
 	 * @param spec the specifications of this weapon.
 	 */
-	public Weapon(WeaponSpec spec)
-	{
+	public Weapon(WeaponSpec spec) {
 		// Initialize the parts needed for this weapon.
 		this.spec = spec;
 		parts = spec.getPartSpecs();
@@ -37,8 +35,7 @@ public class Weapon implements Observable
 	}
 
 	@Override
-	public synchronized void addListener(InvalidationListener listener)
-	{
+	public synchronized void addListener(InvalidationListener listener) {
 		listeners.add(listener);
 	}
 
@@ -48,37 +45,43 @@ public class Weapon implements Observable
 	 * @param part the part to implement on this weapon.
 	 * @return whether if this is actually built or not.
 	 */
-	public boolean buildPart(WeaponPartSpec part)
-	{
+	public boolean buildPart(WeaponPartSpec part) {
 		int partIndex = Arrays.binarySearch(parts, part);
-		if (partIndex < 0 || partsBuilt[partIndex])
-		{ // Not found in parts list, or this is already built on.
+		if (partIndex < 0 || partsBuilt[partIndex]) { // Not found in parts list, or this is already built on.
 			return false;
-		} else
-		{
+		} else {
 			partsBuilt[partIndex] = true;
 			listeners.forEach(list -> list.invalidated(this));
 			return true;
 		}
 	}
 
-	public void damage(Player attacker, Player victim)
-	{
+	public void damage(Player attacker, Player victim) {
 		double guarantee = Math.min(Arrays.stream(parts).mapToDouble(WeaponPartSpec::getAccuracy).sum(), 100);
 		double efficiency = attacker.selectAccuracy(guarantee);
-		for (int i = 0; i < parts.length; i++)
-		{
-			if (partsBuilt[i])
-			{
+		for (int i = 0; i < parts.length; i++) {
+			if (partsBuilt[i]) {
 				parts[i].damage(attacker, victim, this.isVampiric(), efficiency);
 			}
 		}
 	}
 
-	public Color getColorClass()
-	{
+	public Color getColorClass() {
 		int colorRGB = spec.getRGBColor();
 		return Color.rgb((colorRGB >> 16) & 0xFF, (colorRGB >> 8) & 0xFF, colorRGB & 0xFF);
+	}
+
+	public DamageReport getDamageReport() {
+		DamageReport baseDmg = new DamageReport(getInternalType() + ".damage");
+		DamageReport[] partDmg = new DamageReport[parts.length];
+		int dmgIndex = 0;
+
+		for (int i = 0; i < parts.length; i++) {
+			if (partsBuilt[i]) {
+				part[dmgIndex] = new DamageReport[parts[i].getInternalType() + ".damage"];
+				dmgIndex++;
+			} else if (parts[i].)
+		}
 	}
 
 	/**
@@ -86,14 +89,16 @@ public class Weapon implements Observable
 	 *
 	 * @return the internal type.
 	 */
-	public String getInternalType()
-	{
+	public String getInternalType() {
 		return spec.getInternalType();
 	}
 
-	public WeaponSpec getSpec()
-	{
+	public WeaponSpec getSpec() {
 		return spec;
+	}
+
+	public boolean isActive() {
+
 	}
 
 	/**
@@ -102,8 +107,7 @@ public class Weapon implements Observable
 	 * @param part the weapon part to test with
 	 * @return true if it can be built on here, false otherwise.
 	 */
-	public boolean isBuildable(WeaponPartSpec part)
-	{
+	public boolean isBuildable(WeaponPartSpec part) {
 		int partIndex = Arrays.binarySearch(parts, part);
 		return partIndex >= 0 && !partsBuilt[partIndex];
 	}
@@ -113,12 +117,9 @@ public class Weapon implements Observable
 	 *
 	 * @return true if it is completed, false otherwise.
 	 */
-	public boolean isComplete()
-	{
-		for (boolean partBuilt : partsBuilt)
-		{
-			if (!partBuilt)
-			{
+	public boolean isComplete() {
+		for (boolean partBuilt : partsBuilt) {
+			if (!partBuilt) {
 				return false;
 			}
 		}
@@ -130,45 +131,36 @@ public class Weapon implements Observable
 	 *
 	 * @return true if column has loose properties, false otherwise.
 	 */
-	public boolean isIncomplete()
-	{
-		for (boolean partBuilt : partsBuilt)
-		{
-			if (!partBuilt)
-			{
+	public boolean isIncomplete() {
+		for (boolean partBuilt : partsBuilt) {
+			if (!partBuilt) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean isVampiric()
-	{
+	public boolean isVampiric() {
 		return vampiric;
 	}
 
 	@Override
-	public synchronized void removeListener(InvalidationListener listener)
-	{
+	public synchronized void removeListener(InvalidationListener listener) {
 		listeners.remove(listener);
 	}
 
-	public boolean unbuildPart(WeaponPartSpec part)
-	{
+	public boolean unbuildPart(WeaponPartSpec part) {
 		int partIndex = Arrays.binarySearch(parts, part);
-		if (partIndex < 0 || !partsBuilt[partIndex])
-		{ // Not found in parts list, or this is not already built on.
+		if (partIndex < 0 || !partsBuilt[partIndex]) { // Not found in parts list, or this is not already built on.
 			return false;
-		} else
-		{
+		} else {
 			partsBuilt[partIndex] = false;
 			listeners.forEach(list -> list.invalidated(this));
 			return true;
 		}
 	}
 
-	void setVampiric(boolean vampiric)
-	{
+	void setVampiric(boolean vampiric) {
 		this.vampiric = vampiric;
 	}
 }

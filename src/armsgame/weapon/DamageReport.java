@@ -8,18 +8,15 @@ import armsgame.impl.Player;
 
 import static armsgame.card.util.CardDefaults.getCardDefaults;
 
-public class DamageReport
-{
+public class DamageReport {
 
-	private static void damage0(Player attacker, Player victim, double damage, boolean vampiric)
-	{
+	private static void damage0(Player attacker, Player victim, double damage, boolean vampiric) {
 		// TO DO: change health to double
 		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
 		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
 		victim.damageShield(fixedDamage);
 
-		if (vampiric)
-		{
+		if (vampiric) {
 			attacker.heal(fixedDamage);
 		}
 	}
@@ -28,32 +25,35 @@ public class DamageReport
 	private DamageReport[] combo = new DamageReport[0];
 
 	/**
+	 * Constructs a NO-damage DamageReport object.
+	 */
+	public DamageReport() {
+		this.internalType = null;
+	}
+
+	/**
 	 * Constructs a new DamageReport object from a combo of damage reports.
 	 *
 	 * @param combo a list of damage reports
 	 */
-	public DamageReport(DamageReport... combo)
-	{
-		ArrayList<DamageReport> comboList = new ArrayList<>(combo.length * 2);
+	public DamageReport(DamageReport first, DamageReport... combo) {
+		ArrayList<DamageReport> comboList = new ArrayList<>(combo.length * 2 + 1);
 		LinkedList<DamageReport> reportFlatten = new LinkedList<>();
 
 		// Flatten combo list.
 		// TO DO: do this only if tree is thick enough.
 		this.combo = combo;
-		while (reportFlatten.size() > 0)
-		{
+		while (reportFlatten.size() > 0) {
 			DamageReport dmg = reportFlatten.pop();
-			if (dmg.internalType == null)
-			{
-				for (DamageReport child : dmg.combo)
-				{
+			if (dmg.internalType == null) {
+				for (DamageReport child : dmg.combo) {
 					reportFlatten.push(child);
 				}
-			} else
-			{
+			} else {
 				comboList.add(dmg);
 			}
 		}
+		comboList.add(first);
 
 		this.combo = comboList.toArray(new DamageReport[comboList.size()]);
 		this.internalType = null;
@@ -64,16 +64,13 @@ public class DamageReport
 	 *
 	 * @param internalType property name internal type that this damage report points to.
 	 */
-	public DamageReport(String internalType)
-	{
+	public DamageReport(String internalType) {
 		Objects.requireNonNull(internalType);
 		this.internalType = internalType;
 	}
 
-	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency)
-	{
-		if (efficiency <= 0)
-		{
+	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency) {
+		if (efficiency <= 0) {
 			return;
 		}
 
@@ -81,13 +78,11 @@ public class DamageReport
 		double multiDamage = getMultiTargetDamage() * efficiency;
 		boolean effectiveVampiric = vampiric && isVampiric();
 
-		if (singleDamage > 0)
-		{
+		if (singleDamage > 0) {
 			damage0(attacker, victim, singleDamage, effectiveVampiric);
 		}
 
-		if (multiDamage > 0)
-		{
+		if (multiDamage > 0) {
 			attacker.getGame().playerStream().forEach(player -> damage0(attacker, player, multiDamage, effectiveVampiric));
 		}
 	}
@@ -97,19 +92,15 @@ public class DamageReport
 	 *
 	 * @return a value from 0 to 1
 	 */
-	public double getAccuracy()
-	{
+	public double getAccuracy() {
 
-		if (internalType == null)
-		{
+		if (internalType == null) {
 			double accuracy = 0.0;
-			for (DamageReport report : combo)
-			{
+			for (DamageReport report : combo) {
 				accuracy += report.getAccuracy();
 			}
 			return accuracy;
-		} else
-		{
+		} else {
 			return getInternalDoubleProperty("accuracy");
 		}
 
@@ -120,8 +111,7 @@ public class DamageReport
 	 *
 	 * @return the internal type.
 	 */
-	public String getInternalType()
-	{
+	public String getInternalType() {
 		return internalType;
 	}
 
@@ -130,18 +120,14 @@ public class DamageReport
 	 *
 	 * @return a positive damage amount.
 	 */
-	public double getMultiTargetDamage()
-	{
-		if (internalType == null)
-		{
+	public double getMultiTargetDamage() {
+		if (internalType == null) {
 			double dmg = 0.0;
-			for (DamageReport report : combo)
-			{
+			for (DamageReport report : combo) {
 				dmg += report.getMultiTargetDamage();
 			}
 			return dmg;
-		} else
-		{
+		} else {
 			return getInternalDoubleProperty("damage.multi");
 		}
 	}
@@ -151,18 +137,14 @@ public class DamageReport
 	 *
 	 * @return a positive damage amount.
 	 */
-	public double getSingleTargetDamage()
-	{
-		if (internalType == null)
-		{
+	public double getSingleTargetDamage() {
+		if (internalType == null) {
 			double dmg = 0.0;
-			for (DamageReport report : combo)
-			{
+			for (DamageReport report : combo) {
 				dmg += report.getSingleTargetDamage();
 			}
 			return dmg;
-		} else
-		{
+		} else {
 			return getInternalDoubleProperty("damage.single");
 		}
 	}
@@ -172,51 +154,40 @@ public class DamageReport
 	 *
 	 * @return true if it is vampiric, false otherwise.
 	 */
-	public boolean isVampiric()
-	{
-		if (internalType == null)
-		{
-			for (DamageReport report : combo)
-			{
-				if (report.isVampiric())
-				{
+	public boolean isVampiric() {
+		if (internalType == null) {
+			for (DamageReport report : combo) {
+				if (report.isVampiric()) {
 					return true;
 				}
 			}
 			return false;
-		} else
-		{
+		} else {
 			return getInternalIntProperty("vampiric", 0) != 0;
 		}
 	}
 
-	protected double getInternalDoubleProperty(String subKey)
-	{
+	protected double getInternalDoubleProperty(String subKey) {
 		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, 0.0);
 	}
 
-	protected double getInternalDoubleProperty(String subKey, double defValue)
-	{
+	protected double getInternalDoubleProperty(String subKey, double defValue) {
 		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, defValue);
 	}
 
-	protected int getInternalIntProperty(String subKey)
-	{
+	protected int getInternalIntProperty(String subKey) {
 		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, 0);
 	}
 
-	protected int getInternalIntProperty(String subKey, int defValue)
-	{
+	protected int getInternalIntProperty(String subKey, int defValue) {
 		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, defValue);
 	}
 
-	protected String getInternalProperty(String subKey)
-	{
+	protected String getInternalProperty(String subKey) {
 		return getCardDefaults().getProperty(getInternalType() + "." + subKey);
 	}
 
-	protected String getInternalProperty(String subKey, String defValue)
-	{
+	protected String getInternalProperty(String subKey, String defValue) {
 		return getCardDefaults().getProperty(getInternalType() + "." + subKey, defValue);
 	}
 }

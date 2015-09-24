@@ -25,7 +25,7 @@ public class EnergyCrystal extends Action
 	public boolean actionPlayed(Player self)
 	{
 		// TO DO: implementing Hasbro rules??
-		Weapon column = self.selectPropertyColumn("Please select a full-set property column to build on.", Weapon::isComplete);
+		Weapon column = self.selectWeapon("Please select a full-set property column to build on.", Weapon::isComplete);
 		if (column == null)
 		{
 			return false;

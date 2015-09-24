@@ -1,5 +1,8 @@
 package armsgame.weapon;
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 import armsgame.impl.Player;
 
 import static armsgame.card.util.CardDefaults.getCardDefaults;
@@ -10,23 +13,33 @@ import static armsgame.card.util.CardDefaults.getCardDefaults;
  * @author Henry
  *
  */
-public class WeaponPartSpec
-{
+public class WeaponPartSpec {
+	private static String[] SUPPORTED_CODES = getCardDefaults().getProperty("specs.parts").split("\\s*,\\s*");
 
-	public static WeaponPartSpec getPartSpec(String codeType)
-	{
-
+	static {
+		Arrays.sort(SUPPORTED_CODES);
 	}
 
-	private static void damage0(Player attacker, Player victim, double damage, boolean vampiric)
-	{
+	private static HashMap<String, WeaponPartSpec> partSpecs = new HashMap<>();
+
+	public static WeaponPartSpec getPartSpec(String codeType) {
+		if (!partSpecs.containsKey(codeType)) {
+			if (Arrays.binarySearch(SUPPORTED_CODES, codeType) >= 0) {
+				partSpecs.put(codeType, new WeaponPartSpec(codeType));
+			} else {
+				partSpecs.put(codeType, null);
+			}
+		}
+		return partSpecs.get(codeType);
+	}
+
+	private static void damage0(Player attacker, Player victim, double damage, boolean vampiric) {
 		// TO DO: change health to double
 		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
 		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
 		victim.damageShield(fixedDamage);
 
-		if (vampiric)
-		{
+		if (vampiric) {
 			attacker.heal(fixedDamage);
 		}
 	}
@@ -38,15 +51,12 @@ public class WeaponPartSpec
 	 *
 	 * @param codeType the internal coded type of this weapon part.
 	 */
-	private WeaponPartSpec(String codeType)
-	{
+	private WeaponPartSpec(String codeType) {
 		this.codeType = codeType;
 	}
 
-	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency)
-	{
-		if (efficiency <= 0)
-		{
+	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency) {
+		if (efficiency <= 0) {
 			return;
 		}
 
@@ -54,13 +64,11 @@ public class WeaponPartSpec
 		double multiDamage = getMultiTargetDamage() * efficiency;
 		boolean effectiveVampiric = vampiric && isVampiric();
 
-		if (singleDamage > 0)
-		{
+		if (singleDamage > 0) {
 			damage0(attacker, victim, singleDamage, effectiveVampiric);
 		}
 
-		if (multiDamage > 0)
-		{
+		if (multiDamage > 0) {
 			attacker.getGame().playerStream().forEach(player -> damage0(attacker, player, multiDamage, effectiveVampiric));
 		}
 	}
@@ -70,8 +78,7 @@ public class WeaponPartSpec
 	 *
 	 * @return a value from 0 to 1
 	 */
-	public double getAccuracy()
-	{
+	public double getAccuracy() {
 		return getInternalDoubleProperty("accuracy");
 	}
 
@@ -80,9 +87,12 @@ public class WeaponPartSpec
 	 *
 	 * @return the internal type.
 	 */
-	public String getCodeName()
-	{
+	public String getCodeName() {
 		return codeType;
+	}
+
+	public String getInternalType() {
+		return "specs.part." + getCodeName();
 	}
 
 	/**
@@ -90,8 +100,7 @@ public class WeaponPartSpec
 	 *
 	 * @return a positive damage amount.
 	 */
-	public double getMultiTargetDamage()
-	{
+	public double getMultiTargetDamage() {
 		return getInternalDoubleProperty("damage.multi");
 	}
 
@@ -100,9 +109,17 @@ public class WeaponPartSpec
 	 *
 	 * @return a positive damage amount.
 	 */
-	public double getSingleTargetDamage()
-	{
+	public double getSingleTargetDamage() {
 		return getInternalDoubleProperty("damage.single");
+	}
+
+	/**
+	 * Describes whether if this part upgrade is needed to deal any damage.
+	 * 
+	 * @return true if this is neccessary, false otherwise.
+	 */
+	public boolean isNecessaryUpgrade() {
+		return getInternalIntProperty("necessaryUgrade") != 0;
 	}
 
 	/**
@@ -110,38 +127,31 @@ public class WeaponPartSpec
 	 *
 	 * @return true if it is vampiric, false otherwise.
 	 */
-	public boolean isVampiric()
-	{
+	public boolean isVampiric() {
 		return getInternalIntProperty("vampiric", 0) != 0;
 	}
 
-	protected double getInternalDoubleProperty(String subKey)
-	{
-		return getCardDefaults().getDoubleProperty(getCodeName() + "." + subKey, 0.0);
+	protected double getInternalDoubleProperty(String subKey) {
+		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, 0.0);
 	}
 
-	protected double getInternalDoubleProperty(String subKey, double defValue)
-	{
-		return getCardDefaults().getDoubleProperty(getCodeName() + "." + subKey, defValue);
+	protected double getInternalDoubleProperty(String subKey, double defValue) {
+		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, defValue);
 	}
 
-	protected int getInternalIntProperty(String subKey)
-	{
-		return getCardDefaults().getIntProperty(getCodeName() + "." + subKey, 0);
+	protected int getInternalIntProperty(String subKey) {
+		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, 0);
 	}
 
-	protected int getInternalIntProperty(String subKey, int defValue)
-	{
-		return getCardDefaults().getIntProperty(getCodeName() + "." + subKey, defValue);
+	protected int getInternalIntProperty(String subKey, int defValue) {
+		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, defValue);
 	}
 
-	protected String getInternalProperty(String subKey)
-	{
-		return getCardDefaults().getProperty(getCodeName() + "." + subKey);
+	protected String getInternalProperty(String subKey) {
+		return getCardDefaults().getProperty(getInternalType() + "." + subKey);
 	}
 
-	protected String getInternalProperty(String subKey, String defValue)
-	{
-		return getCardDefaults().getProperty(getCodeName() + "." + subKey, defValue);
+	protected String getInternalProperty(String subKey, String defValue) {
+		return getCardDefaults().getProperty(getInternalType() + "." + subKey, defValue);
 	}
 }
