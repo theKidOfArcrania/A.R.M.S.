@@ -17,30 +17,25 @@ import armsgame.weapon.Weapon;
  *
  * @author Henry
  */
-public class Boost extends Action
-{
+public class Boost extends Action {
 	private static final long serialVersionUID = -5163764459341688966L;
 
 	@Override
-	public boolean actionPlayed(Player self)
-	{
+	public boolean actionPlayed(Player self) {
 		ArrayList<Boost> extraDoubles = new ArrayList<>(10);
 		CardAction played;
 		CenterPlay centerPlay = self.getGame().getCenterPlay();
 		int multiplier = 2;
 
-		do
-		{
+		do {
 			played = self.selectHand("Select an ammunition card to attack with.", card -> ((!self.isLastTurn() && card instanceof Boost)
 					|| (card instanceof Ammunition
 							&& card.isEnabled(self, Likeness.Action))), cardAction -> cardAction.getInternalType().equals("move.action"));
 
-			if (played == null)
-			{
+			if (played == null) {
 				return false;
 			}
-			if (played.getPlayed() instanceof Boost)
-			{
+			if (played.getPlayed() instanceof Boost) {
 				extraDoubles.add((Boost) played.getPlayed());
 				multiplier *= 2;
 			}
@@ -48,33 +43,27 @@ public class Boost extends Action
 		Ammunition ammunition = (Ammunition) played.getPlayed();
 		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", ammunition::isValidRent);
 
-		if (processDamage(self, ammunition.isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints() * multiplier))
-		{
+		if (processDamage(self, ammunition.isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints() * multiplier)) {
 			extraDoubles.forEach((doubling) -> {
 				self.pushTurn(new CardAction(doubling, getSupportedTypes().getActionType(Likeness.Action)));
 				centerPlay.discard(doubling);
 			});
 			centerPlay.discard(ammunition);
 			return true;
-		} else
-		{
+		} else {
 			return false;
 		}
 	}
 
 	@Override
-	public String getInternalType()
-	{
+	public String getInternalType() {
 		return "action.double";
 	}
 
 	@Override
-	public boolean isEnabled(Player self, Likeness action)
-	{
-		if (action == Likeness.Action)
-		{
-			if (self.isLastTurn())
-			{
+	public boolean isEnabled(Player self, Likeness action) {
+		if (action == Likeness.Action) {
+			if (self.isLastTurn()) {
 				return false;
 			}
 

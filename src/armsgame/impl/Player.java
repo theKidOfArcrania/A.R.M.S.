@@ -10,6 +10,7 @@ import armsgame.card.Response;
 import armsgame.card.util.CardAction;
 import armsgame.card.util.CardActionType;
 import armsgame.card.util.CardDefaults;
+import armsgame.weapon.DamageReport;
 import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponPartSpec;
 import armsgame.weapon.WeaponSpec;
@@ -105,10 +106,6 @@ public abstract class Player {
 	public boolean checkWin() {
 		int fullSets = weaponSets.stream().parallel().reduce(0, (count, column) -> count + (column.isComplete() ? 1 : 0), (count1, count2) -> count1 + count2);
 		return fullSets >= 3;
-	}
-
-	public Stream<Weapon> columnStream() {
-		return weaponSets.stream();
 	}
 
 	public void damageEnergy(double damage) {
@@ -437,6 +434,14 @@ public abstract class Player {
 	public abstract boolean selectRequest(String prompt);
 
 	/**
+	 * This prompts the player of a payment that must be made.
+	 * <p>
+	 *
+	 * @param amount the debt amount.
+	 */
+	public abstract void selectResponse(DamageReport amount);
+
+	/**
 	 * This prompts the player whether to agree
 	 * <p>
 	 *
@@ -501,6 +506,10 @@ public abstract class Player {
 	 * @return the property column the player selected.
 	 */
 	public abstract Weapon selectWeapon(String prompt, Predicate<Weapon> filter, Player context);
+
+	public Stream<Weapon> setStream() {
+		return weaponSets.stream();
+	}
 
 	public DoubleProperty shieldLevelProperty() {
 		return shieldLevel;
