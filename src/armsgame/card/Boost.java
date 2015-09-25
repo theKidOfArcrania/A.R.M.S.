@@ -43,7 +43,7 @@ public class Boost extends Action {
 		Ammunition ammunition = (Ammunition) played.getPlayed();
 		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", ammunition::isValidRent);
 
-		if (processDamage(self, ammunition.isGlobal(), weapon.isEnergetic(), weapon.getAttackPoints() * multiplier)) {
+		if (processDamage(self, ammunition.isMultiTarget(), weapon.isEnergetic(), weapon.getAttackPoints() * multiplier)) {
 			extraDoubles.forEach((doubling) -> {
 				self.pushTurn(new CardAction(doubling, getSupportedTypes().getActionType(Likeness.Action)));
 				centerPlay.discard(doubling);

@@ -23,6 +23,7 @@ public class DamageReport {
 
 	private final String internalType;
 	private DamageReport[] combo = new DamageReport[0];
+	private boolean multiDmgOverride;
 
 	/**
 	 * Constructs a NO-damage DamageReport object.
@@ -126,7 +127,12 @@ public class DamageReport {
 			for (DamageReport report : combo) {
 				dmg += report.getMultiTargetDamage();
 			}
-			return dmg;
+
+			if (multiDmgOverride) {
+				return singleTargetDamage0() + dmg;
+			} else {
+				return dmg;
+			}
 		} else {
 			return getInternalDoubleProperty("damage.multi");
 		}
@@ -138,15 +144,15 @@ public class DamageReport {
 	 * @return a positive damage amount.
 	 */
 	public double getSingleTargetDamage() {
-		if (internalType == null) {
-			double dmg = 0.0;
-			for (DamageReport report : combo) {
-				dmg += report.getSingleTargetDamage();
-			}
-			return dmg;
+		if (multiDmgOverride) {
+			return 0;
 		} else {
-			return getInternalDoubleProperty("damage.single");
+			return singleTargetDamage0();
 		}
+	}
+
+	public boolean isMultiDamageOverride() {
+		return multiDmgOverride;
 	}
 
 	/**
@@ -164,6 +170,22 @@ public class DamageReport {
 			return false;
 		} else {
 			return getInternalIntProperty("vampiric", 0) != 0;
+		}
+	}
+
+	public void setMultiDamageOverride(boolean override) {
+		this.multiDmgOverride = override;
+	}
+
+	private double singleTargetDamage0() {
+		if (internalType == null) {
+			double dmg = 0.0;
+			for (DamageReport report : combo) {
+				dmg += report.getSingleTargetDamage();
+			}
+			return dmg;
+		} else {
+			return getInternalDoubleProperty("damage.single");
 		}
 	}
 

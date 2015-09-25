@@ -3,6 +3,7 @@ package armsgame.weapon;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import armsgame.card.EnergyCrystal;
 import armsgame.impl.Player;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -16,7 +17,7 @@ import javafx.scene.paint.Color;
  */
 public class Weapon implements Observable {
 	private final WeaponSpec spec;
-	private boolean vampiric = false;
+	private EnergyCrystal crystal = null;
 	private final WeaponPartSpec[] parts;
 	private final boolean[] partsBuilt;
 	private final ArrayList<InvalidationListener> listeners = new ArrayList<>();
@@ -40,6 +41,21 @@ public class Weapon implements Observable {
 	}
 
 	/**
+	 * Builds an energy crystal on this weapon
+	 *
+	 * @param crystal the energy crystal to build.
+	 * @return true if it was actually built, false otherwise.
+	 */
+	public boolean buildCrystal(EnergyCrystal crystal) {
+		if (this.crystal == null) {
+			this.crystal = crystal;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * This builds the the current part onto the weapon.
 	 *
 	 * @param part the part to implement on this weapon.
@@ -57,13 +73,9 @@ public class Weapon implements Observable {
 	}
 
 	public void damage(Player attacker, Player victim) {
-		double guarantee = Math.min(Arrays.stream(parts).mapToDouble(WeaponPartSpec::getAccuracy).sum(), 100);
-		double efficiency = attacker.selectAccuracy(guarantee);
-		for (int i = 0; i < parts.length; i++) {
-			if (partsBuilt[i]) {
-				parts[i].damage(attacker, victim, this.isVampiric(), efficiency);
-			}
-		}
+		DamageReport dmg = getDamageReport();
+		double efficiency = attacker.selectAccuracy(dmg.getAccuracy());
+		// TO DO: Damage
 	}
 
 	public Color getColorClass() {
@@ -78,10 +90,13 @@ public class Weapon implements Observable {
 
 		for (int i = 0; i < parts.length; i++) {
 			if (partsBuilt[i]) {
-				part[dmgIndex] = new DamageReport[parts[i].getInternalType() + ".damage"];
+				partDmg[dmgIndex] = new DamageReport(parts[i].getInternalType() + ".damage");
 				dmgIndex++;
-			} else if (parts[i].)
+			} else if (parts[i].isNecessaryUpgrade()) { // A necessary upgrade has not been built
+				return new DamageReport();
+			}
 		}
+		return new DamageReport(baseDmg, partDmg);
 	}
 
 	/**
@@ -93,12 +108,25 @@ public class Weapon implements Observable {
 		return spec.getInternalType();
 	}
 
+	public String getName() {
+		if (isEnergetic()) {
+			return spec.getEnergyFormName();
+		}
+		return spec.getLongName();
+	}
+
 	public WeaponSpec getSpec() {
 		return spec;
 	}
 
+	/**
+	 * Determines whether if this weapon does any effective damage.
+	 *
+	 * @return true if this has effective damage, false otherwise.
+	 */
 	public boolean isActive() {
-
+		DamageReport dmg = getDamageReport();
+		return dmg.getMultiTargetDamage() > 0 || dmg.getSingleTargetDamage() > 0;
 	}
 
 	/**
@@ -127,6 +155,15 @@ public class Weapon implements Observable {
 	}
 
 	/**
+	 * Determines whether if this weapon is energetic.
+	 *
+	 * @return true if it is energetic, false otherwise.
+	 */
+	public boolean isEnergetic() {
+		return !(crystal == null);
+	}
+
+	/**
 	 * Describes whether if this weapon hasn't max upgrades.
 	 *
 	 * @return true if column has loose properties, false otherwise.
@@ -140,13 +177,20 @@ public class Weapon implements Observable {
 		return false;
 	}
 
-	public boolean isVampiric() {
-		return vampiric;
-	}
-
 	@Override
 	public synchronized void removeListener(InvalidationListener listener) {
 		listeners.remove(listener);
+	}
+
+	/**
+	 * Unbuilds the energy crystal attached to this weapon.
+	 *
+	 * @return the unbuilt energy crystal.
+	 */
+	public EnergyCrystal unbuildCrystal() {
+		EnergyCrystal crystal = this.crystal;
+		this.crystal = null;
+		return crystal;
 	}
 
 	public boolean unbuildPart(WeaponPartSpec part) {
@@ -158,9 +202,5 @@ public class Weapon implements Observable {
 			listeners.forEach(list -> list.invalidated(this));
 			return true;
 		}
-	}
-
-	void setVampiric(boolean vampiric) {
-		this.vampiric = vampiric;
 	}
 }

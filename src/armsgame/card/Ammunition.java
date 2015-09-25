@@ -6,9 +6,13 @@
 package armsgame.card;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
+import armsgame.weapon.DamageReport;
 import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponSpec;
 
@@ -47,34 +51,49 @@ public class Ammunition extends Action {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", Weapon::isActive);
-		return processDamage(self, isGlobal(), weapon.isVampiric(), weapon.getAttackPoints());
+		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", this::isUsableWith);
+		Player victim = null;
+		DamageReport dmg = weapon.getDamageReport();
+		dmg.setMultiDamageOverride(isMultiTarget());
+
+		if (dmg.getSingleTargetDamage() != 0) {
+			victim = dmg.get
+		}
+
+		return dmg.damage(self, victim, vampiric, efficiency);
 	}
 
 	@Override
 	public String getCardName() {
-		return specTargets.getColorName() + " Ammunition";
+		String defName = Arrays.stream(specTargets).map(WeaponSpec::getShortName).collect(Collectors.joining("-"));
+		return getInternalProperty("name", defName) + " Ammunition";
 	}
 
 	@Override
 	public String getInternalType() {
-		return "action.ammunition." + specTargets.getInternalType();
+		return "action.ammunition." + codeType;
 	}
 
 	@Override
 	public boolean isEnabled(Player self, Likeness action) {
 		if (action == Likeness.Action) {
-			return self.columnStream().parallel().anyMatch(this::isValidRent);
+			return self.setStream().parallel().anyMatch(this::isUsableWith);
 		}
 		return true;
 	}
 
-	public boolean isGlobal() {
-		return this.getInternalIntProperty("global", 0) != 0;
+	public boolean isMultiTarget() {
+		return this.getInternalIntProperty("multiTarget", 0) != 0;
 	}
 
-	public boolean isValidRent(Weapon column) {
-		return specTargets.compatibleWith(column.getPropertyColor()) && column.getAttackPoints() > 0;
+	public boolean isUsableWith(Weapon test) {
+		WeaponSpec specTest = test.getSpec();
+		for (WeaponSpec specTarget : specTargets) {
+			if (specTarget == specTest) {
+				return test.isActive();
+			}
+		}
+		return false;
 	}
 
 }
