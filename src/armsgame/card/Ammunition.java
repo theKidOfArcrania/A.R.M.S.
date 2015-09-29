@@ -7,7 +7,6 @@ package armsgame.card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import armsgame.card.util.CardActionType.Likeness;
@@ -57,10 +56,15 @@ public class Ammunition extends Action {
 		dmg.setMultiDamageOverride(isMultiTarget());
 
 		if (dmg.getSingleTargetDamage() != 0) {
-			victim = dmg.get
+			victim = self.selectPlayer("Select player to attack");
+			if (victim == null) {
+				return false;
+			}
 		}
 
-		return dmg.damage(self, victim, vampiric, efficiency);
+		double efficiency = self.selectAccuracy(dmg.getAccuracy());
+		dmg.damage(self, victim, weapon.isEnergetic(), efficiency);
+		return true;
 	}
 
 	@Override

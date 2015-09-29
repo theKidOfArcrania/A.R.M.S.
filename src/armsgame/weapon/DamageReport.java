@@ -10,18 +10,8 @@ import static armsgame.card.util.CardDefaults.getCardDefaults;
 
 public class DamageReport {
 
-	private static void damage0(Player attacker, Player victim, double damage, boolean vampiric) {
-		// TO DO: change health to double
-		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
-		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
-		victim.damageShield(fixedDamage);
-
-		if (vampiric) {
-			attacker.heal(fixedDamage);
-		}
-	}
-
 	private final String internalType;
+
 	private DamageReport[] combo = new DamageReport[0];
 	private boolean multiDmgOverride;
 
@@ -70,14 +60,14 @@ public class DamageReport {
 		this.internalType = internalType;
 	}
 
-	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency) {
+	public void damage(Player attacker, Player victim, boolean energetic, double efficiency) {
 		if (efficiency <= 0) {
 			return;
 		}
 
 		double singleDamage = getSingleTargetDamage() * efficiency;
 		double multiDamage = getMultiTargetDamage() * efficiency;
-		boolean effectiveVampiric = vampiric && isVampiric();
+		boolean effectiveVampiric = energetic || isVampiric();
 
 		if (singleDamage > 0) {
 			damage0(attacker, victim, singleDamage, effectiveVampiric);
@@ -175,6 +165,20 @@ public class DamageReport {
 
 	public void setMultiDamageOverride(boolean override) {
 		this.multiDmgOverride = override;
+	}
+
+	private void damage0(Player attacker, Player victim, double damage, boolean vampiric) {
+		// TO DO: change health to double
+		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
+		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
+
+		victim.selectResponse(this);
+
+		victim.damageShield(fixedDamage);
+
+		if (vampiric) {
+			attacker.heal(fixedDamage);
+		}
 	}
 
 	private double singleTargetDamage0() {

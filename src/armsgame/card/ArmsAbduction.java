@@ -28,14 +28,14 @@ public class ArmsAbduction extends Action {
 			return false;
 		}
 
-		Weapon takeSet = self.selectWeapon("Please select a property set to take.", Weapon::isFullSet, target);
+		Weapon takeSet = self.selectWeapon("Please select a property set to take.", Weapon::isComplete, target);
 
 		if (takeSet == null) {
 			return false;
 		}
 
 		WeaponTransfer dealBreaker = new WeaponTransfer(self, target);
-		dealBreaker.requestPropertySet(takeSet.getPropertyColor());
+		dealBreaker.requestPropertySet(takeSet.getSpec());
 		dealBreaker.finishRequest();
 		return true;
 	}
