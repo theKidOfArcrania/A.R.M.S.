@@ -5,13 +5,12 @@
  */
 package armsgame.impl;
 
-import java.util.ArrayList;
-import java.util.stream.Stream;
-
 import armsgame.card.util.CardAction;
 import armsgame.card.util.CardDefaults;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 //TO DO: RMI settings.
 
@@ -24,8 +23,9 @@ import javafx.beans.property.SimpleObjectProperty;
 public class Board {
 
 	private final CenterPlay centerPlay;
-	private final SimpleObjectProperty<Player> current = new SimpleObjectProperty<Player>(null);
-	private final ArrayList<Player> players = new ArrayList<>(10);
+	private final SimpleObjectProperty<Player> current = new SimpleObjectProperty<>(null);
+	private final ObservableList<Player> players = FXCollections.observableArrayList();
+	private final ObservableList<Player> playersRead = FXCollections.unmodifiableObservableList(players);
 	private volatile String progress;
 	// private final HashMap<Card, Player> references = new HashMap<>(10);
 	private boolean started = false;
@@ -54,9 +54,7 @@ public class Board {
 	}
 
 	public Player[] checkWin() {
-		return players.parallelStream()
-				.filter(Player::checkWin)
-				.toArray(Player[]::new);
+		return players.parallelStream().filter(Player::checkWin).toArray(Player[]::new);
 	}
 
 	public ObjectProperty<Player> currentProperty() {
@@ -71,12 +69,13 @@ public class Board {
 		return current.get();
 	}
 
-	public Player getPlayer(int index) {
-		return players.get(index);
-	}
-
-	public int getPlayerCount() {
-		return players.size();
+	/**
+	 * Obtains an UNMODIFIABLE copy of the players list.
+	 * 
+	 * @return an unmodifiable copy of the players list.
+	 */
+	public ObservableList<Player> getPlayers() {
+		return playersRead;
 	}
 
 	/**
@@ -89,22 +88,13 @@ public class Board {
 		return progress;
 	}
 
-	public int indexOfPlayer(Player player) {
-		return players.indexOf(player);
-	}
-
 	public boolean isStarted() {
 		return started;
 	}
 
-	public Stream<Player> playerStream() {
-		return players.stream();
-	}
-
 	public void removePlayer(int index) {
 		checkStarted();
-		players.remove(index)
-				.registerGame(null);
+		players.remove(index).registerGame(null);
 	}
 
 	public void removePlayer(Player player) {
@@ -119,6 +109,7 @@ public class Board {
 	public void start() {
 		@SuppressWarnings("unused")
 		Player[] winner;
+
 		checkStarted();
 		started = true;
 
@@ -151,22 +142,4 @@ public class Board {
 		// Congratulations!!! We have a winner.
 		// TO DO: win screen.
 	}
-
-	/**
-	 * This internal method checks if this card has already been referenced to in the game.
-	 * <p>
-	 *
-	 * @throws IllegalStateException
-	 *             if this reference is not logged with this player or if it is not null.
-	 */
-	/*
-	 * void checkReference(Player player, Card c) { if (!centerPlay.getDeck().contains(c)) { throw new IllegalArgumentException( "Card is not in deck"); } if (references.get(c) != null && references.get(c) != player) { throw new IllegalStateException( "This card is already in use by someone else.");
-	 * } }
-	 */
-	/**
-	 * This internal method first checks for existing references/ usages. Then it adds a reference of this card to the player game.
-	 */
-	/*
-	 * void referenceCard(Player player, Card c) { if (!centerPlay.getDeck().contains(c)) { throw new IllegalArgumentException( "Card is not in deck"); } checkReference(player, c); references.put(c, player); }
-	 */
 }

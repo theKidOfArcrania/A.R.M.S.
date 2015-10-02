@@ -10,7 +10,7 @@ import armsgame.card.Response;
 import armsgame.card.util.CardAction;
 import armsgame.card.util.CardActionType;
 import armsgame.card.util.CardDefaults;
-import armsgame.weapon.DamageReport;
+import armsgame.weapon.DamageSpec;
 import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponPartSpec;
 import armsgame.weapon.WeaponSpec;
@@ -45,6 +45,7 @@ public abstract class Player {
 	private int setCache = -1;
 	private Board game = null;
 	// this is all the cards a player has in his/her hand.
+	private final ObservableList<Response> responses;
 	private final ObservableList<Card> hand;
 	private int moves = 0;
 	private final ObservableList<Weapon> weaponSets;
@@ -57,6 +58,7 @@ public abstract class Player {
 		weaponSets = FXCollections.observableArrayList();
 		hand = FXCollections.observableArrayList();
 		playerHistory = FXCollections.observableArrayList();
+		responses = FXCollections.observableArrayList();
 
 		propertySets = new ReadOnlyIntegerPropertyBase() {
 			{
@@ -439,7 +441,7 @@ public abstract class Player {
 	 *
 	 * @param amount the debt amount.
 	 */
-	public abstract void selectResponse(DamageReport amount);
+	public abstract void selectResponse(DamageSpec amount);
 
 	/**
 	 * This prompts the player whether to agree

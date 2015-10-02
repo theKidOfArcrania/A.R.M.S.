@@ -73,7 +73,7 @@ public class Weapon implements Observable {
 	}
 
 	public void damage(Player attacker, Player victim) {
-		DamageReport dmg = getDamageReport();
+		DamageSpec dmg = getDamageReport();
 		double efficiency = attacker.selectAccuracy(dmg.getAccuracy());
 		// TO DO: Damage
 	}
@@ -83,20 +83,20 @@ public class Weapon implements Observable {
 		return Color.rgb((colorRGB >> 16) & 0xFF, (colorRGB >> 8) & 0xFF, colorRGB & 0xFF);
 	}
 
-	public DamageReport getDamageReport() {
-		DamageReport baseDmg = new DamageReport(getInternalType() + ".damage");
-		DamageReport[] partDmg = new DamageReport[parts.length];
+	public DamageSpec getDamageReport() {
+		DamageSpec baseDmg = new DamageSpec(getInternalType() + ".damage");
+		DamageSpec[] partDmg = new DamageSpec[parts.length];
 		int dmgIndex = 0;
 
 		for (int i = 0; i < parts.length; i++) {
 			if (partsBuilt[i]) {
-				partDmg[dmgIndex] = new DamageReport(parts[i].getInternalType() + ".damage");
+				partDmg[dmgIndex] = new DamageSpec(parts[i].getInternalType() + ".damage");
 				dmgIndex++;
 			} else if (parts[i].isNecessaryUpgrade()) { // A necessary upgrade has not been built
-				return new DamageReport();
+				return new DamageSpec();
 			}
 		}
-		return new DamageReport(baseDmg, partDmg);
+		return new DamageSpec(baseDmg, partDmg);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class Weapon implements Observable {
 	 * @return true if this has effective damage, false otherwise.
 	 */
 	public boolean isActive() {
-		DamageReport dmg = getDamageReport();
+		DamageSpec dmg = getDamageReport();
 		return dmg.getMultiTargetDamage() > 0 || dmg.getSingleTargetDamage() > 0;
 	}
 

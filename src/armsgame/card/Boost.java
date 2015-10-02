@@ -41,7 +41,7 @@ public class Boost extends Action {
 			}
 		} while (played.getPlayed() instanceof Boost);
 		Ammunition ammunition = (Ammunition) played.getPlayed();
-		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", ammunition::isValidRent);
+		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", Weapon::isComplete);
 
 		if (processDamage(self, ammunition.isMultiTarget(), weapon.isEnergetic(), weapon.getAttackPoints() * multiplier)) {
 			extraDoubles.forEach((doubling) -> {

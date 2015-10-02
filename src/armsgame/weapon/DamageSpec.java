@@ -1,0 +1,248 @@
+package armsgame.weapon;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Objects;
+import java.util.function.DoubleUnaryOperator;
+
+import armsgame.impl.Player;
+
+import static armsgame.card.util.CardDefaults.getCardDefaults;
+
+public class DamageSpec {
+
+	private final String internalType;
+
+	private final ArrayList<DoubleUnaryOperator> dmgMods = new ArrayList<>();
+
+	private DamageSpec[] combo = new DamageSpec[0];
+	private boolean multiDmgOverride;
+
+	/**
+	 * Constructs a NO-damage DamageReport object.
+	 */
+	public DamageSpec() {
+		this.internalType = null;
+	}
+
+	/**
+	 * Constructs a new DamageReport object from a combo of damage reports.
+	 *
+	 * @param combo a list of damage reports
+	 */
+	public DamageSpec(DamageSpec first, DamageSpec... combo) {
+		ArrayList<DamageSpec> comboList = new ArrayList<>(combo.length * 2 + 1);
+		LinkedList<DamageSpec> reportFlatten = new LinkedList<>();
+
+		// Flatten combo list.
+		// TO DO: do this only if tree is thick enough.
+		this.combo = combo;
+		while (reportFlatten.size() > 0) {
+			DamageSpec dmg = reportFlatten.pop();
+			if (dmg.internalType == null) {
+				for (DamageSpec child : dmg.combo) {
+					reportFlatten.push(child);
+				}
+			} else {
+				comboList.add(dmg);
+			}
+		}
+		comboList.add(first);
+
+		this.combo = comboList.toArray(new DamageSpec[comboList.size()]);
+		this.internalType = null;
+	}
+
+	/**
+	 * Constructs a new DamageReport object from an internal type pointer.
+	 *
+	 * @param internalType property name internal type that this damage report points to.
+	 */
+	public DamageSpec(String internalType) {
+		Objects.requireNonNull(internalType);
+		this.internalType = internalType;
+	}
+
+	/**
+	 * Adds another damage modifier which will be applied in reverse order
+	 *
+	 * @param dmgMod the operator that modifies the damage.
+	 */
+	public void addDamageModifier(DoubleUnaryOperator dmgMod) {
+		dmgMods.add(dmgMod);
+	}
+
+	/**
+	 * Carries out the damage where the attacker deals damage onto the victim.
+	 *
+	 * @param attacker the player who attacks
+	 * @param victim the player who receives the damage
+	 * @param energetic whether if the respective weapon has an energy crystal.
+	 * @param efficiency the efficiency rate of the player attacking the victim.
+	 */
+	public void damage(Player attacker, Player victim, boolean energetic, double efficiency) {
+		if (efficiency <= 0) {
+			return;
+		}
+
+		double singleDamage = modifyDamage(getSingleTargetDamage() * efficiency);
+		double multiDamage = modifyDamage(getMultiTargetDamage() * efficiency);
+		boolean effectiveVampiric = energetic || isVampiric();
+
+		if (singleDamage > 0) {
+			damage0(attacker, victim, singleDamage + multiDamage, effectiveVampiric);
+		}
+
+		if (multiDamage > 0) {
+			for (Player player : attacker.getGame().getPlayers()) {
+				if (player != victim) {
+					damage0(attacker, player, multiDamage, effectiveVampiric);
+				}
+			}
+		}
+	}
+
+	/**
+	 * This retrieves the accuracy rate increase of this weapon part The accuracy rate is implemented as a bar, and this accuracy rate guarantees 100% efficiency rate xx% of the time
+	 *
+	 * @return a value from 0 to 1
+	 */
+	public double getAccuracy() {
+
+		if (internalType == null) {
+			double accuracy = 0.0;
+			for (DamageSpec report : combo) {
+				accuracy += report.getAccuracy();
+			}
+			return accuracy;
+		} else {
+			return getInternalDoubleProperty("accuracy");
+		}
+
+	}
+
+	/**
+	 * This retrieves the internal typing of this damage report.
+	 *
+	 * @return the internal type.
+	 */
+	public String getInternalType() {
+		return internalType;
+	}
+
+	/**
+	 * Retrieves the damage dealt to multiple targets at 100% efficiency
+	 *
+	 * @return a positive damage amount.
+	 */
+	public double getMultiTargetDamage() {
+		if (internalType == null) {
+			double dmg = 0.0;
+			for (DamageSpec report : combo) {
+				dmg += report.getMultiTargetDamage();
+			}
+
+			if (multiDmgOverride) {
+				return singleTargetDamage0() + dmg;
+			} else {
+				return dmg;
+			}
+		} else {
+			return getInternalDoubleProperty("damage.multi");
+		}
+	}
+
+	/**
+	 * Retrieves the damage dealt to a single targets at 100% efficiency
+	 *
+	 * @return a positive damage amount.
+	 */
+	public double getSingleTargetDamage() {
+		if (multiDmgOverride) {
+			return 0;
+		} else {
+			return singleTargetDamage0();
+		}
+	}
+
+	public boolean isMultiDamageOverride() {
+		return multiDmgOverride;
+	}
+
+	/**
+	 * Identifies whether if this weapon part is vampiric by default. This is defined by having the energy from the victim being transferred to the damager.
+	 *
+	 * @return true if it is vampiric, false otherwise.
+	 */
+	public boolean isVampiric() {
+		if (internalType == null) {
+			for (DamageSpec report : combo) {
+				if (report.isVampiric()) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			return getInternalIntProperty("vampiric", 0) != 0;
+		}
+	}
+
+	public void setMultiDamageOverride(boolean override) {
+		this.multiDmgOverride = override;
+	}
+
+	private void damage0(Player attacker, Player victim, double damage, boolean vampiric) {
+		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
+		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
+
+		victim.selectResponse(this);
+		victim.damageShield(fixedDamage);
+
+		if (vampiric) {
+			attacker.heal(fixedDamage);
+		}
+	}
+
+	private double modifyDamage(double dmg) {
+		for (int i = dmgMods.size() - 1; i >= 0; i--) {
+			dmg = dmgMods.get(i).applyAsDouble(dmg);
+		}
+		return dmg;
+	}
+
+	private double singleTargetDamage0() {
+		if (internalType == null) {
+			double dmg = 0.0;
+			for (DamageSpec report : combo) {
+				dmg += report.getSingleTargetDamage();
+			}
+			return dmg;
+		} else {
+			return getInternalDoubleProperty("damage.single");
+		}
+	}
+
+	protected double getInternalDoubleProperty(String subKey) {
+		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, 0.0);
+	}
+
+	protected double getInternalDoubleProperty(String subKey, double defValue) {
+		return getCardDefaults().getDoubleProperty(getInternalType() + "." + subKey, defValue);
+	}
+
+	protected int getInternalIntProperty(String subKey) {
+		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, 0);
+	}
+
+	protected int getInternalIntProperty(String subKey, int defValue) {
+		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, defValue);
+	}
+
+	protected String getInternalProperty(String subKey) {
+		return getCardDefaults().getProperty(getInternalType() + "." + subKey);
+	}
+
+	protected String getInternalProperty(String subKey, String defValue) {
+		return getCardDefaults().getProperty(getInternalType() + "." + subKey, defValue);
+	}
+}

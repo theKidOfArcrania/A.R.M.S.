@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import armsgame.card.util.CardActionType.Likeness;
 import armsgame.impl.Player;
-import armsgame.weapon.DamageReport;
+import armsgame.weapon.DamageSpec;
 import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponSpec;
 
@@ -52,7 +52,7 @@ public class Ammunition extends Action {
 	public boolean actionPlayed(Player self) {
 		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", this::isUsableWith);
 		Player victim = null;
-		DamageReport dmg = weapon.getDamageReport();
+		DamageSpec dmg = weapon.getDamageReport();
 		dmg.setMultiDamageOverride(isMultiTarget());
 
 		if (dmg.getSingleTargetDamage() != 0) {
