@@ -3,16 +3,12 @@ package armsgame.ui.test;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 
-import armsgame.card.CardDefaults;
 import armsgame.impl.Player;
-import armsgame.res.Tools;
 import armsgame.ui.PlayerInfo;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import static java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment;
@@ -27,8 +23,8 @@ public class UITest extends Application {
 	private final Dimension displayRes = new Dimension(defaultMode.getWidth(), defaultMode.getHeight());
 	private final double dispWidth = displayRes.getWidth();
 	private final double dispHeight = displayRes.getHeight();
-	private final double wRatio = dispWidth/1600.0;
-	private final double hRatio = dispHeight/900.0;
+	private final double wRatio = dispWidth / 1600.0;
+	private final double hRatio = dispHeight / 900.0;
 
 	public UITest() {
 
