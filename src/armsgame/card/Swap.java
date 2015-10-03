@@ -40,9 +40,10 @@ public class Swap extends Action {
 
 		WeaponPartSpec give = self.selectPartUpgrade("Please select a property to give");
 
+		// TO DO: get WeaponSpec.
 		WeaponTransfer forceDeal = new WeaponTransfer(self, target);
-		forceDeal.requestProperty(take);
-		forceDeal.giveProperty(give);
+		forceDeal.request(null, take);
+		forceDeal.give(null, give);
 		forceDeal.finishRequest();
 		return true;
 	}

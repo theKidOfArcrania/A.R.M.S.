@@ -35,7 +35,7 @@ public class ArmsAbduction extends Action {
 		}
 
 		WeaponTransfer dealBreaker = new WeaponTransfer(self, target);
-		dealBreaker.requestPropertySet(takeSet.getSpec());
+		dealBreaker.request(takeSet.getSpec());
 		dealBreaker.finishRequest();
 		return true;
 	}
@@ -48,7 +48,11 @@ public class ArmsAbduction extends Action {
 	@Override
 	public boolean isEnabled(Player self, Likeness action) {
 		if (action == Likeness.Action) {
-			return self.getGame().playerStream().parallel().anyMatch(Player::hasMaxWeapon);
+			for (Player player : self.getGame().getPlayers()) {
+				if (player.hasMaxWeapon()) {
+					return true;
+				}
+			}
 		}
 		return true;
 	}

@@ -18,12 +18,12 @@ public class EnergyCrystal extends Action {
 
 	@Override
 	public boolean actionPlayed(Player self) {
-		// TO DO: implementing Hasbro rules??
-		Weapon column = self.selectWeapon("Please select a full-set property column to build on.", Weapon::isComplete);
-		if (column == null) {
+		// TO DO: also reduce another player's full sets?
+		Weapon weapon = self.selectWeapon("Please select a full-set property column to build on.", Weapon::isComplete);
+		if (weapon == null) {
 			return false;
 		}
-		column.addAndSort(this);
+		weapon.buildCrystal(this);
 		return true;
 	}
 

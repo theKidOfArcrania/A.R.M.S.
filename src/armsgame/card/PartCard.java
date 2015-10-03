@@ -80,7 +80,7 @@ public final class PartCard extends Action {
 	public boolean actionPlayed(Player self) {
 		Predicate<Weapon> buildable = weapon -> weapon.isBuildable(partBuild);
 		if (!self.getWeaponSets().parallelStream().anyMatch(buildable)) {
-			if (self.selectRequest("This part cannot be added on any weapon. Do you want to convert it into energy")) {
+			if (self.selectRequest("This part cannot be added on any weapon. Do you want to salvage it into shield energy?")) {
 				// TO DO: convert to energy.
 				return true;
 			} else {

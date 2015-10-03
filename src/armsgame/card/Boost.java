@@ -22,6 +22,7 @@ public class Boost extends Action {
 
 	@Override
 	public boolean actionPlayed(Player self) {
+
 		ArrayList<Boost> extraDoubles = new ArrayList<>(10);
 		CardAction played;
 		CenterPlay centerPlay = self.getGame().getCenterPlay();
