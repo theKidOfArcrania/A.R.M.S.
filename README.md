@@ -209,6 +209,7 @@ There are 7 robots, each specializing in one weapon (shown in paraenthesis). Eac
 - **ENERGY PACK**: This recharges the energy by a fixed amount, overflowing into the shield if energy is full.
 - **SCAVENGE THE JUNKYARD**: Draw two cards from the scavenge pile.
 - **TIME WARP**: Another turn
+- **[EVENT CARD]**: Special type of action card that remains a mystery until it is played.
 
 ##Event Cards
 This category of cards is also known as the mystery card: it remains a mystery until it is played. This may be a good card or bad, depending on your luck. There are four default event cards, and some robots have additional event cards that may be purchased.
@@ -217,6 +218,13 @@ This category of cards is also known as the mystery card: it remains a mystery u
 2. **Weapon Malfunction**: If ___ is owned, the weapon upgrade is destroyed and put into the discard pile, unless it is part of a full set
 3. **Robot Malfunction**: Glitches and turn ends
 4. **Weapon of Choice**: Can become any weapon upgrade.
+
+##Response Cards
+This category of cards is used in response to a card that another player has played against you. In order to activate it, you must play it in the field. Other players will not know what your response card is, but will know that you played a response card. There are three types of response cards. Depending on the card, it might be effective for one or more of these subcategories. In all, the cards will always nullify the move or the countermove and replace it with something else.
+
+- Attack Response Card: this subcategory counteracts any attacks made against the player.
+- Transfer Response Card: this subcategory counteracts any weapon transfers made against the player.
+- Response Response Card: this subcategory counteracts any responses directed against the player. (This is the only one that can be played during a player's turn).
 
 ##Currency
 
