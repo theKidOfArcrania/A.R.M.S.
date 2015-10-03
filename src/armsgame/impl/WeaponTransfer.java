@@ -75,10 +75,10 @@ public class WeaponTransfer {
 			if (partTake == null) {
 				WeaponPartSpec[] parts = weaponTake.getSpec().getPartSpecs();
 				for (WeaponPartSpec part : parts) {
-					// TO DO: Acquire part.
+					// FIXME: Acquire part.
 				}
 			} else {
-				// TO DO: Acquire Part.
+				// FIXME: Acquire Part.
 			}
 		}
 
@@ -203,7 +203,7 @@ public class WeaponTransfer {
 			return;
 		}
 
-		// TO DO: handle responses from weapon transfer
+		// FIXME: handle responses from weapon transfer
 		giver.selectResponse(this);
 		transfers.forEach(Transfer::execute);
 	}
@@ -276,7 +276,7 @@ public class WeaponTransfer {
 
 	@Override
 	public String toString() {
-		// TO DO: request string.
+		// FIXME: request string.
 		return super.toString();
 	}
 

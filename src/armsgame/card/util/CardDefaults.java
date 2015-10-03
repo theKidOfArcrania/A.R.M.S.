@@ -12,10 +12,10 @@ import java.util.logging.Logger;
 
 import armsgame.ResourceDefaults;
 
-//TO DO: change "rent" to "fire"
-//TO DO: change "props"
-//TO DO: change "money" or "cash" into energy
-//TO DO: reimplement damage dealing... and also change rent to damage
+//FIXME: change "rent" to "fire"
+//FIXME: change "props"
+//FIXME: change "money" or "cash" into energy
+//FIXME: reimplement damage dealing... and also change rent to damage
 
 //action.[actionName].* --> this set of properties describes an action of that name.
 //action.rent.[color] --> this set of properties describes an rent action of that color type.
@@ -59,8 +59,7 @@ public class CardDefaults extends ResourceDefaults {
 		try {
 			defs = new CardDefaults("carddefs.PROPERTIES");
 		} catch (IOException ex) {
-			Logger.getLogger(CardDefaults.class.getName())
-				.log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
+			Logger.getLogger(CardDefaults.class.getName()).log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
 			System.exit(1);
 			throw new InternalError(); // this should not be called.
 		}
@@ -87,12 +86,9 @@ public class CardDefaults extends ResourceDefaults {
 				}
 
 				if (subType == null) {
-					Class.forName(className)
-						.newInstance();
+					Class.forName(className).newInstance();
 				} else {
-					Class.forName(className)
-						.getConstructor(String.class)
-						.newInstance(subType);
+					Class.forName(className).getConstructor(String.class).newInstance(subType);
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {

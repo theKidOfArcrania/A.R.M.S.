@@ -33,11 +33,6 @@ import javafx.collections.ObservableList;
  */
 public abstract class Player {
 
-	private static boolean containsWeaponPart(WeaponPartSpec spec, Weapon column) {
-		// TO DO: implment
-		return false;
-	}
-
 	private final CardDefaults defs;
 	private final Account playerAccount;
 	private final DoubleProperty shieldLevel = new SimpleDoubleProperty(0);

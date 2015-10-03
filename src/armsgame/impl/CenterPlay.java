@@ -31,7 +31,6 @@ public class CenterPlay {
 	}
 
 	public void discard(Card card) {
-		// TO DO: remove ref.
 		playedCards.add(card);
 	}
 
@@ -39,8 +38,7 @@ public class CenterPlay {
 	 * This draws the specified number of cards from the face down pile. If there are no more cards in the face-down pile, it shuffles the face-up cards and then places it in the face-down pile and continues play.
 	 * <p>
 	 *
-	 * @param count
-	 *            the number of cards to draw
+	 * @param count the number of cards to draw
 	 * @return the drawed cards.
 	 */
 	public Card[] drawCards(int count) {
@@ -77,8 +75,7 @@ public class CenterPlay {
 	 * Specifies if the card exists in the face-up pile.
 	 * <p>
 	 *
-	 * @param card
-	 *            the card to test
+	 * @param card the card to test
 	 * @return true if it exists in the face-up pile, false otherwise
 	 */
 	public boolean faceUpContains(Card card) {
@@ -109,8 +106,7 @@ public class CenterPlay {
 	 * Retrieves one card from the face-up card deck. The most top card would be index 0.
 	 * <p>
 	 *
-	 * @param index
-	 *            the index of the card
+	 * @param index the index of the card
 	 * @return the card at the specified index.
 	 */
 	public Card getFaceUpCard(int index) {

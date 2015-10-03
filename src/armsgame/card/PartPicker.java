@@ -27,7 +27,7 @@ public class PartPicker extends Action {
 			return false;
 		}
 
-		// TO DO: return a part and its respective weapon spec.
+		// FIXME: return a part and its respective weapon spec.
 		WeaponPartSpec take = self.selectPartUpgrade("Please select a property to take.", (part, weapon) -> {
 			// Has to not be part of the full weapon
 			return !weapon.isComplete();
@@ -37,7 +37,6 @@ public class PartPicker extends Action {
 			return false;
 		}
 
-		// TO DO: get WeaponSpec.
 		WeaponTransfer slyDeal = new WeaponTransfer(self, target, null, take);
 		slyDeal.finishRequest();
 		return true;

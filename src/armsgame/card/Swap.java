@@ -29,8 +29,6 @@ public class Swap extends Action {
 		}
 
 		WeaponPartSpec take = self.selectPartUpgrade("Please select a weapon part to take.", (part, weapon) -> {
-			// TO DO: ask the player to select where to put the part.
-			// TO DO: make sure that this weapon is usable.
 			return !weapon.isComplete();
 		} , target);
 
@@ -40,7 +38,7 @@ public class Swap extends Action {
 
 		WeaponPartSpec give = self.selectPartUpgrade("Please select a property to give");
 
-		// TO DO: get WeaponSpec.
+		// FIXME: get WeaponSpec.
 		WeaponTransfer forceDeal = new WeaponTransfer(self, target);
 		forceDeal.request(null, take);
 		forceDeal.give(null, give);
