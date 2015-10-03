@@ -5,10 +5,13 @@
  */
 package armsgame.card;
 
+import java.util.function.Predicate;
+
 import armsgame.card.util.CardActionType;
 import armsgame.card.util.CardActionType.Likeness;
 import armsgame.card.util.SupportedActions;
 import armsgame.impl.Player;
+import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponPartSpec;
 
 import static java.util.Objects.requireNonNull;
@@ -21,8 +24,7 @@ import static java.util.Objects.requireNonNull;
  * @author HW
  */
 @SuppressWarnings("FinalClass")
-public final class PartCard extends Action
-{
+public final class PartCard extends Action {
 	/**
 	 *
 	 */
@@ -34,8 +36,7 @@ public final class PartCard extends Action
 	/**
 	 * Constructs an all-part weapon part, with no restrictions.
 	 */
-	public PartCard()
-	{
+	public PartCard() {
 		this.type = 1;
 		this.partBuild = null;
 	}
@@ -46,8 +47,7 @@ public final class PartCard extends Action
 	 *
 	 * @param weaponPartSpec This is the weapon part that this part will build
 	 */
-	public PartCard(WeaponPartSpec weaponPartSpec)
-	{
+	public PartCard(WeaponPartSpec weaponPartSpec) {
 		// all parameters MUST be non-null.
 		requireNonNull(weaponPartSpec);
 		this.type = 0;
@@ -59,8 +59,7 @@ public final class PartCard extends Action
 	 *
 	 * @param internalType the internal type of the property-card color
 	 */
-	PartCard(String internalType)
-	{
+	PartCard(String internalType) {
 		char prefix = internalType.charAt(0);
 		switch (prefix) {
 		case '$':
@@ -76,26 +75,40 @@ public final class PartCard extends Action
 		}
 	}
 
+	// TO DO: have actions put here? and also discard function?
 	@Override
-	public boolean actionPlayed(Player self)
-	{
-		// TO DO: the action.
+	public boolean actionPlayed(Player self) {
+		Predicate<Weapon> buildable = weapon -> weapon.isBuildable(partBuild);
+		if (!self.getWeaponSets().parallelStream().anyMatch(buildable)) {
+			if (self.selectRequest("This part cannot be added on any weapon. Do you want to convert it into energy")) {
+				// TO DO: convert to energy.
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		Weapon set = self.selectWeapon("Select a weapon to add this part.", buildable);
+
+		if (set == null) {
+			return false;
+		}
+
+		set.buildPart(partBuild);
+		return true;
 	}
 
 	@Override
-	public String getCardName()
-	{
+	public String getCardName() {
 		return getPropertyName();
 	}
 
-	public int getDamageBase()
-	{
+	public int getDamageBase() {
 		return getInternalIntProperty("boostBase");
 	}
 
 	@Override
-	public String getInternalType()
-	{
+	public String getInternalType() {
 		return "action.part." + prefixes.charAt(type);
 	}
 
@@ -105,28 +118,25 @@ public final class PartCard extends Action
 	 *
 	 * @return the value of propertyName
 	 */
-	public String getPropertyName()
-	{
+	public String getPropertyName() {
 		return getInternalProperty("name");
 	}
 
 	@Override
-	public SupportedActions getSupportedTypes()
-	{
+	public SupportedActions getSupportedTypes() {
 		SupportedActions actions = new SupportedActions();
 		actions.addAction(new CardActionType("Add property", "move.property"));
+		actions.addAction(new CardActionType("Convert to energy", "move.energy"));
 		actions.addAction(new CardActionType("Discard", "move.discard"));
 		return actions;
 	}
 
 	@Override
-	public boolean isEnabled(Player self, Likeness action)
-	{
+	public boolean isEnabled(Player self, Likeness action) {
 		return true;
 	}
 
-	public int modifyDamage(int base)
-	{
+	public int modifyDamage(int base) {
 		return base + getDamageBase();
 	}
 

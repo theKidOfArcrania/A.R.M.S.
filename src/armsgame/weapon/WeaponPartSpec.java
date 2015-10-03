@@ -3,8 +3,6 @@ package armsgame.weapon;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import armsgame.impl.Player;
-
 import static armsgame.card.util.CardDefaults.getCardDefaults;
 
 /**
@@ -33,17 +31,6 @@ public class WeaponPartSpec {
 		return partSpecs.get(codeType);
 	}
 
-	private static void damage0(Player attacker, Player victim, double damage, boolean vampiric) {
-		// TO DO: change health to double
-		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
-		double fixedDamage = Math.min(damage, totalHealth); // fix for overflow
-		victim.damageShield(fixedDamage);
-
-		if (vampiric) {
-			attacker.heal(fixedDamage);
-		}
-	}
-
 	private final String codeType;
 
 	/**
@@ -53,24 +40,6 @@ public class WeaponPartSpec {
 	 */
 	private WeaponPartSpec(String codeType) {
 		this.codeType = codeType;
-	}
-
-	public void damage(Player attacker, Player victim, boolean vampiric, double efficiency) {
-		if (efficiency <= 0) {
-			return;
-		}
-
-		double singleDamage = getSingleTargetDamage() * efficiency;
-		double multiDamage = getMultiTargetDamage() * efficiency;
-		boolean effectiveVampiric = vampiric && isVampiric();
-
-		if (singleDamage > 0) {
-			damage0(attacker, victim, singleDamage, effectiveVampiric);
-		}
-
-		if (multiDamage > 0) {
-			attacker.getGame().playerStream().forEach(player -> damage0(attacker, player, multiDamage, effectiveVampiric));
-		}
 	}
 
 	/**
@@ -105,6 +74,15 @@ public class WeaponPartSpec {
 	}
 
 	/**
+	 * Retrieves a user-friendly name of this weapon part.
+	 * 
+	 * @return the name of this weapon
+	 */
+	public String getName() {
+		return getInternalProperty("name");
+	}
+
+	/**
 	 * Retrieves the damage dealt to a single targets at 100% efficiency
 	 *
 	 * @return a positive damage amount.
@@ -115,7 +93,7 @@ public class WeaponPartSpec {
 
 	/**
 	 * Describes whether if this part upgrade is needed to deal any damage.
-	 * 
+	 *
 	 * @return true if this is neccessary, false otherwise.
 	 */
 	public boolean isNecessaryUpgrade() {

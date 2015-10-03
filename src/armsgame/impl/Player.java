@@ -1,6 +1,7 @@
 package armsgame.impl;
 
 import java.util.Arrays;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -10,7 +11,7 @@ import armsgame.card.Response;
 import armsgame.card.util.CardAction;
 import armsgame.card.util.CardActionType;
 import armsgame.card.util.CardDefaults;
-import armsgame.weapon.DamageSpec;
+import armsgame.weapon.DamageReport;
 import armsgame.weapon.Weapon;
 import armsgame.weapon.WeaponPartSpec;
 import armsgame.weapon.WeaponSpec;
@@ -224,7 +225,12 @@ public abstract class Player {
 	 * @return true if at least one set is incomplete, but has upgrades, false otherwise.
 	 */
 	public boolean hasFreeWeaponParts() {
-		return weaponSets.parallelStream().anyMatch(Weapon::isIncomplete);
+		for (Weapon set : weaponSets) {
+			if (!(set.isComplete() || set.isOriginal())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -369,7 +375,7 @@ public abstract class Player {
 	 * @return the weapon part upgrade the player selected.
 	 */
 	public WeaponPartSpec selectPartUpgrade(String prompt) {
-		return selectPartUpgrade(prompt, card -> true);
+		return selectPartUpgrade(prompt, (spec, weapon) -> true);
 	}
 
 	/**
@@ -380,7 +386,7 @@ public abstract class Player {
 	 * @param filter filter for properties
 	 * @return the property the player selected.
 	 */
-	public WeaponPartSpec selectPartUpgrade(String prompt, Predicate<WeaponPartSpec> filter) {
+	public WeaponPartSpec selectPartUpgrade(String prompt, BiPredicate<WeaponPartSpec, Weapon> filter) {
 		return selectPartUpgrade(prompt, filter, this);
 	}
 
@@ -393,7 +399,7 @@ public abstract class Player {
 	 * @param context the property columns that the player will select from.
 	 * @return the property the player selected.
 	 */
-	public abstract WeaponPartSpec selectPartUpgrade(String prompt, Predicate<WeaponPartSpec> filter, Player context);
+	public abstract WeaponPartSpec selectPartUpgrade(String prompt, BiPredicate<WeaponPartSpec, Weapon> filter, Player context);
 
 	/**
 	 * This prompts the player to select another player
@@ -441,7 +447,7 @@ public abstract class Player {
 	 *
 	 * @param amount the debt amount.
 	 */
-	public abstract void selectResponse(DamageSpec amount);
+	public abstract void selectResponse(DamageReport amount);
 
 	/**
 	 * This prompts the player whether to agree

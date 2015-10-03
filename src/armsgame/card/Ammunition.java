@@ -52,10 +52,9 @@ public class Ammunition extends Action {
 	public boolean actionPlayed(Player self) {
 		Weapon weapon = self.selectWeapon("Choose your weapon to attack with.", this::isUsableWith);
 		Player victim = null;
-		DamageSpec dmg = weapon.getDamageReport();
-		dmg.setMultiDamageOverride(isMultiTarget());
+		DamageSpec dmg = weapon.getDamageSpec();
 
-		if (dmg.getSingleTargetDamage() != 0) {
+		if (!isMultiTarget() && dmg.getSingleTargetDamage() > 0) {
 			victim = self.selectPlayer("Select player to attack");
 			if (victim == null) {
 				return false;
@@ -63,7 +62,7 @@ public class Ammunition extends Action {
 		}
 
 		double efficiency = self.selectAccuracy(dmg.getAccuracy());
-		dmg.damage(self, victim, weapon.isEnergetic(), efficiency);
+		dmg.damage(self, victim, weapon.isEnergetic(), efficiency, isMultiTarget());
 		return true;
 	}
 

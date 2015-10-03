@@ -16,14 +16,22 @@ public class DamageReport {
 	}
 
 	public void execute() {
+		double totalHealth = victim.getEnergyLevel() + victim.getShieldLevel();
+		double fixedDamage = Math.min(dmg, totalHealth); // fix for overflow damage
 
+		victim.selectResponse(this);
+		victim.damageShield(fixedDamage);
+
+		if (vampiric) {
+			attacker.heal(fixedDamage);
+		}
 	}
 
 	public Player getAttacker() {
 		return attacker;
 	}
 
-	public double getDmg() {
+	public double getDamage() {
 		return dmg;
 	}
 

@@ -16,9 +16,8 @@ import armsgame.weapon.WeaponPartSpec;
  * @author Henry
  */
 public class Swap extends Action {
-	/**
-	 *
-	 */
+
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = -7696673622785225864L;
 
 	@Override
@@ -29,17 +28,17 @@ public class Swap extends Action {
 			return false;
 		}
 
-		WeaponPartSpec take = self.selectPartUpgrade("Please select a property to take.", (card) -> {
+		WeaponPartSpec take = self.selectPartUpgrade("Please select a weapon part to take.", (part, weapon) -> {
 			// TO DO: ask the player to select where to put the part.
 			// TO DO: make sure that this weapon is usable.
-			return !column.isComplete() || column.indexOf(card) >= column.getFullSet();
+			return !weapon.isComplete();
 		} , target);
 
 		if (take == null) {
 			return false;
 		}
 
-		WeaponPartSpec give = self.selectPartUpgrade("Please select a property to give", (card) -> true);
+		WeaponPartSpec give = self.selectPartUpgrade("Please select a property to give");
 
 		WeaponTransfer forceDeal = new WeaponTransfer(self, target);
 		forceDeal.requestProperty(take);
@@ -56,9 +55,20 @@ public class Swap extends Action {
 	@Override
 	public boolean isEnabled(Player self, Likeness action) {
 		if (action == Likeness.Action) {
-			// TO DO: make sure that this weapon is usable.
-			self.getGame().playerStream().parallel().anyMatch(Player::hasFreeWeaponParts);
-			return !self.setStream().anyMatch(Weapon::isEmpty);
+			PARTCHK: {
+				for (Weapon weapon : self.getWeaponSets()) {
+					if (!weapon.isOriginal()) {
+						break PARTCHK;
+					}
+				}
+				return false;
+			}
+			for (Player player : self.getGame().getPlayers()) {
+				if (player != self && player.hasFreeWeaponParts()) {
+					return true;
+				}
+			}
+			return false;
 		}
 		return true;
 	}

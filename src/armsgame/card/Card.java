@@ -2,54 +2,20 @@ package armsgame.card;
 
 import java.awt.Image;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.function.Predicate;
 
 import armsgame.card.util.CardActionType;
 import armsgame.card.util.CardActionType.Likeness;
 import armsgame.card.util.CardDefaults;
 import armsgame.card.util.SupportedActions;
-import armsgame.impl.Board;
-import armsgame.impl.WeaponTransfer;
 import armsgame.impl.Player;
 
 import static armsgame.card.util.CardDefaults.getCardDefaults;
 
-public abstract class Card
-{
+public abstract class Card {
 
 	private static final long serialVersionUID = -8288322516558088995L;
 
-	private static void processDamage(WeaponTransfer damage, AttackModifiers[] modifiers)
-	{
-		Arrays.stream(modifiers).forEachOrdered(mod -> mod.modifyAttack(damage));
-		damage.finishRequest();
-	}
-
-	protected static boolean processDamage(Player self, boolean global, boolean zapMode, int base, AttackModifiers... modifiers)
-	{
-		if (global)
-		{
-			Board game = self.getGame();
-			game.playerStream().parallel().filter(Predicate.isEqual(self).negate()).forEach(target -> processDamage(new WeaponTransfer(self, target, base,
-					zapMode), modifiers));
-			return true;
-		} else
-		{
-			Player target = self.selectPlayer("Please select a player to damage.");
-			if (target == null)
-			{
-				return false;
-			}
-			processDamage(new WeaponTransfer(self, target, base, zapMode), modifiers);
-			return true;
-		}
-	}
-
-	int id = -1;
-
-	public Card()
-	{
+	public Card() {
 		super();
 	}
 
@@ -62,25 +28,6 @@ public abstract class Card
 	 */
 	public abstract boolean actionPlayed(Player self);
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj == null)
-		{
-			return false;
-		}
-		if (getClass() != obj.getClass())
-		{
-			return false;
-		}
-		final Card other = (Card) obj;
-		if (this.id < 0 || this.id != other.id)
-		{
-			return false;
-		}
-		return true;
-	}
-
 	/**
 	 * Getter for the name of this card.
 	 * <p>
@@ -90,13 +37,11 @@ public abstract class Card
 	public abstract String getCardName();
 
 	@SuppressWarnings("static-method")
-	public CardDefaults getDefaults()
-	{
+	public CardDefaults getDefaults() {
 		return getCardDefaults();
 	}
 
-	public String getDescription()
-	{
+	public String getDescription() {
 		return getInternalProperty("description");
 	}
 
@@ -106,8 +51,7 @@ public abstract class Card
 	 *
 	 * @return the energy conversion value of this card, or 0 if it cannot be converted.
 	 */
-	public int getEnergyValue()
-	{
+	public int getEnergyValue() {
 		return getInternalIntProperty("energyValue");
 	}
 
@@ -118,8 +62,7 @@ public abstract class Card
 	 * @return the image of this card.
 	 * @exception IOException when the image cannot be read
 	 */
-	public Image getImage() throws IOException
-	{
+	public Image getImage() throws IOException {
 		return getCardDefaults().getImageProperty(getInternalType() + ".image");
 	}
 
@@ -137,47 +80,33 @@ public abstract class Card
 	 *
 	 * @return The supported actions in an array.
 	 */
-	public SupportedActions getSupportedTypes()
-	{
+	public SupportedActions getSupportedTypes() {
 		SupportedActions actions = new SupportedActions();
 		actions.addAction(new CardActionType("Play " + getCardName(), "move.action"));
 		actions.addAction(new CardActionType("Discard", "move.discard"));
 		return actions;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		int hash = 7;
-		hash = 97 * hash + this.id;
-		return hash;
-	}
-
 	public abstract boolean isEnabled(Player self, Likeness action);
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return getCardName();
 	}
 
-	protected int getInternalIntProperty(String subKey)
-	{
+	protected int getInternalIntProperty(String subKey) {
 		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, 0);
 	}
 
-	protected int getInternalIntProperty(String subKey, int defValue)
-	{
+	protected int getInternalIntProperty(String subKey, int defValue) {
 		return getCardDefaults().getIntProperty(getInternalType() + "." + subKey, defValue);
 	}
 
-	protected String getInternalProperty(String subKey)
-	{
+	protected String getInternalProperty(String subKey) {
 		return getCardDefaults().getProperty(getInternalType() + "." + subKey);
 	}
 
-	protected String getInternalProperty(String subKey, String defValue)
-	{
+	protected String getInternalProperty(String subKey, String defValue) {
 		return getCardDefaults().getProperty(getInternalType() + "." + subKey, defValue);
 	}
 

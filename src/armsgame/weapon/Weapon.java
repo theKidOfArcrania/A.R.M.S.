@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import armsgame.card.EnergyCrystal;
-import armsgame.impl.Player;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.scene.paint.Color;
@@ -72,18 +71,12 @@ public class Weapon implements Observable {
 		}
 	}
 
-	public void damage(Player attacker, Player victim) {
-		DamageSpec dmg = getDamageReport();
-		double efficiency = attacker.selectAccuracy(dmg.getAccuracy());
-		// TO DO: Damage
-	}
-
 	public Color getColorClass() {
 		int colorRGB = spec.getRGBColor();
 		return Color.rgb((colorRGB >> 16) & 0xFF, (colorRGB >> 8) & 0xFF, colorRGB & 0xFF);
 	}
 
-	public DamageSpec getDamageReport() {
+	public DamageSpec getDamageSpec() {
 		DamageSpec baseDmg = new DamageSpec(getInternalType() + ".damage");
 		DamageSpec[] partDmg = new DamageSpec[parts.length];
 		int dmgIndex = 0;
@@ -125,7 +118,7 @@ public class Weapon implements Observable {
 	 * @return true if this has effective damage, false otherwise.
 	 */
 	public boolean isActive() {
-		DamageSpec dmg = getDamageReport();
+		DamageSpec dmg = getDamageSpec();
 		return dmg.getMultiTargetDamage() > 0 || dmg.getSingleTargetDamage() > 0;
 	}
 
@@ -164,17 +157,17 @@ public class Weapon implements Observable {
 	}
 
 	/**
-	 * Describes whether if this weapon hasn't max upgrades.
+	 * Determines whether if this weapon has no parts built.
 	 *
-	 * @return true if column has loose properties, false otherwise.
+	 * @return true if this is original, false otherwise.
 	 */
-	public boolean isIncomplete() {
+	public boolean isOriginal() {
 		for (boolean partBuilt : partsBuilt) {
-			if (!partBuilt) {
-				return true;
+			if (partBuilt) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override

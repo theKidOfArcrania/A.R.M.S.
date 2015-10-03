@@ -26,35 +26,27 @@ import static java.util.Objects.requireNonNull;
  *
  * @author HW
  */
-public class WeaponTransfer
-{
+public class WeaponTransfer {
 
-	private static int getValue(Card c)
-	{
-		if (!(c instanceof BurstCharge) && !(c instanceof PartCard))
-		{
+	private static int getValue(Card c) {
+		if (!(c instanceof BurstCharge) && !(c instanceof PartCard)) {
 			throw new IllegalArgumentException("Must be a money card or a property card.");
 		}
 
-		if (c instanceof Valuable)
-		{
+		if (c instanceof Valuable) {
 			return ((Valuable) c).getValue();
 		}
 		return 0;
 	}
 
-	private static String joinList(ArrayList<String> list)
-	{
-		if (list.size() == 0)
-		{
+	private static String joinList(ArrayList<String> list) {
+		if (list.size() == 0) {
 			return "";
 		}
-		if (list.size() == 1)
-		{
+		if (list.size() == 1) {
 			return list.get(0);
 		}
-		if (list.size() == 2)
-		{
+		if (list.size() == 2) {
 			return list.get(0) + " and " + list.get(1);
 		}
 
@@ -62,13 +54,11 @@ public class WeaponTransfer
 		return list.stream().collect(Collectors.joining(", ")) + ", and " + last;
 	}
 
-	private static void transferPart(Player giver, Player reciever, WeaponPartSpec partSpec)
-	{
+	private static void transferPart(Player giver, Player reciever, WeaponPartSpec partSpec) {
 		Weapon specTake = giver.getWeapon(partSpec);
 		specTake.unbuildPart(partSpec);
 
-		if (reciever != null)
-		{
+		if (reciever != null) {
 			Weapon specRecieve = reciever.getWeapon(specTake.getSpec());
 			specRecieve.buildPart(partSpec);
 		}
@@ -93,13 +83,12 @@ public class WeaponTransfer
 
 	private int hp;
 	private final Player victim;
-	private int paidAmount = 0;
-	private final ArrayList<PartCard> partsRequested = new ArrayList<>(3);
+	private final ArrayList<WeaponPartSpec> partsRequested = new ArrayList<>(3);
 	private final ArrayList<WeaponSpec> weaponsRequested = new ArrayList<>(3);
-	private final ArrayList<PartCard> partsGiven = new ArrayList<>(3);
+	private final ArrayList<WeaponPartSpec> partsGiven = new ArrayList<>(3);
 	private final ArrayList<WeaponSpec> weaponsGiven = new ArrayList<>(3);
 	private boolean energyZapMode = false;
-	private boolean canceled = false;
+	private final boolean canceled = false;
 
 	/**
 	 * Constructs a payment object without any payment parameters.
@@ -108,8 +97,7 @@ public class WeaponTransfer
 	 * @param damager the player who dealed the damage.
 	 * @param victim the player who is recieving this damage.
 	 */
-	public WeaponTransfer(Player damager, Player victim)
-	{
+	public WeaponTransfer(Player damager, Player victim) {
 		requireNonNull(damager);
 		requireNonNull(victim);
 		this.damager = damager;
@@ -121,42 +109,39 @@ public class WeaponTransfer
 	 * Constructs a payment object with a pre-initialized property to request.
 	 * <p>
 	 *
-	 * @param damager the reciever of this payment.
-	 * @param victim the victim of this payment.
-	 * @param partsRequested the requested property
+	 * @param receiver the receiver of this weapon transfer.
+	 * @param giver the person transferring weapon part
+	 * @param partRequested the requested weapon part
 	 */
-	public WeaponTransfer(Player creditor, Player debtor, PartCard propRequested)
-	{
-		requireNonNull(creditor);
-		requireNonNull(debtor);
-		requireNonNull(propRequested);
-		this.damager = creditor;
-		this.victim = debtor;
+	public WeaponTransfer(Player receiver, Player giver, WeaponPartSpec partRequested) {
+		requireNonNull(receiver);
+		requireNonNull(giver);
+		requireNonNull(partRequested);
+		this.damager = receiver;
+		this.victim = giver;
 		this.hp = 0;
-		this.partsRequested.add(propRequested);
+		this.partsRequested.add(partRequested);
 	}
 
 	/**
-	 * Constructs a payment object with a pre-initialized property set to request.
+	 * Constructs a payment object with a pre-initialized property to request.
 	 * <p>
 	 *
-	 * @param damager the reciever of this payment.
-	 * @param victim the victim of this payment.
-	 * @param propSetRequested the requested property set
+	 * @param receiver the receiver of this weapon transfer.
+	 * @param giver the person transferring weapon part
+	 * @param partRequested the requested weapon set
 	 */
-	public WeaponTransfer(Player creditor, Player debtor, WeaponSpec propSetRequested)
-	{
-		requireNonNull(creditor);
-		requireNonNull(debtor);
-		requireNonNull(partsRequested);
-		this.damager = creditor;
-		this.victim = debtor;
+	public WeaponTransfer(Player receiver, Player giver, WeaponSpec partRequested) {
+		requireNonNull(receiver);
+		requireNonNull(giver);
+		requireNonNull(partRequested);
+		this.damager = receiver;
+		this.victim = giver;
 		this.hp = 0;
-		this.weaponsRequested.add(propSetRequested);
+		this.weaponsRequested.add(partRequested);
 	}
 
-	public void finishPay()
-	{
+	public void finishPay() {
 		// if (!metPayment()) {
 		// throw new IllegalStateException("Debt has not been fully met");
 		// }
@@ -165,41 +150,20 @@ public class WeaponTransfer
 		weaponsRequested.forEach(this::takePart0);
 		partsGiven.forEach(this::givePart0);
 		weaponsGiven.forEach(this::givePart0);
-
-		bills.forEach(card -> {
-			// TO DO: check ref. and also shift ref.
-			if (card instanceof BurstCharge)
-			{
-				BurstCharge nrg = (BurstCharge) card;
-
-				victim.damageShield(nrg.getEnergyValue());
-				if (energyZapMode)
-				{
-					damager.healShield(nrg.getEnergyValue());
-				}
-			} else
-			{
-				takePart0((PartCard) card);
-			}
-		});
 	}
 
 	/**
 	 * This method finishes the payment request and hands it over to the victim/ ower.
 	 */
-	public void finishRequest()
-	{
+	public void finishRequest() {
 
-		if (victim == damager)
-		{
+		if (victim == damager) {
 			return;
 		}
 
-		// currently, we only support one type of response: Just say no.
-		handleResponse(this.toString(), damager, victim);
+		// TO DO: handle responses from weapon transfer
 
-		if (!canceled)
-		{
+		if (!canceled) {
 			victim.selectResponse(this);
 			this.finishPay();
 		}
@@ -209,17 +173,15 @@ public class WeaponTransfer
 	 * Adds a property to the give list
 	 * <p>
 	 *
-	 * @param partCard the property to add.
+	 * @param part the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean giveProperty(PartCard partCard)
-	{
+	public boolean giveProperty(WeaponPartSpec part) {
 		// TO DO: check prop ref.
-		if (partsGiven.contains(partCard))
-		{
+		if (partsGiven.contains(part)) {
 			return false;
 		}
-		partsGiven.add(partCard);
+		partsGiven.add(part);
 		return true;
 	}
 
@@ -230,54 +192,11 @@ public class WeaponTransfer
 	 * @param set the property set to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean givePropertySet(WeaponSpec set)
-	{
-		if (weaponsGiven.contains(set))
-		{
+	public boolean givePropertySet(WeaponSpec set) {
+		if (weaponsGiven.contains(set)) {
 			return false;
 		}
 		weaponsGiven.add(set);
-		return true;
-	}
-
-	public boolean isEnergyZapMode()
-	{
-		return energyZapMode;
-	}
-
-	public boolean metPayment()
-	{
-		return hp <= paidAmount;
-	}
-
-	public boolean payBill(Card bill)
-	{
-		if (getValue(bill) <= 0 || hp <= paidAmount)
-		{
-			return false;
-		}
-		bills.add(bill);
-		paidAmount += getValue(bill);
-		return true;
-	}
-
-	public void payBills(Collection<? extends Card> c)
-	{
-		bills.ensureCapacity(bills.size() + c.size());
-		c.forEach(card -> {
-			// omit any repeated cards or cards that have no value or if the
-			// debt is already met.
-			if (hp > paidAmount && getValue(card) > 0 && !bills.contains(card) && !c.contains(card))
-			{
-				paidAmount += getValue(card);
-				bills.add(card);
-			}
-		});
-	}
-
-	public boolean removePaidBill(Card bill)
-	{
-		bills.remove(bill);
 		return true;
 	}
 
@@ -285,17 +204,15 @@ public class WeaponTransfer
 	 * Adds a property to the request list
 	 * <p>
 	 *
-	 * @param partCard the property to add.
+	 * @param part the property to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean requestProperty(PartCard partCard)
-	{
+	public boolean requestProperty(WeaponPartSpec part) {
 		// TO DO: check prop ref.
-		if (partsRequested.contains(partCard))
-		{
+		if (partsRequested.contains(part)) {
 			return false;
 		}
-		partsRequested.add(partCard);
+		partsRequested.add(part);
 		return true;
 	}
 
@@ -306,59 +223,48 @@ public class WeaponTransfer
 	 * @param set the property set to add.
 	 * @return whether if this property was added to request list.
 	 */
-	public boolean requestPropertySet(WeaponSpec set)
-	{
-		if (weaponsRequested.contains(set))
-		{
+	public boolean requestPropertySet(WeaponSpec set) {
+		if (weaponsRequested.contains(set)) {
 			return false;
 		}
 		weaponsRequested.add(set);
 		return true;
 	}
 
-	public void setEnergyZapMode(boolean energyZapMode)
-	{
+	public void setEnergyZapMode(boolean energyZapMode) {
 		this.energyZapMode = energyZapMode;
 	}
 
-	public void setHpDamage(int debt)
-	{
+	public void setHpDamage(int debt) {
 		this.hp = debt;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		ArrayList<String> requests = new ArrayList<>(10);
 		ArrayList<String> gives = new ArrayList<>(10);
 
-		if (!partsRequested.isEmpty())
-		{
-			partsRequested.stream().map(PartCard::getPropertyName).forEach(requests::add);
+		if (!partsRequested.isEmpty()) {
+			partsRequested.stream().map(WeaponPartSpec::getName).forEach(requests::add);
 		}
 
-		if (!weaponsRequested.isEmpty())
-		{
+		if (!weaponsRequested.isEmpty()) {
 			weaponsRequested.stream().map(WeaponSpec::toString).map(color -> color + " set").forEach(requests::add);
 		}
 
-		if (hp > 0)
-		{
+		if (hp > 0) {
 			requests.add(BurstCharge.moneyString(hp, true));
 		}
 
-		if (requests.isEmpty())
-		{
+		if (requests.isEmpty()) {
 			requests.add("nothing");
 		}
 
-		if (!partsGiven.isEmpty())
-		{
-			partsGiven.stream().map(PartCard::getPropertyName).forEach(gives::add);
+		if (!partsGiven.isEmpty()) {
+			partsGiven.stream().map(WeaponPartSpec::getName).forEach(gives::add);
 		}
 
-		if (!weaponsGiven.isEmpty())
-		{
+		if (!weaponsGiven.isEmpty()) {
 			weaponsGiven.stream().map(WeaponSpec::toString).map(color -> color + " set").forEach(gives::add);
 		}
 
@@ -368,47 +274,25 @@ public class WeaponTransfer
 				25 + requestsString.length() + givesString.length()).append("Player ").append(damager.getName()).append(" wants ");
 		description.append(requestsString);
 
-		if (!givesString.isEmpty())
-		{
+		if (!givesString.isEmpty()) {
 			description.append(" for ").append(givesString);
 		}
 		return description.append(".").toString();
 	}
 
-	private void givePart0(PartCard prop)
-	{
+	private void givePart0(WeaponPartSpec prop) {
 		transferPart(damager, victim, prop);
 	}
 
-	private void givePart0(WeaponSpec propset)
-	{
+	private void givePart0(WeaponSpec propset) {
 		transferPart(damager, victim, propset);
 	}
 
-	private void handleResponse(String responseString, Player requester, Player responder)
-	{
-		Response response = responder.selectResponse(responseString);
-		if (response != null && response.getResponseType() != null)
-		{
-			switch (response.getResponseType()) {
-			case SHIELD:
-				canceled = !canceled;
-				handleResponse("Player " + responder.getName() + " has Just-Say-No-ed your request.", responder, requester);
-				break;
-			default:
-				// not supported.
-				throw new InternalError();
-			}
-		}
-	}
-
-	private void takePart0(PartCard prop)
-	{
+	private void takePart0(WeaponPartSpec prop) {
 		transferPart(victim, damager, prop);
 	}
 
-	private void takePart0(WeaponSpec propset)
-	{
+	private void takePart0(WeaponSpec propset) {
 		transferPart(victim, damager, propset);
 	}
 
