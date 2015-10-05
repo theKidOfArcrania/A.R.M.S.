@@ -51,13 +51,14 @@ import armsgame.ResourceDefaults;
  */
 public class CardDefaults extends ResourceDefaults {
 
+	private static final String DEF_CARD_DECK = "armsgame/card/carddefs.DECK";
 	private static final long serialVersionUID = -7651695787655927167L;
 
-	private static final CardDefaults defs;
+	private static CardDefaults defs;
 
 	static {
 		try {
-			defs = new CardDefaults("carddefs.PROPERTIES");
+			defs = new CardDefaults(DEF_CARD_DECK);
 		} catch (IOException ex) {
 			Logger.getLogger(CardDefaults.class.getName()).log(Level.SEVERE, "Unable to load standard card defaults. Crashing now.", ex);
 			System.exit(1);
@@ -69,8 +70,13 @@ public class CardDefaults extends ResourceDefaults {
 		return defs;
 	}
 
+	public static CardDefaults setCardDefaults(String propFile) throws IOException {
+		defs = new CardDefaults(propFile);
+		return defs;
+	}
+
 	protected CardDefaults(String propFile) throws IOException {
-		load(CardDefaults.class.getResourceAsStream(propFile));
+		load(ClassLoader.getSystemResourceAsStream(propFile));
 	}
 
 	public Deck generateDeck() throws DeckInitializationFailureException {

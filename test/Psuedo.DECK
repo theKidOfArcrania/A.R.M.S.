@@ -1,0 +1,6 @@
+#card properties.
+#TO DO: Adding image-links for each card.
+#TO DO: Adding action-types, and also renaming the stuff.
+#set scale to 1 million because this is the base unit.
+scale=1000000 
+
