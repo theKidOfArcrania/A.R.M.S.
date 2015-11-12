@@ -26,7 +26,7 @@ public class Scavenge extends Action {
 
 	@Override
 	public String getInternalType() {
-		return "action.go";
+		return "action.scavenge";
 	}
 
 	@Override

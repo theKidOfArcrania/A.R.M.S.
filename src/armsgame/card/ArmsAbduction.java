@@ -42,7 +42,7 @@ public class ArmsAbduction extends Action {
 
 	@Override
 	public String getInternalType() {
-		return "action.breaker";
+		return "action.abduction";
 	}
 
 	@Override

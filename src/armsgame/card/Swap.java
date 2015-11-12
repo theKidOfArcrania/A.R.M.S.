@@ -48,7 +48,7 @@ public class Swap extends Action {
 
 	@Override
 	public String getInternalType() {
-		return "action.forced";
+		return "action.swap";
 	}
 
 	@Override

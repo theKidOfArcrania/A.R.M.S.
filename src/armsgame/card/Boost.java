@@ -58,7 +58,7 @@ public class Boost extends Action {
 
 	@Override
 	public String getInternalType() {
-		return "action.double";
+		return "action.boost";
 	}
 
 	@Override

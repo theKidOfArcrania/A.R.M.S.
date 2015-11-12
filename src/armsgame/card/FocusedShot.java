@@ -41,7 +41,7 @@ public class FocusedShot extends Action {
 
 	@Override
 	public String getInternalType() {
-		return "action.debtCollector";
+		return "action.focusShot";
 	}
 
 	public int getPayAmount() {
